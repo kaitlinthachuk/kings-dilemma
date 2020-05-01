@@ -1,0 +1,46 @@
+[{ 
+    "name": "House Stormcloak",
+    "kingdom": "Dukes of Solad",
+    "motto": "Nothing is as it appears",
+    "image": "./assests/images/solad",
+    "crave": 1,
+    "prestige": 2,
+    "prestige_number": 2
+},{
+    "name": "House Rhinehardt",
+    "kingdom": "Marquises of Tork",
+    "motto": "Hit hard, we can take it",
+    "image": "./assests/images/tork",
+    "crave": 0,
+    "prestige": 5,
+    "prestige_number": 3
+    
+},{
+    "name": "House Flora",
+    "kingdom": "Marquises of Crann",
+    "motto": "Tranquility in Death",
+    "image": "./assests/images/crann",
+    "crave": 2,
+    "prestige": 0,
+    "prestige_number": 11
+    
+},{
+    "name": "House Arborstella",
+    "kingdom": "Dukes of Coden",
+    "motto": "Forests Grow Strong",
+    "image": "./assests/images/coden",
+    "crave": 1,
+    "prestige": 2,
+    "prestige_number": 4
+    
+},{
+    "name": "House Irvine",
+    "kingdom": "Marquises of Tiryll",
+    "motto": "No Blood Is Like Our Blood",
+    "image": "./assests/images/tiryll",
+    "crave": 0,
+    "prestige": 4,
+    "prestige_number": 9
+    
+}
+]
