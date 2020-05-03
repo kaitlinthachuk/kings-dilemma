@@ -1,0 +1,71 @@
+@import 'vars';
+
+.house-crest{
+    border-radius: 50%;
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.house-selection:hover .house-crest{
+    opacity: 0.3;
+}
+
+.house-selection:hover .house-motto {
+    opacity: 1;
+}
+
+.house-motto{
+    transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -33%);
+  -ms-transform: translate(-50%, -33%);
+  white-space: nowrap;
+}
+
+.house-selection {
+    position: relative;
+    width: 33%;
+    margin-left: 240px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.house-selection-container{
+    display: flex;
+}
+
+.house-selection-button{
+    height: fit-content;
+    margin: auto;
+}
+
+.spinner {
+    fill: transparent;
+    stroke: $secondary-yellow;
+    stroke-width: 3px;
+    stroke-dasharray: calc(1.5 * 3.14 * 25) calc(3.14 * 25 * 0.5);
+    animation: rot 4s linear infinite;
+    transform-origin: 50% 50%;
+  }
+
+  .spinner-inner {
+    fill: transparent;
+    stroke: $secondary-yellow;
+    stroke-width: 3px;
+    stroke-dasharray: calc(1.5 * 3.14 * 15) calc(3.14 * 15 * 0.5);
+    animation: rot 4s linear infinite reverse;
+    transform-origin: 50% 50%;
+  }
+
+  g {
+    //transform: translate(-50%, -50%);
+  }
+
+  @keyframes rot { to { transform: rotate(1turn);} }

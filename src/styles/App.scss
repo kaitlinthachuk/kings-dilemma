@@ -1,0 +1,54 @@
+@import 'vars';
+body{
+  height: 100%;
+  background-color: $background-color;
+}
+.App {
+  text-align: center;
+  color: $primary-text;
+  font-family: 'Quicksand', sans-serif;
+}
+
+button {
+  line-height: 2rem;
+  font-size: 1.4rem;
+  padding: 0.5rem;
+  width: fit-content;
+  outline: none;
+  cursor: pointer;
+  background: $background-color;
+  border: none;
+  color: $primary-text;
+  font-weight: bold;
+  border-radius: $border-radius;
+  transition: background-color 0.5s ease-out;
+}
+
+button:hover {
+  background-color: $primary-yellow;
+}
+
+h3 {
+  font-size: $taller;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: $tallest;
+  font-weight: 800;
+}
+
+h1 {
+  font-size: $huge;
+  font-weight: 900;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  padding: 0;
+  font-family: 'Cinzel', serif;
+}
