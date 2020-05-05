@@ -1,13 +1,18 @@
 @import 'vars';
 
 .house-crest{
-    border-radius: 50%;
+    border-radius: 3em;
     opacity: 1;
     display: block;
     width: 100%;
     height: auto;
     transition: .5s ease;
     backface-visibility: hidden;
+}
+
+.selected {
+  width : 25%;
+  margin: auto;
 }
 
 .house-selection:hover .house-crest{
@@ -19,7 +24,7 @@
 }
 
 .house-motto{
-    transition: .5s ease;
+  transition: .5s ease;
   opacity: 0;
   position: absolute;
   top: 50%;
@@ -30,15 +35,15 @@
 }
 
 .house-selection {
-    position: relative;
-    width: 33%;
-    margin-left: 240px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  position: relative;
+  width: 33%;
+  margin-left: 240px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .house-selection-container{
-    display: flex;
+  display: flex;
 }
 
 .house-selection-button{
@@ -64,8 +69,5 @@
     transform-origin: 50% 50%;
   }
 
-  g {
-    //transform: translate(-50%, -50%);
-  }
 
   @keyframes rot { to { transform: rotate(1turn);} }

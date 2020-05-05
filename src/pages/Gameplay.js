@@ -1,55 +1,85 @@
-// import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom'
 
-// import Navbar from '../components/Navbar.js';
-// import PlayerBar from '../components/PlayerBar.jsx';
-// import HouseSideMenu from '../components/HouseSideMenu.jsx';
+import Navbar from '../components/Navbar.js';
+//import PlayerBar from '../components/PlayerBar.jsx';
+//import HouseSideMenu from '../components/HouseSideMenu.jsx';
 
-// import '../styles/Page.scss';
+import '../styles/Gameplay.scss';
 
 
-// class Gameplay extends Component {
-//   constructor(props) {
-//     super(props);
+function Gameplay(props) {
+    const location = useLocation();
+    const [isVoting, setIsVoting] = useState(false);
+    const [house, setHouse] = useState(null);
+    const [otherHouses, setOtherHouses] = useState([]);
+    const [secretAgenda, setSecretAgenda] = useState({});
+    const [isAdmin, setIsAdmin] = useState(false);
 
-//     this.state = {
-//       width: window.innerWidth,
-//     };
 
-//     this.handleWindowResize = this.handleWindowResize.bind(this);
-//   }
+    useEffect(() => {
+        let { houseState, otherHousesState } = location.state;
+        otherHousesState.sort((a, b) => {
+            return a.prestige - b.prestige;
+        })
 
-//   componentDidMount() {
-//     window.addEventListener('resize', this.handleWindowResize);
-//   }
+        if (otherHousesState[0].prestige !== otherHousesState[1].prestige) {
+            otherHousesState[0].tokens.push('mod');
+        } else {
+            let prestige = otherHousesState[0].prestige
+            let tied = otherHousesState.filter((a => {
+                return a.prestige == prestige;
+            }))
 
-//   componentWillUnmount() {
-//     window.removeEventListener('resize', this.handleWindowResize);
-//   }
+            tied.sort((a, b) => {
+                return a.number - b.number;
+            });
 
-//   render() {
-//       const { topNavButtons, house, remainingHouses } = this.props;
-//     const { width } = this.state;
-//     return (
-//       <div className="layout">
-//         <Navbar buttons = {topNavButtons}></Navbar>
-//         <div id={id} className="page">
-//           {this.props.children}
-//         </div>
-//         { width <= 1000  ?
-//         <HouseSideMenu houses = {remainingHouses}></HouseSideMenu>
-//          :
-//           null
-//         }
-//         <PlayerBar house = {house} ></PlayerBar>
-//       </div>
-//     );
-//   }
+            for (let i = 0; i < otherHousesState.length(); i++) {
+                if (otherHousesState[i].name == tied[0].name) {
+                    otherHousesState[i].tokens.push('mod');
+                    break;
+                }
+            }
+        }
 
-//   handleWindowResize() {
-//     this.setState({
-//       width: window.innerWidth,
-//     })
-//   }
-// }
+        if (otherHousesState[4].prestige !== otherHousesState[3].prestige) {
+            otherHousesState[4].tokens.push('leader');
+        } else {
+            let prestige = otherHousesState[4].prestige
+            let tied = otherHousesState.filter((a => {
+                return a.prestige == prestige;
+            }))
 
-// export default Gameplay;
+            tied.sort((a, b) => {
+                return b.number - a.number;
+            });
+
+            for (let i = 0; i < otherHousesState.length(); i++) {
+                if (otherHousesState[i].name == tied[0].name) {
+                    otherHousesState[i].tokens.push('leader');
+                    break;
+                }
+            }
+        }
+
+        if (houseState.name == "solad") {
+            setIsAdmin(true);
+        }
+        setHouse(houseState);
+        setOtherHouses(otherHousesState);
+    }, []);
+
+
+
+
+
+    return (
+
+        <div className="gameplay-container">
+            <Navbar isAdmin={isAdmin} />
+        </div>
+    );
+}
+
+export default Gameplay;
