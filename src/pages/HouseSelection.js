@@ -27,6 +27,7 @@ function HouseSelection(props) {
         snapshot.forEach((child) => {
           let val = child.toJSON();
           val['tokens'] = [];
+          val['agenda'] = null;
           fetchedHouses.push(val);
         })
         setLoading(false);
@@ -44,7 +45,7 @@ function HouseSelection(props) {
     e.preventDefault();
     let houseName = e.target.parentElement.name;
     for (let i = 0; i < otherHouses.length; i++) {
-      if (otherHouses[i].key == houseName) {
+      if (otherHouses[i].key === houseName) {
         setHouse(otherHouses[i]);
         setRedirect(true);
         break;
@@ -90,6 +91,7 @@ function HouseSelection(props) {
   } else if (isError) {
     content = <div>Something broke! {errorMsg} </div>;
   } else if (redirect) {
+    console.log(house, otherHouses);
     content = <Redirect to={{ pathname: '/play', state: { houseState: house, otherHousesState: otherHouses } }} />;
   } else {
     content = newHouse();

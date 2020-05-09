@@ -1,3 +1,19 @@
+@import 'vars';
+
 .navbar-container {
     grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    background-color: darken($background-color, 10);
   }
+
+.navbar-button{
+  margin: auto;
+  background-color: darken($background-color, 10);
+  font-family: 'Cinzel', serif;
+  
+}
+
+.navbar-button:hover{
+  background-color: darken($background-color, 20);
+}

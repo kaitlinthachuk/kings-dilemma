@@ -1,0 +1,21 @@
+@import "vars";
+
+.playerbar-container{
+    grid-area: footer;
+    background-color: darken($background-color, 10);
+    display: flex;
+    justify-content: space-between;
+}
+
+.playerbar-value{
+    font-size: $tallest;
+    font-weight: 800;
+    margin: auto;
+    height: 100%;
+    display: inline-flex;
+}
+
+.playerbar-value > span {
+    margin: auto;
+    padding: 10px;
+}

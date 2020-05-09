@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom'
 
 import Navbar from '../components/Navbar.js';
-//import PlayerBar from '../components/PlayerBar.jsx';
+import PlayerBar from '../components/PlayerBar.js';
 //import HouseSideMenu from '../components/HouseSideMenu.jsx';
 
 import '../styles/Gameplay.scss';
@@ -19,6 +19,7 @@ function Gameplay(props) {
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
+
         otherHousesState.sort((a, b) => {
             return a.prestige - b.prestige;
         })
@@ -72,12 +73,14 @@ function Gameplay(props) {
 
 
 
-
-
     return (
 
         <div className="gameplay-container">
             <Navbar isAdmin={isAdmin} />
+            {
+                house ? <PlayerBar house={house} /> : null
+            }
+
         </div>
     );
 }
