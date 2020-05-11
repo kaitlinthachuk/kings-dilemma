@@ -18,7 +18,6 @@ function HouseSelection(props) {
   let isError = false,
     errorMsg = null;
 
-  //fetch all the houses when we first start
   useEffect(() => {
 
     database.ref('/houses/').once('value')
@@ -91,7 +90,6 @@ function HouseSelection(props) {
   } else if (isError) {
     content = <div>Something broke! {errorMsg} </div>;
   } else if (redirect) {
-    console.log(house, otherHouses);
     content = <Redirect to={{ pathname: '/play', state: { houseState: house, otherHousesState: otherHouses } }} />;
   } else {
     content = newHouse();

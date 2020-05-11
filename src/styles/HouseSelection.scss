@@ -62,7 +62,7 @@
 
   .spinner-inner {
     fill: transparent;
-    stroke: $secondary-yellow;
+    stroke: darken($background-color, 10);
     stroke-width: 3px;
     stroke-dasharray: calc(1.5 * 3.14 * 15) calc(3.14 * 15 * 0.5);
     animation: rot 4s linear infinite reverse;

@@ -10,14 +10,10 @@ function Navbar(props) {
 
   function navClick(e) {
     e.preventDefault();
-    setImagePath(e.target.id + ".png");
+    setImagePath("images/" + e.target.id + ".png");
     setIsVisible(true);
   }
 
-  function closeModal(e) {
-    e.preventDefault();
-    setIsVisible(false);
-  }
   return (
     <>
       <div className='navbar-container'>
@@ -31,7 +27,7 @@ function Navbar(props) {
             null
         }
       </div>
-      <ImageModal isVisible={isVisible} path={imagePath} closeModal={closeModal} />
+      <ImageModal isVisible={isVisible} images={[{ path: imagePath, onClick: null, alt: "" }]} />
     </>
   );
 }
