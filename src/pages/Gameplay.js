@@ -82,20 +82,21 @@ function Gameplay(props) {
         });
 
 
-        index = availableAgendas.findIndex(function (el) {
+        let agendaIndex = availableAgendas.findIndex(function (el) {
             return el.alt === e.target.alt;
         });
 
-        availableAgendas.splice(index, 1);
+        availableAgendas.splice(agendaIndex, 1);
 
         availableAgendas = availableAgendas.map(function (el) {
             return el.alt;
         })
 
-        let housePath = 'session/' + [house.key] + "/secret_agenda",
-            nextPath = 'session/' + otherHouses[index + 1].key + "/secret_agenda";
+        let housePath = 'session/' + [house.key] + "/secret_agenda";
+
 
         if (index < 4) {
+            let nextPath = 'session/' + otherHouses[index + 1].key + "/secret_agenda";
             database.ref().update({
                 [nextPath]: true
             })

@@ -12,6 +12,8 @@ function PlayerBar(props) {
         powerSrc = images("./tokens/power.svg"),
         laurelSrc = images("./cards/laurel.svg"),
         boardSrc,
+        isExtremist = false,
+        isRebel = false,
         resourceContents = [],
         rankingContents = [];
 
@@ -24,14 +26,24 @@ function PlayerBar(props) {
         let resources = cardData[props.secretAgenda]["resources"],
             ranking = cardData[props.secretAgenda]["ranking"];
 
-        resources.forEach(element => {
-            resourceContents.push(
-                <tr key={element[0]}>
-                    <td>{element[0]}</td>
-                    <td>{element[1]}</td>
-                </tr>
-            );
-        });
+        if (props.secretAgenda === "rebel") {
+            isRebel = true;
+        }
+
+        if (props.secretAgenda === "extremist") {
+            resourceContents.push(<div className="extremist-resources">{resources}</div>);
+            isExtremist = true;
+        } else {
+            resources.forEach(element => {
+                resourceContents.push(
+                    <tr key={element[0]}>
+                        <td>{element[0]}</td>
+                        <td>{element[1]}</td>
+                    </tr>
+                );
+            });
+        }
+
         ranking.forEach(element => {
             rankingContents.push(
                 <tr key={element[0]}>
@@ -47,7 +59,7 @@ function PlayerBar(props) {
     return (
         <>
             <div className="agenda-container">
-                {haveAgenda &&
+                {haveAgenda && !isExtremist &&
                     <table className="resources" key="resources">
                         <tbody>
                             <tr>
@@ -60,6 +72,8 @@ function PlayerBar(props) {
                         </tbody>
                     </table>
                 }
+                {isExtremist && resourceContents}
+                {isRebel && <span className="rebel-extra">{cardData[props.secretAgenda]["extra"]}</span>}
                 {haveAgenda &&
                     <table className="ranking" key="ranking">
                         <tbody>
@@ -77,6 +91,7 @@ function PlayerBar(props) {
                         </tbody>
                     </table>}
                 {haveAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
+
             </div>
             <div className="tokens-container">
                 <div className="playerbar-value">
