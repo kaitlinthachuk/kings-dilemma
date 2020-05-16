@@ -15,9 +15,9 @@ function Gameplay(props) {
     const [isVoting, setIsVoting] = useState(false);
     const [house, setHouse] = useState(null);
     const [otherHouses, setOtherHouses] = useState([]);
-    const [secretAgenda, setSecretAgenda] = useState({});
+    const [secretAgenda, setSecretAgenda] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
-    const [selectAgenda, setSelectAgenda] = useState(false);
+    const [selectAgenda, setSelectAgenda] = useState({ state: false, availableAgendas: [] });
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -38,61 +38,76 @@ function Gameplay(props) {
 
         availableAgendas.splice(randomIndex, 1);
 
-        database.ref('session/').set({
-            available_agendas: availableAgendas
-        });
-        database.ref('session/' + otherHousesState[0].key).set({
-            secret_agenda: true
-        });
-
         if (houseState.key === "solad") {
-            database.ref('session/tokens/').set({
-                [otherHousesState[0].key]: "mod",
-                [otherHousesState[4].key]: "leader"
+            database.ref().update({
+                'session/available_agendas': availableAgendas,
+                ['session/' + otherHousesState[0].key + "/secret_agenda"]: true,
+                ['session/tokens/' + otherHousesState[0].key]: "mod",
+                ['session/tokens/' + otherHousesState[4].key]: "leader"
             });
             setIsAdmin(true);
         }
 
-        if (houseState.key === otherHousesState[0].key) {
-            setSelectAgenda(true);
-        }
         setHouse(houseState);
         setOtherHouses(otherHousesState);
         setIsLoading(false);
     }, []);
 
-    let availableAgendas = [],
-        initiateSelect = false;
-    if (!isLoading && !availableAgendas) {
+    let availableAgendas = [];
+
+    if (!isLoading && secretAgenda.length === 0 && !selectAgenda.state) {
         database.ref("/session/" + house.key + "/secret_agenda").on('value', function (snapshot) {
-            if (snapshot.val() && availableAgendas.length === 0) {
+            if (snapshot.val()) {
                 database.ref("/session/available_agendas").once('value', function (snapshot) {
                     availableAgendas = snapshot.val();
                     availableAgendas.forEach(function (agenda, index) {
                         availableAgendas[index] = {
                             path: "cards/" + agenda + ".png",
                             alt: agenda,
+                            class: "image-modal-agenda",
                             onClick: agendaOnClick
                         };
                     });
-                    console.log(availableAgendas);
-                    initiateSelect = true;
+                    setSelectAgenda({ state: true, availableAgendas: availableAgendas });
                 })
-            } else {
-                availableAgendas = null;
             }
         });
 
     }
 
-
-    if (initiateSelect) {
-        console.log("initiate", initiateSelect);
-    }
-
     function agendaOnClick(e) {
         e.preventDefault();
-        console.log(e);
+        let index = otherHouses.findIndex(function (el) {
+            return house.key = el.key;
+        });
+
+
+        index = availableAgendas.findIndex(function (el) {
+            return el.alt == e.target.alt;
+        });
+
+        availableAgendas.splice(index, 1);
+
+        availableAgendas = availableAgendas.map(function (el) {
+            return el.alt;
+        })
+
+        let housePath = 'session/' + [house.key] + "/secret_agenda",
+            nextPath = 'session/' + otherHouses[index + 1].key + "/secret_agenda";
+
+        if (index < 4) {
+            database.ref().update({
+                [nextPath]: true
+            })
+        }
+
+        database.ref().update({
+            'session/available_agendas': availableAgendas,
+            [housePath]: false
+        });
+
+        setSecretAgenda(e.target.alt);
+        setSelectAgenda(false);
     }
 
 
@@ -100,11 +115,9 @@ function Gameplay(props) {
 
         <div className="gameplay-container">
             <Navbar isAdmin={isAdmin} />
+            <ImageModal isVisible={selectAgenda.state} images={selectAgenda.availableAgendas} showClose='false' class="image-agenda-modal" />
             {
-                selectAgenda ? <ImageModal images={availableAgendas} /> : null
-            }
-            {
-                !isLoading ? <PlayerBar house={house} /> : null
+                !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }
 
         </div>

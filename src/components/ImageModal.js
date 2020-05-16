@@ -1,34 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import "../styles/ImageModal.scss";
 
 const images = require.context('../assets', true);
 
 function ImageModal(props) {
-    const [isOpen, setisOpen] = useState(true);
-    let contents = null;
 
-    function closeModal(e) {
-        e.preventDefault();
-        setisOpen(false);
-    };
+    let contents = null,
+        showClose = props.showClose;
 
-    if (isOpen && props.isVisible) {
+    if (props.isVisible) {
         let imagesTags = [];
         props.images.forEach(element => {
             let img_src = images("./" + element.path);
-            imagesTags.push(<img className="image-modal" src={img_src} alt={element.alt} obClick={element.onClick}></img>);
+            imagesTags.push(<img className={element.class} src={img_src} key={img_src} alt={element.alt} onClick={element.onClick}></img>);
         });
-
-        contents = <div className="image-modal-container">
-            < button className="close" onClick={closeModal} > X</button >
+        contents = <div className={props.class}>
+            {
+                showClose == "true" && < button className="close" onClick={props.closeModal} > X</button >
+            }
             {imagesTags}
         </div >
     }
 
-    return (
-        contents
-    );
+    return (contents);
 }
 
 export default ImageModal;

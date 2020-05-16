@@ -1,19 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
+import cardData from '../assets/cards/cards.json';
 
 import '../styles/PlayerBar.scss';
 
 const images = require.context('../assets', true);
 
+
 function PlayerBar(props) {
     let coinSrc = images("./tokens/coin.svg"),
         powerSrc = images("./tokens/power.svg"),
-        //agendaSrc = images("./" + props.house.agenda);
-        rankingSrc = images("./cards/greedy-ranking.png"),
-        resSrc = images("./cards/greedy-resources.png"),
-        boardSrc = images("./cards/greedy-board.png");
+        laurelSrc = images("./cards/laurel.svg"),
+        boardSrc,
+        resourceContents = [],
+        rankingContents = [],
+        haveAgenda = props.secretAgenda.length != 0;
+
+    if (haveAgenda) {
+        let resources = cardData[props.secretAgenda]["resources"],
+            ranking = cardData[props.secretAgenda]["ranking"];
+
+        resources.forEach(element => {
+            resourceContents.push(
+                <tr key={element[0]}>
+                    <td>{element[0]}</td>
+                    <td>{element[1]}</td>
+                </tr>
+            );
+        });
+        ranking.forEach(element => {
+            rankingContents.push(
+                <tr key={element[0]}>
+                    <td>{element[0]}</td>
+                    <td>{element[1]}</td>
+                </tr>
+            );
+        })
+
+        boardSrc = images("./cards/" + props.secretAgenda + "-board.svg");
+    }
 
     return (
         <div className='playerbar-container'>
+            {/* <div className="tokens-container"> */}
             <div className="playerbar-value">
                 <img src={coinSrc} className="token-small playerbar-token" id="coin-svg" alt="coins" />
                 <span>{props.house.coins}</span>
@@ -22,9 +50,39 @@ function PlayerBar(props) {
                 <img src={powerSrc} className="token-small playerbar-token" id="power-svg" alt="power" />
                 <span>{props.house.power}</span>
             </div>
-            <img src={rankingSrc} className="playerbar-agenda" id="ranking" alt="agenda-ranking" />
-            <img src={resSrc} className="playerbar-agenda" id="res" alt="agenda-resources" />
-            <img src={boardSrc} className="playerbar-agenda" id="board" alt="agenda-board" />
+            {/* </div> */}
+            {/* <div className="table-container"> */}
+            {haveAgenda &&
+                <table className="resources" key="resources">
+                    <tbody>
+                        <tr>
+                            <th>Resources</th>
+                            <th>
+                                <img src={laurelSrc} alt="laurel" />
+                            </th>
+                        </tr>
+                        {resourceContents}
+                    </tbody>
+                </table>
+            }
+            {haveAgenda &&
+                <table className="ranking" key="ranking">
+                    <tbody>
+                        <tr>
+                            <th>
+                                <div className="header-wrapper">
+                                    <img src={coinSrc} alt="coin" /> Ranking
+                            </div>
+                            </th>
+                            <th>
+                                <img src={laurelSrc} alt="laurel" />
+                            </th>
+                        </tr>
+                        {rankingContents}
+                    </tbody>
+                </table>}
+            {/* </div> */}
+            {haveAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
         </div>
     );
 }

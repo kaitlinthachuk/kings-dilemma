@@ -14,6 +14,12 @@ function Navbar(props) {
     setIsVisible(true);
   }
 
+  function closeModal(e) {
+    e.preventDefault();
+    setIsVisible(false);
+  };
+
+
   return (
     <>
       <div className='navbar-container'>
@@ -23,11 +29,14 @@ function Navbar(props) {
         <button className='navbar-button' id="stickers" onClick={navClick}>Chronicle Stickers</button>
         <button className='navbar-button' id="symbols" onClick={navClick}>Symbols Legend</button>
         {
-          isAdmin ? <button className='navbar-button' id="#voting" onClick={navClick}>Start Voting</button> :
-            null
+          isAdmin && <button className='navbar-button' id="voting" onClick={navClick}>Start Voting</button>
+        }
+        {
+          isAdmin && <button className='navbar-button' id="tokens" onClick={navClick}>Assign Agenda Tokens</button>
         }
       </div>
-      <ImageModal isVisible={isVisible} images={[{ path: imagePath, onClick: null, alt: "" }]} />
+      <ImageModal isVisible={isVisible} closeModal={closeModal} showClose='true' class="image-modal-container"
+        images={[{ path: imagePath, onClick: e => e.preventDefault(), alt: "", class: "image-modal" }]} />
     </>
   );
 }

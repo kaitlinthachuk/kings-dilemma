@@ -28,3 +28,22 @@
     background: transparent;
     color: $background-color; 
 }
+
+.image-modal-agenda{
+    width: 200px;
+    height: 300px;
+    margin: auto;
+}
+
+.image-agenda-modal{
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.9); 
+    display: flex;
+    justify-content: space-between;
+}
