@@ -1,9 +1,9 @@
 .gameplay-container{
     display: grid;
-    grid-template-columns: auto 25%;
-    grid-template-rows: 60px auto 200px;
+    grid-template-columns: auto 300px;
+    grid-template-rows: 60px auto 180px;
     grid-template-areas: 
       "header header"
       "main side"
-      "footer footer";
+      "footer tokens";
 }

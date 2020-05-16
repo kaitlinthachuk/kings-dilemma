@@ -5,7 +5,7 @@ import { database } from '../firebase.js';
 import Navbar from '../components/Navbar.js';
 import PlayerBar from '../components/PlayerBar.js';
 import ImageModal from '../components/ImageModal.js';
-//import HouseSideMenu from '../components/HouseSideMenu.jsx';
+import HouseSideMenu from '../components/HouseSideMenu.js';
 
 import '../styles/Gameplay.scss';
 
@@ -31,7 +31,7 @@ function Gameplay(props) {
             }
 
         })
-        otherHousesState[0].tokens.push('mod');
+        otherHousesState[0].tokens.push('moderator');
         otherHousesState[4].tokens.push('leader');
         let randomIndex = Math.floor(Math.random() * 4),
             availableAgendas = ['greedy', 'opulent', 'rebel', 'opportunist', 'moderate', 'extremist'];
@@ -78,12 +78,12 @@ function Gameplay(props) {
     function agendaOnClick(e) {
         e.preventDefault();
         let index = otherHouses.findIndex(function (el) {
-            return house.key = el.key;
+            return house.key === el.key;
         });
 
 
         index = availableAgendas.findIndex(function (el) {
-            return el.alt == e.target.alt;
+            return el.alt === e.target.alt;
         });
 
         availableAgendas.splice(index, 1);
@@ -110,7 +110,6 @@ function Gameplay(props) {
         setSelectAgenda(false);
     }
 
-
     return (
 
         <div className="gameplay-container">
@@ -119,7 +118,9 @@ function Gameplay(props) {
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }
-
+            {
+                !isLoading && <HouseSideMenu houses={otherHouses} />
+            }
         </div>
     );
 }
