@@ -1,7 +1,16 @@
 @import "vars";
 
-.playerbar-container{
+.agenda-container{
     grid-area: footer;
+    background-color: darken($background-color, 10);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-left: -100px;
+}
+
+.tokens-container{
+    grid-area: tokens;
     background-color: darken($background-color, 10);
     display: flex;
     align-items: center;
@@ -13,7 +22,6 @@
     font-weight: 700;
     height: 100%;
     display: flex;
-    padding: 20px;
 }
 
 .playerbar-value > span {
@@ -26,18 +34,16 @@
     display: flex;
 }
 
-.tokens-container{
-    display: flex;
-}
+
 
 img.playerbar-agenda {
-     transform: rotate(-90deg) translateY(-150px);
+     transform: rotate(-90deg) translateY(-25%);
      height: 475px;
      
 }
 
 table.ranking {
-    transform: scale(0.4) translateX(-500px);
+    transform: scale(0.4) translateX(-150%);
 }
 
 table.resources {

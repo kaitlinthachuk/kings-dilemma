@@ -7,13 +7,18 @@ const images = require.context('../assets', true);
 
 
 function PlayerBar(props) {
+    const [haveAgenda, setHaveAgenda] = useState(false);
     let coinSrc = images("./tokens/coin.svg"),
         powerSrc = images("./tokens/power.svg"),
         laurelSrc = images("./cards/laurel.svg"),
         boardSrc,
         resourceContents = [],
-        rankingContents = [],
-        haveAgenda = props.secretAgenda.length != 0;
+        rankingContents = [];
+
+
+    if (props.secretAgenda.length > 0 && !haveAgenda) {
+        setHaveAgenda(true);
+    }
 
     if (haveAgenda) {
         let resources = cardData[props.secretAgenda]["resources"],
@@ -40,50 +45,50 @@ function PlayerBar(props) {
     }
 
     return (
-        <div className='playerbar-container'>
-            {/* <div className="tokens-container"> */}
-            <div className="playerbar-value">
-                <img src={coinSrc} className="token-small playerbar-token" id="coin-svg" alt="coins" />
-                <span>{props.house.coins}</span>
-            </div>
-            <div className="playerbar-value">
-                <img src={powerSrc} className="token-small playerbar-token" id="power-svg" alt="power" />
-                <span>{props.house.power}</span>
-            </div>
-            {/* </div> */}
-            {/* <div className="table-container"> */}
-            {haveAgenda &&
-                <table className="resources" key="resources">
-                    <tbody>
-                        <tr>
-                            <th>Resources</th>
-                            <th>
-                                <img src={laurelSrc} alt="laurel" />
-                            </th>
-                        </tr>
-                        {resourceContents}
-                    </tbody>
-                </table>
-            }
-            {haveAgenda &&
-                <table className="ranking" key="ranking">
-                    <tbody>
-                        <tr>
-                            <th>
-                                <div className="header-wrapper">
-                                    <img src={coinSrc} alt="coin" /> Ranking
+        <>
+            <div className="agenda-container">
+                {haveAgenda &&
+                    <table className="resources" key="resources">
+                        <tbody>
+                            <tr>
+                                <th>Resources</th>
+                                <th>
+                                    <img src={laurelSrc} alt="laurel" />
+                                </th>
+                            </tr>
+                            {resourceContents}
+                        </tbody>
+                    </table>
+                }
+                {haveAgenda &&
+                    <table className="ranking" key="ranking">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <div className="header-wrapper">
+                                        <img src={coinSrc} alt="coin" /> Ranking
                             </div>
-                            </th>
-                            <th>
-                                <img src={laurelSrc} alt="laurel" />
-                            </th>
-                        </tr>
-                        {rankingContents}
-                    </tbody>
-                </table>}
-            {/* </div> */}
-            {haveAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
-        </div>
+                                </th>
+                                <th>
+                                    <img src={laurelSrc} alt="laurel" />
+                                </th>
+                            </tr>
+                            {rankingContents}
+                        </tbody>
+                    </table>}
+                {haveAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
+            </div>
+            <div className="tokens-container">
+                <div className="playerbar-value">
+                    <img src={coinSrc} className="token-small playerbar-token" id="coin-svg" alt="coins" />
+                    <span>{props.house.coins}</span>
+                </div>
+                <div className="playerbar-value">
+                    <img src={powerSrc} className="token-small playerbar-token" id="power-svg" alt="power" />
+                    <span>{props.house.power}</span>
+                </div>
+            </div>
+        </>
     );
 }
 

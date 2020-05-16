@@ -17,7 +17,7 @@ function ImageModal(props) {
         });
         contents = <div className={props.class}>
             {
-                showClose == "true" && < button className="close" onClick={props.closeModal} > X</button >
+                showClose === "true" && < button className="close" onClick={props.closeModal} > X</button >
             }
             {imagesTags}
         </div >
