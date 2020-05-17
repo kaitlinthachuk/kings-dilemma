@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar.js';
 import PlayerBar from '../components/PlayerBar.js';
 import ImageModal from '../components/ImageModal.js';
 import HouseSideMenu from '../components/HouseSideMenu.js';
+import AgendaModal from '../components/AgendaModal.js';
 
 import '../styles/Gameplay.scss';
 
@@ -19,6 +20,7 @@ function Gameplay(props) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [selectAgenda, setSelectAgenda] = useState({ state: false, availableAgendas: [] });
     const [isLoading, setIsLoading] = useState(true);
+    const [assignTokens, setAssignTokens] = useState(false);
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -111,11 +113,23 @@ function Gameplay(props) {
         setSelectAgenda(false);
     }
 
+    function tokenOnClick(e) {
+        e.preventDefault();
+        setAssignTokens(true);
+    }
+
+    function processTokens(e) {
+        console.log(e);
+        setAssignTokens(false);
+    }
+
     return (
 
         <div className="gameplay-container">
-            <Navbar isAdmin={isAdmin} />
-            <ImageModal isVisible={selectAgenda.state} images={selectAgenda.availableAgendas} showClose='false' class="image-agenda-modal" />
+            <Navbar isAdmin={isAdmin} tokenOnClick={tokenOnClick} votingOnClick={(e) => e.preventDefault()} />
+            <ImageModal isVisible={selectAgenda.state} images={selectAgenda.availableAgendas}
+                showClose='false' class="image-agenda-modal" />
+            <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }

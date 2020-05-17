@@ -9,10 +9,7 @@ function HouseSideMenu(props) {
     const [houses, setHouses] = useState(props.houses);
 
     let contents = [];
-    console.log(houses);
-
     houses.forEach(element => {
-        console.log(element.key);
         let imgSrc = images("./images/" + element.key + "-small.png"),
             tokens = [],
             tokenSrc = "./tokens/";

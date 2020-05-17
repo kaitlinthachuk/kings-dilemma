@@ -29,10 +29,10 @@ function Navbar(props) {
         <button className='navbar-button' id="stickers" onClick={navClick}>Chronicle Stickers</button>
         <button className='navbar-button' id="symbols" onClick={navClick}>Symbols Legend</button>
         {
-          isAdmin && <button className='navbar-button' id="voting" onClick={navClick}>Start Voting</button>
+          isAdmin && <button className='navbar-button' id="voting" onClick={props.votingOnClick}>Start Voting</button>
         }
         {
-          isAdmin && <button className='navbar-button' id="tokens" onClick={navClick}>Assign Agenda Tokens</button>
+          isAdmin && <button className='navbar-button' id="tokens" onClick={props.tokenOnClick}>Assign Agenda Tokens</button>
         }
       </div>
       <ImageModal isVisible={isVisible} closeModal={closeModal} showClose='true' class="image-modal-container"
