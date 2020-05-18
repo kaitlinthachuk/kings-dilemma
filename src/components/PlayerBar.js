@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cardData from '../assets/cards/cards.json';
+import { database } from '../firebase.js';
 
 import '../styles/PlayerBar.scss';
 
@@ -8,6 +9,9 @@ const images = require.context('../assets', true);
 
 function PlayerBar(props) {
     const [haveAgenda, setHaveAgenda] = useState(false);
+    const [coins, setCoins] = useState(0);
+    const [power, setPower] = useState(0);
+
     let coinSrc = images("./tokens/coin.svg"),
         powerSrc = images("./tokens/power.svg"),
         laurelSrc = images("./cards/laurel.svg"),
@@ -16,6 +20,18 @@ function PlayerBar(props) {
         isRebel = false,
         resourceContents = [],
         rankingContents = [];
+
+
+    useEffect(() => {
+        database.ref('session/' + props.house.key + "/coins").on('value', (snapshot) => {
+            setCoins(snapshot.val());
+        });
+
+        database.ref('session/' + props.house.key + "/power").on('value', (snapshot) => {
+            setPower(snapshot.val());
+        });
+
+    }, [])
 
 
     if (props.secretAgenda.length > 0 && !haveAgenda) {
@@ -96,11 +112,11 @@ function PlayerBar(props) {
             <div className="tokens-container">
                 <div className="playerbar-value">
                     <img src={coinSrc} className="token-small playerbar-token" id="coin-svg" alt="coins" />
-                    <span>{props.house.coins}</span>
+                    <span>{coins}</span>
                 </div>
                 <div className="playerbar-value">
                     <img src={powerSrc} className="token-small playerbar-token" id="power-svg" alt="power" />
-                    <span>{props.house.power}</span>
+                    <span>{power}</span>
                 </div>
             </div>
         </>

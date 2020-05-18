@@ -1,0 +1,76 @@
+@import 'vars';
+
+.voting-container{
+    grid-area: main;
+        display: grid;
+        grid-template-columns: 33% 33% 33%;
+        grid-template-rows: 33% 33% 33%;
+        grid-template-areas: 
+          "nay card aye"
+          "scale scale scale"
+          "vote vote vote";
+    
+}
+
+.aye-container{
+    grid-area: aye;
+    overflow: auto;
+}
+
+.nay-container{
+    grid-area: nay;
+    overflow: auto;
+}
+
+.scales{
+  grid-area: scale;
+}
+
+table.aye, table.nay {
+  width: 20rem;
+  border: 5px solid $primary-text;
+  border-radius: 1.5rem;
+  border-spacing: 0; // need to reset for chrome
+  overflow: hidden;
+  align-self: center;
+  display: inline-table;
+}
+
+th, td {
+  text-align: center;
+  height: 3rem;
+}
+
+th {
+  font-size: 1.3rem;
+}
+
+td {
+  width: 50%;
+  font-size: 1.5rem;
+  font-weight: 500;
+  border-bottom: 2px solid $primary-text;
+  background-color: $white;
+}
+
+th:nth-child(1){
+    color: $white;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+table.aye  th:nth-child(1) {
+  background-color: $blue-aye;
+}
+
+table.nay th:nth-child(1) {
+    background-color: $red-nay;
+  }
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+th:nth-child(2), td:nth-child(2) {
+  border-left: 2px solid $primary-text;
+}

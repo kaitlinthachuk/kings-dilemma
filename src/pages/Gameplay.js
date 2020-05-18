@@ -7,6 +7,7 @@ import PlayerBar from '../components/PlayerBar.js';
 import ImageModal from '../components/ImageModal.js';
 import HouseSideMenu from '../components/HouseSideMenu.js';
 import AgendaModal from '../components/AgendaModal.js';
+import VotingManager from '../components/VotingManager.js'
 
 import '../styles/Gameplay.scss';
 
@@ -33,8 +34,7 @@ function Gameplay(props) {
             }
 
         })
-        otherHousesState[0].tokens.push('moderator');
-        otherHousesState[4].tokens.push('leader');
+
         let randomIndex = Math.floor(Math.random() * 4),
             availableAgendas = ['greedy', 'opulent', 'rebel', 'opportunist', 'moderate', 'extremist'];
 
@@ -53,6 +53,14 @@ function Gameplay(props) {
         setHouse(houseState);
         setOtherHouses(otherHousesState);
         setIsLoading(false);
+
+        database.ref('/session/voting/start_voting').on('value', function (snapshot) {
+            if (snapshot.val()) {
+                setIsVoting(true);
+            } else {
+                setIsVoting(false);
+            }
+        })
     }, []);
 
     let availableAgendas = [];
@@ -118,6 +126,12 @@ function Gameplay(props) {
         setAssignTokens(true);
     }
 
+    function startVoting(e) {
+        e.preventDefault();
+        database.ref().update({ '/session/voting/start_voting': true })
+        setIsVoting(true);
+    }
+
     function processTokens(e) {
         e.forEach((val) => {
             database.ref('session/tokens/' + val.house).push(val.token + "-" + val.alignment);
@@ -128,10 +142,11 @@ function Gameplay(props) {
     return (
 
         <div className="gameplay-container">
-            <Navbar isAdmin={isAdmin} tokenOnClick={tokenOnClick} votingOnClick={(e) => e.preventDefault()} />
+            <Navbar isAdmin={isAdmin} tokenOnClick={tokenOnClick} votingOnClick={startVoting} />
             <ImageModal isVisible={selectAgenda.state} images={selectAgenda.availableAgendas}
                 showClose='false' class="image-agenda-modal" />
             <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
+            <VotingManager isVisible={isVoting} />
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }

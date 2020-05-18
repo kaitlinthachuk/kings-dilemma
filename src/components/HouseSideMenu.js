@@ -50,9 +50,9 @@ class HouseSideMenu extends Component {
                         return <img className="token-tiny" src={images(src)} alt={src} key={src} />
                     })
                     }
-                    <div className="house-container">
-                        <img className="house token-medium" src={imgSrc} alt={element.key} />
-                        <h4 className="house-name">{element.name}</h4>
+                    <div className="house-container" key={element + "-house"}>
+                        <img className="house token-medium" src={imgSrc} alt={element.key} key={imgSrc} />
+                        <h4 className="house-name" key={element.name}>{element.name}</h4>
                     </div>
                 </div>
             )

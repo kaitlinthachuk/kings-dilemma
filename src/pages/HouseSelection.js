@@ -25,7 +25,6 @@ function HouseSelection(props) {
         let fetchedHouses = [];
         snapshot.forEach((child) => {
           let val = child.toJSON();
-          val['tokens'] = [];
           val['agenda'] = null;
           fetchedHouses.push(val);
         })
@@ -46,6 +45,11 @@ function HouseSelection(props) {
     for (let i = 0; i < otherHouses.length; i++) {
       if (otherHouses[i].key === houseName) {
         setHouse(otherHouses[i]);
+        database.ref().update({
+          ['session/' + otherHouses[i].key + "/coins"]: otherHouses[i].coins,
+          ['session/' + otherHouses[i].key + "/power"]: otherHouses[i].power,
+        });
+
         setRedirect(true);
         break;
       }
