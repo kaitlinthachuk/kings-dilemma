@@ -44,8 +44,8 @@ function Gameplay(props) {
             database.ref().update({
                 'session/available_agendas': availableAgendas,
                 ['session/' + otherHousesState[0].key + "/secret_agenda"]: true,
-                ['session/tokens/' + otherHousesState[0].key]: "mod",
-                ['session/tokens/' + otherHousesState[4].key]: "leader"
+                ['session/tokens/' + otherHousesState[0].key]: ["moderator"],
+                ['session/tokens/' + otherHousesState[4].key]: ["leader"]
             });
             setIsAdmin(true);
         }
@@ -119,7 +119,9 @@ function Gameplay(props) {
     }
 
     function processTokens(e) {
-        console.log(e);
+        e.forEach((val) => {
+            database.ref('session/tokens/' + val.house).push(val.token + "-" + val.alignment);
+        })
         setAssignTokens(false);
     }
 

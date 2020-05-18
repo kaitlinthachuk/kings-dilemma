@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import '../styles/AgendaModal.scss';
 
+
 function AgendaModal(props) {
     const [tokens, setTokens] = useState([
         { house: '', token: '', alignment: '' },
@@ -11,9 +12,10 @@ function AgendaModal(props) {
         setTokens([...tokens, { house: '', token: '', alignment: '' }]);
     }
 
+
     const handleChange = (e) => {
         const updatedTokens = [...tokens];
-        updatedTokens[e.target.dataset.idx][e.target.className] = e.target.value;
+        updatedTokens[e.target.dataset.idx][e.target.className] = e.target.value.toLowerCase();
         setTokens(updatedTokens);
     };
 
@@ -79,7 +81,7 @@ function AgendaModal(props) {
                                 data-idx={idx}
                                 id={alignment + "-pos"}
                                 className="alignment"
-                                value={tokens[idx].alignment}
+                                value="positive"
                                 onChange={handleChange}
                             />
                             <label htmlFor={alignment + '-pos'}>Positive</label>
@@ -89,7 +91,7 @@ function AgendaModal(props) {
                                 data-idx={idx}
                                 id={alignment + "-neg"}
                                 className="alignment"
-                                value={tokens[idx].alignment}
+                                value="negative"
                                 onChange={handleChange}
                             />
                             <label htmlFor={alignment + '-neg'}>Negative</label>
