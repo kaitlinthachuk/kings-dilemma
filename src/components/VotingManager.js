@@ -8,15 +8,26 @@ const images = require.context('../assets/', true);
 function VotingManager(props) {
     const [ayeVotes, setAyeVotes] = useState([]);
     const [nayVotes, setNayVotes] = useState([]);
+    const [ayeOutcomes, setAyeOutcomes] = useState([]);
+    const [nayOutcomes, setNayOutcomes] = useState([]);
+
     const [vote, setVote] = useState({ vote: "", power: "" });
 
     useEffect(() => {
-        database.ref('session/voting/aye').on('value', (snapshot) => {
+        database.ref('session/voting/aye/voters').on('value', (snapshot) => {
             setAyeVotes(Object.entries(snapshot.val()));
         });
 
-        database.ref('session/voting/nay').on('value', (snapshot) => {
+        database.ref('session/voting/nay/voters').on('value', (snapshot) => {
             setNayVotes(Object.entries(snapshot.val()));
+        });
+
+        database.ref('session/voting/aye/outcomes').on('value', (snapshot) => {
+            setAyeOutcomes(Object.entries(snapshot.val()));
+        });
+
+        database.ref('session/voting/nay/outcomes').on('value', (snapshot) => {
+            setNayOutcomes(Object.entries(snapshot.val()));
         })
 
     }, [])
@@ -62,7 +73,24 @@ function VotingManager(props) {
             </table>
         </div>
 
-        <img src={images("./tokens/scales.svg")} key="scales" className="scales" />
+        <div className="scale-container">
+            <img src={images("./tokens/scales.svg")} key="scales" className="scales" />
+            <div className="aye-token-container">
+                {
+                    ayeOutcomes.map((val) => {
+                        return (<img src={images('./tokens/outcome-' + val[1] + ".svg")} key={val[1]} className="aye-outcome-token token-small" />)
+                    })
+                }
+            </div>
+            <div className="nay-token-container">
+                {
+                    nayOutcomes.map((val) => {
+                        return (<img src={images('./tokens/outcome-' + val[1] + ".svg")} key={val[1]} className="nay-outcome-token token-small" />)
+                    })
+                }
+            </div>
+        </div>
+
     </div>);
 }
 

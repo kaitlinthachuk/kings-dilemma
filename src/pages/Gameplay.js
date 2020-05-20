@@ -7,7 +7,8 @@ import PlayerBar from '../components/PlayerBar.js';
 import ImageModal from '../components/ImageModal.js';
 import HouseSideMenu from '../components/HouseSideMenu.js';
 import AgendaModal from '../components/AgendaModal.js';
-import VotingManager from '../components/VotingManager.js'
+import VotingManager from '../components/VotingManager.js';
+import VotingOutcome from "../components/VotingOutcome.js";
 
 import '../styles/Gameplay.scss';
 
@@ -22,6 +23,7 @@ function Gameplay(props) {
     const [selectAgenda, setSelectAgenda] = useState({ state: false, availableAgendas: [] });
     const [isLoading, setIsLoading] = useState(true);
     const [assignTokens, setAssignTokens] = useState(false);
+    const [assignOutcomes, setAssignOutcomes] = useState(false);
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -128,7 +130,15 @@ function Gameplay(props) {
 
     function startVoting(e) {
         e.preventDefault();
+        setAssignOutcomes(true);
+    }
+
+    function processOutcomeTokens(e) {
+        e.forEach((val) => {
+            database.ref('session/voting/' + val.side + "/outcomes").push(val.token + "-" + val.alignment);
+        })
         database.ref().update({ '/session/voting/start_voting': true })
+        setAssignOutcomes(false);
         setIsVoting(true);
     }
 
@@ -146,6 +156,7 @@ function Gameplay(props) {
             <ImageModal isVisible={selectAgenda.state} images={selectAgenda.availableAgendas}
                 showClose='false' class="image-agenda-modal" />
             <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
+            <VotingOutcome isVisible={assignOutcomes} onSubmit={processOutcomeTokens} />
             <VotingManager isVisible={isVoting} />
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />

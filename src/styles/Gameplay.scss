@@ -1,7 +1,7 @@
 .gameplay-container{
     display: grid;
     grid-template-columns: auto 300px;
-    grid-template-rows: 60px auto 180px;
+    grid-template-rows: 10% 70% 20%;
     grid-template-areas: 
       "header header"
       "main side"

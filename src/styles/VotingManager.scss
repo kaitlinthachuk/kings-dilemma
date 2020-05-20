@@ -4,7 +4,7 @@
     grid-area: main;
         display: grid;
         grid-template-columns: 33% 33% 33%;
-        grid-template-rows: 33% 33% 33%;
+        grid-template-rows: auto 40% auto;
         grid-template-areas: 
           "nay card aye"
           "scale scale scale"
@@ -22,8 +22,34 @@
     overflow: auto;
 }
 
-.scales{
+.scale-container{
   grid-area: scale;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.scales{
+  width: 100%;
+}
+
+.aye-token-container {
+  position: absolute;
+  z-index: 99;
+  top: 40px;
+  left: 273px;
+}
+
+.nay-token-container {
+  position: absolute;
+  z-index: 99;
+  top: 40px;
+  left: 651px;
+}
+
+.aye-outcome-token, .nay-outcome-token {
+  padding-left: 5px;
+    padding-right: 5px;
 }
 
 table.aye, table.nay {

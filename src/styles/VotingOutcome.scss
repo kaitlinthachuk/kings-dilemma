@@ -1,0 +1,23 @@
+@import 'vars';
+
+.voting-token-form{
+    display: block; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: $opaque-background; 
+    color: $background-color;
+}
+
+.assign-outcome > input {
+    margin: 1rem;
+}
+
+.assign-outcome> input[type="button"], .assign-agenda > input[type="submit"] {
+    margin: 1rem auto;
+}

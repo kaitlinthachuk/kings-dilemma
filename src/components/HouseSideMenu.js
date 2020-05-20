@@ -23,7 +23,6 @@ class HouseSideMenu extends Component {
         database.ref('session/tokens/').on('value', (snapshot) => {
             let fbTokens = snapshot.val(),
                 tokenSrc = './tokens/';
-            console.log(fbTokens)
 
             Object.keys(fbTokens).forEach((key) => {
                 Object.values(fbTokens[key]).forEach((val) => {
@@ -52,7 +51,7 @@ class HouseSideMenu extends Component {
                     }
                     <div className="house-container" key={element + "-house"}>
                         <img className="house token-medium" src={imgSrc} alt={element.key} key={imgSrc} />
-                        <h4 className="house-name" key={element.name}>{element.name}</h4>
+                        <h5 className="house-name" key={element.name}>{element.name}</h5>
                     </div>
                 </div>
             )
