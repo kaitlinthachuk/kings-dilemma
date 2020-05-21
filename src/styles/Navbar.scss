@@ -3,7 +3,6 @@
 .navbar-container {
     grid-area: header;
     display: flex;
-    justify-content: space-between;
     background-color: darken($background-color, 10);
   }
 

@@ -4,13 +4,14 @@
         display: block; 
         position: fixed; 
         z-index: 1; 
-        padding-top: 100px;
+        padding: 100px 0 100px 0;
         left: 0;
         top: 0;
         width: 100%; 
         height: 100%; 
         overflow: auto; 
         background-color: $opaque-background; 
+        box-sizing: border-box;
 }
 
 .image-modal{
@@ -18,11 +19,10 @@
     display: block;
     width: 90%;
     max-width: 1000px;
-    margin-bottom: 20%;
 }
 
 .close{
-    position: absolute;
+    position: fixed;
     top: 40px;
     right: 10%;
     background: transparent;
@@ -33,6 +33,8 @@
     width: 200px;
     height: 300px;
     margin: auto;
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 .image-agenda-modal{

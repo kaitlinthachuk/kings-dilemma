@@ -116,7 +116,7 @@ function Gameplay(props) {
 
         database.ref().update({
             'session/available_agendas': availableAgendas,
-            [housePath]: false
+            // [housePath]: false
         });
 
         setSecretAgenda(e.target.alt);

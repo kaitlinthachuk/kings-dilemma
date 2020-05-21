@@ -1,8 +1,14 @@
 @import 'vars';
-body{
+
+/* .gameplay-container height 100vh is cleaner but has strange behavior */
+html, body, #root, .App, .gameplay-container {
   height: 100%;
+}
+
+body{
   background-color: $background-color;
 }
+
 .App {
   text-align: center;
   color: $primary-text;
@@ -55,12 +61,14 @@ h5 {
 
 .token-tiny{
   width: 40px;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
 }
 
 .token-small{
   width: 50px;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
 }
 
 .token-medium {
-    width: 100px;
+    width: 130px;
 }

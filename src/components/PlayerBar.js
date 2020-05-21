@@ -75,37 +75,39 @@ function PlayerBar(props) {
     return (
         <>
             <div className="agenda-container">
-                {haveAgenda && !isExtremist &&
-                    <table className="resources" key="resources">
-                        <tbody>
-                            <tr>
-                                <th>Resources</th>
-                                <th>
-                                    <img src={laurelSrc} alt="laurel" />
-                                </th>
-                            </tr>
-                            {resourceContents}
-                        </tbody>
-                    </table>
-                }
-                {isExtremist && resourceContents}
-                {isRebel && <span className="rebel-extra">{cardData[props.secretAgenda]["extra"]}</span>}
-                {haveAgenda &&
-                    <table className="ranking" key="ranking">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <div className="header-wrapper">
-                                        <img src={coinSrc} alt="coin" /> Ranking
+                <div className="agenda-tables">
+                    {haveAgenda && !isExtremist &&
+                        <table className="resources" key="resources">
+                            <tbody>
+                                <tr>
+                                    <th>Resources</th>
+                                    <th>
+                                        <img src={laurelSrc} alt="laurel" />
+                                    </th>
+                                </tr>
+                                {resourceContents}
+                            </tbody>
+                        </table>
+                    }
+                    {isExtremist && resourceContents}
+                    {isRebel && <span className="rebel-extra">{cardData[props.secretAgenda]["extra"]}</span>}
+                    {haveAgenda &&
+                        <table className="ranking" key="ranking">
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        <div className="header-wrapper">
+                                            <img src={coinSrc} alt="coin" /> Ranking
                             </div>
-                                </th>
-                                <th>
-                                    <img src={laurelSrc} alt="laurel" />
-                                </th>
-                            </tr>
-                            {rankingContents}
-                        </tbody>
-                    </table>}
+                                    </th>
+                                    <th>
+                                        <img src={laurelSrc} alt="laurel" />
+                                    </th>
+                                </tr>
+                                {rankingContents}
+                            </tbody>
+                        </table>}
+                </div>
                 {haveAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
 
             </div>

@@ -7,9 +7,12 @@
         grid-template-rows: auto 40% auto;
         grid-template-areas: 
           "nay card aye"
-          "scale scale scale"
+          "aye-scale scale nay-scale"
           "vote vote vote";
-    
+    overflow: auto;
+    margin: 10px auto;
+    width: 100%;
+    max-width: 1000px;    
 }
 
 .aye-container{
@@ -22,81 +25,76 @@
     overflow: auto;
 }
 
-.scale-container{
-  grid-area: scale;
+.aye-scale, .nay-scale {
+  position: relative;
   display: flex;
   justify-content: center;
-  position: relative;
+  align-items: center;
+
+  >img {
+    height: 100%;
+    width: 100%;
+  }
 }
 
-.scales{
-  width: 100%;
+.aye-scale {
+  grid-area: aye-scale;
 }
 
-.aye-token-container {
+.nay-scale {
+  grid-area: nay-scale;
+}
+
+.aye-token-container, .nay-token-container {
   position: absolute;
-  z-index: 99;
-  top: 40px;
-  left: 273px;
-}
-
-.nay-token-container {
-  position: absolute;
-  z-index: 99;
-  top: 40px;
-  left: 651px;
-}
-
-.aye-outcome-token, .nay-outcome-token {
-  padding-left: 5px;
-    padding-right: 5px;
 }
 
 table.aye, table.nay {
-  width: 20rem;
-  border: 5px solid $primary-text;
-  border-radius: 1.5rem;
+  font-size: 12px;
+  width: 20em;
+  border: 3px solid $primary-text;
+  border-radius: 1rem;
   border-spacing: 0; // need to reset for chrome
   overflow: hidden;
   align-self: center;
   display: inline-table;
+
+  th, td {
+    text-align: center;
+    height: 2em;
+  }
+  
+  th {
+    font-size: 1.3em;
+  }
+  
+  td {
+    width: 50%;
+    font-size: 1.5em;
+    font-weight: 500;
+    border-bottom: 2px solid $primary-text;
+    background-color: $white;
+  }
+  
+  th:nth-child(1){
+      color: $white;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  th:nth-child(2), td:nth-child(2) {
+    border-left: 2px solid $primary-text;
+  }
 }
 
-th, td {
-  text-align: center;
-  height: 3rem;
-}
-
-th {
-  font-size: 1.3rem;
-}
-
-td {
-  width: 50%;
-  font-size: 1.5rem;
-  font-weight: 500;
-  border-bottom: 2px solid $primary-text;
-  background-color: $white;
-}
-
-th:nth-child(1){
-    color: $white;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-table.aye  th:nth-child(1) {
+table.aye th:nth-child(1) {
   background-color: $blue-aye;
 }
 
 table.nay th:nth-child(1) {
     background-color: $red-nay;
-  }
-
-tr:last-child td {
-  border-bottom: none;
-}
-
-th:nth-child(2), td:nth-child(2) {
-  border-left: 2px solid $primary-text;
 }

@@ -23,11 +23,13 @@ function VotingManager(props) {
         });
 
         database.ref('session/voting/aye/outcomes').on('value', (snapshot) => {
-            setAyeOutcomes(Object.entries(snapshot.val()));
+            // setAyeOutcomes(Object.entries(snapshot.val()));
+            setAyeOutcomes(initOutcomes(snapshot.val()));
         });
 
         database.ref('session/voting/nay/outcomes').on('value', (snapshot) => {
-            setNayOutcomes(Object.entries(snapshot.val()));
+            // setNayOutcomes(Object.entries(snapshot.val()));
+            setNayOutcomes(initOutcomes(snapshot.val()));
         })
 
     }, [])
@@ -37,61 +39,87 @@ function VotingManager(props) {
         content = <h3> start that voting</h3>
     }
 
-    return (<div className="voting-container" style={{ display: props.isVisible ? "" : "none" }}>
-        <div className="aye-container" key="aye-container">
-            <table className="aye" key="aye">
-                <tbody>
-                    <tr>
-                        <th colSpan="2">
-                            Aye
-            </th>
-                    </tr>
-                    {ayeVotes.map((val) => {
-                        return (<tr key={val[0]}>
-                            <td>{val[0]}</td>
-                            <td>{val[1]}</td>
-                        </tr>)
-                    })}
-                </tbody>
-            </table>
-        </div>
-        <div className="nay-container" key="nay-container">
-            <table className="nay" key="nay">
-                <tbody>
-                    <tr>
-                        <th colSpan="2">
-                            Nay
-            </th>
-                    </tr>
-                    {nayVotes.map((val) => {
-                        return (<tr key={val[0]}>
-                            <td>{val[0]}</td>
-                            <td>{val[1]}</td>
-                        </tr>)
-                    })}
-                </tbody>
-            </table>
-        </div>
+    function initOutcomes(vals) {
+        let outcomes = []
+        for (const val in vals) {
+            outcomes.push({
+                key: val,
+                token: vals[val],
+                transform: `translate(${getRandom(50)}px, ${getRandom(50)}px) rotate(${getRandom(30)}deg)`,
+            });
+        }
+        return outcomes;
+    }
 
-        <div className="scale-container">
-            <img src={images("./tokens/scales.svg")} key="scales" className="scales" />
-            <div className="aye-token-container">
-                {
-                    ayeOutcomes.map((val) => {
-                        return (<img src={images('./tokens/outcome-' + val[1] + ".svg")} key={val[1]} className="aye-outcome-token token-small" />)
-                    })
-                }
+    function getRandom(scale) {
+        return (Math.random() * 2 - 1) * scale;
+    }
+
+    return (
+        <div className="voting-container" style={{ display: props.isVisible ? "" : "none" }}>
+            <div className="aye-container" key="aye-container">
+                <table className="aye" key="aye">
+                    <tbody>
+                        <tr>
+                            <th colSpan="2">
+                                Aye
+            </th>
+                        </tr>
+                        {ayeVotes.map((val) => {
+                            return (<tr key={val[0]}>
+                                <td>{val[0]}</td>
+                                <td>{val[1]}</td>
+                            </tr>)
+                        })}
+                    </tbody>
+                </table>
             </div>
-            <div className="nay-token-container">
-                {
-                    nayOutcomes.map((val) => {
-                        return (<img src={images('./tokens/outcome-' + val[1] + ".svg")} key={val[1]} className="nay-outcome-token token-small" />)
-                    })
-                }
+            <div className="nay-container" key="nay-container">
+                <table className="nay" key="nay">
+                    <tbody>
+                        <tr>
+                            <th colSpan="2">
+                                Nay
+            </th>
+                        </tr>
+                        {nayVotes.map((val) => {
+                            return (<tr key={val[0]}>
+                                <td>{val[0]}</td>
+                                <td>{val[1]}</td>
+                            </tr>)
+                        })}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="aye-scale">
+                <img src={images("./tokens/aye-scale.svg")} key="scales" />
+                <div className="aye-token-container">
+                    {ayeOutcomes.map((val) =>
+                        <img
+                            src={images('./tokens/outcome-' + val.token + ".svg")}
+                            key={val.key}
+                            className="aye-outcome-token token-small"
+                            style={{ transform: val.transform }}
+                        />
+                    )}
+                </div>
+            </div>
+            <div className="nay-scale">
+                <img src={images("./tokens/nay-scale.svg")} key="scales" />
+                <div className="nay-token-container">
+                    {nayOutcomes.map((val) =>
+                        <img
+                            src={images('./tokens/outcome-' + val.token + ".svg")}
+                            key={val.key}
+                            className="nay-outcome-token token-small"
+                            style={{ transform: val.transform }}
+                        />
+                    )}
+                </div>
             </div>
         </div>
-
-    </div>);
+    );
 }
 
 export default VotingManager;

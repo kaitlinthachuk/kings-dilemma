@@ -45,10 +45,12 @@ class HouseSideMenu extends Component {
                 tokens = this.state[element.key];
             contents.push(
                 <div className="menu-house" key={element}>
-                    {tokens.length == 0 ? null : tokens.map((src) => {
-                        return <img className="token-tiny" src={images(src)} alt={src} key={src} />
-                    })
-                    }
+                    <div className="token-container">
+                        {tokens.length == 0 ? null : tokens.map((src) => {
+                            return <img className="token-small" src={images(src)} alt={src} key={src} />
+                        })
+                        }
+                    </div>
                     <div className="house-container" key={element + "-house"}>
                         <img className="house token-medium" src={imgSrc} alt={element.key} key={imgSrc} />
                         <h5 className="house-name" key={element.name}>{element.name}</h5>

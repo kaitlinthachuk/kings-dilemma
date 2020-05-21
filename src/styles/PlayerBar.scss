@@ -6,7 +6,6 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    margin-left: -100px;
 }
 
 .tokens-container{
@@ -34,88 +33,84 @@
     display: flex;
 }
 
-
-
 img.playerbar-agenda {
-     transform: rotate(-90deg) translateY(-25%);
-     height: 475px;
-     
+     height: 70%;
 }
 
 .extremist-resources{
   width: 300px;
-  margin: 0px 80px 0 80px;
   font-weight: 700;
 }
 
 .rebel-extra{
-  margin-left: -150px;
   width: 150px;
-  margin-right: 50px;
+  margin: 0 20px;
   font-weight: 700;
 }
 
-
-table.ranking {
-    transform: scale(0.4) translateX(-150%);
-}
-
-table.resources {
-    transform: scale(0.4);
-}
-
 table.resources, table.ranking {
-  width: 20rem;
-  border: 5px solid $secondary-yellow;
-  border-radius: 1.5rem;
+  font-size: 10px;
+  width: 17em;
+  border: 3px solid $secondary-yellow;
+  border-radius: 1em;
   border-spacing: 0; // need to reset for chrome
   overflow: hidden;
   align-self: center;
   display: inline-table;
-}
-
-th, td {
-  text-align: center;
-  height: 3rem;
-}
-
-th {
-  font-size: 1.3rem;
-}
-
-td {
-  width: 50%;
-  font-size: 2rem;
-  font-weight: 700;
-  border-bottom: 2px solid $secondary-yellow;
-  background-color: $white;
-}
-
-th:nth-child(2), td:nth-child(2) {
-  border-left: 2px solid $secondary-yellow;
-}
-
-th:nth-child(1) {
-  background-color: $primary-text;
-  color: $white;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-th:nth-child(2) {
-  background-color: $secondary-yellow;
-}
-
-td:nth-child(1) {
-  color: $primary-text;
-}
-
-td:nth-child(2) {
-  color: $secondary-yellow;
-}
-
-tr:last-child td {
-  border-bottom: none;
+  
+  th, td {
+    text-align: center;
+    height: 1.5em;
+  }
+  
+  td {
+    width: 50%;
+    font-size: 150%;
+    font-weight: 700;
+    border-bottom: 1px solid $secondary-yellow;
+    background-color: $white;
+  }
+  
+  th:nth-child(2), td:nth-child(2) {
+    border-left: 1px solid $secondary-yellow;
+  }
+  
+  th:nth-child(1) {
+    background-color: $primary-text;
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  
+  th:nth-child(2) {
+    background-color: $secondary-yellow;
+  }
+  
+  td:nth-child(1) {
+    color: $primary-text;
+  }
+  
+  td:nth-child(2) {
+    color: $secondary-yellow;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  th img {
+    height: 100%;
+  }
+  
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+    
+    img {
+      padding: 0 0.5em;
+      height: 1.2em;
+    }
+  }
 }
 
 .ranking td:nth-child(1) {
@@ -123,16 +118,12 @@ tr:last-child td {
   font-weight: normal;
 }
 
-th img {
-  height: 70%;
+.agenda-tables {
+  display: flex;
+  padding: 0 20px;
+  align-items: center;
 }
 
-.header-wrapper {
-  display: flex;
-  align-items: center;
-  
-  img {
-    padding: 0.5rem;
-    height: 1.75rem;
-  }
+.agenda-tables table:nth-child(2) {
+  margin-left: 20px;
 }
