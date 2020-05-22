@@ -21,6 +21,7 @@
     font-weight: 700;
     height: 100%;
     display: flex;
+    align-items: center;
 }
 
 .playerbar-value > span {
@@ -31,10 +32,6 @@
 .table-container{
     height: 100%;
     display: flex;
-}
-
-img.playerbar-agenda {
-     height: 70%;
 }
 
 .extremist-resources{

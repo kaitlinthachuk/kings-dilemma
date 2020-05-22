@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { database } from '../firebase.js';
 
@@ -24,6 +24,7 @@ function Gameplay(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [assignTokens, setAssignTokens] = useState(false);
     const [assignOutcomes, setAssignOutcomes] = useState(false);
+    const [scale, setScale] = useState(1);
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -64,6 +65,22 @@ function Gameplay(props) {
             }
         })
     }, []);
+
+    useLayoutEffect(() => {
+        handleResize(); // for initial load if causes problems try useEffectLayout as suggested by react docs
+        window.addEventListener('resize', handleResize);
+        return (() => window.removeEventListener('resize', handleResize));
+    });
+
+    function handleResize() {
+        const availableWidth = document.body.scrollWidth - 300; // 300 from sidebar width
+        const availableHeight = document.body.scrollHeight - 60 - 180; // 60 nav and 180 playerbar
+        const scale = Math.min(
+            availableWidth / 1280,
+            availableHeight / 720
+        );
+        setScale(scale);
+    }
 
     let availableAgendas = [];
 
@@ -157,7 +174,10 @@ function Gameplay(props) {
                 showClose='false' class="image-agenda-modal" />
             <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
             <VotingOutcome isVisible={assignOutcomes} onSubmit={processOutcomeTokens} />
-            <VotingManager isVisible={isVoting} />
+            <div className='aspect-ratio-box-root'>
+                <VotingManager isVisible={isVoting} scale={scale} />
+                {/* useful root for when adding webcame too */}
+            </div>
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }

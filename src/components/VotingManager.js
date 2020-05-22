@@ -56,7 +56,7 @@ function VotingManager(props) {
     }
 
     return (
-        <div className="voting-container" style={{ display: props.isVisible ? "" : "none" }}>
+        <div className="voting-container" style={{ display: props.isVisible ? "" : "none", transform: `scale(${props.scale})` }}>
             <div className="aye-container" key="aye-container">
                 <table className="aye" key="aye">
                     <tbody>

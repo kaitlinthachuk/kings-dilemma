@@ -1,7 +1,7 @@
 @import 'vars';
 
 /* .gameplay-container height 100vh is cleaner but has strange behavior */
-html, body, #root, .App, .gameplay-container {
+html, body, #root, .App {
   height: 100%;
 }
 

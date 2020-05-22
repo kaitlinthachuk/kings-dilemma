@@ -2,16 +2,23 @@
 
 .side-menu-container{
     grid-area: side;
-    background-color: darken($background-color, 10)
+    background-color: darken($background-color, 10);
+    overflow: hidden auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-menu-container > :nth-child(odd) {
+    background-color: darken($background-color, 12);
 }
 
 .menu-house{
+    height: 100%;
+    min-height: 60px;
+    max-height: 130px;
     display: flex;
-    justify-content: flex-end;
-}
-
-.menu-house > .token-tiny{
-    margin: auto;
+    align-items: center;
+    position: relative;
 }
 
 .token-container {
@@ -21,11 +28,21 @@
 }
 
 .house-container{
+    height: 100%;
+    width: 200px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
+    transition: .5s ease;
+    background-color: darken($background-color, 10);
 }
 
-.house-container:hover .house{
-    opacity: 0.3;
+.house-container:hover{
+    background-blend-mode: overlay; // weird way to achieve your original affect but with background image
 }
 
 .house-container:hover .house-name {
@@ -36,7 +53,4 @@
     transition: .5s ease;
     opacity: 0;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }

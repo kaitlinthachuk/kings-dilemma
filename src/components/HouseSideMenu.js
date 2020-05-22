@@ -51,8 +51,7 @@ class HouseSideMenu extends Component {
                         })
                         }
                     </div>
-                    <div className="house-container" key={element + "-house"}>
-                        <img className="house token-medium" src={imgSrc} alt={element.key} key={imgSrc} />
+                    <div className="house-container" key={element + "-house"} style={{ backgroundImage: `url(${imgSrc})` }}>
                         <h5 className="house-name" key={element.name}>{element.name}</h5>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 .gameplay-container{
+    height: 100%;
     display: grid;
     grid-template-columns: auto 300px;
     grid-template-rows: 60px auto 180px;
@@ -6,4 +7,11 @@
       "header header"
       "main side"
       "footer tokens";
+}
+
+.aspect-ratio-box-root {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
