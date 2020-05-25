@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useRef, useEffect } from 'react';
 import { database } from '../firebase.js';
 
 import '../styles/HouseSideMenu.scss';
@@ -14,7 +14,9 @@ class HouseSideMenu extends Component {
             "coden": [],
             "solad": [],
             "tiryll": [],
-            "tork": []
+            "tork": [],
+            "moderator": "",
+            "leader": ""
         }
         this.buildHouses = this.buildHouses.bind(this);
     }
@@ -36,13 +38,45 @@ class HouseSideMenu extends Component {
                 })
             })
         });
+
+        database.ref('session/voting/moderator').on('value', (snapshot) => {
+            this.setState({
+                "moderator": snapshot.val()
+            });
+        });
+        database.ref('session/voting/leader').on('value', (snapshot) => {
+            this.setState({
+                "leader": snapshot.val()
+            })
+        });
+
+
+
     }
 
     buildHouses() {
         let contents = [];
+
         this.props.houses.forEach(element => {
             let imgSrc = images("./images/" + element.key + "-small.png"),
                 tokens = this.state[element.key];
+
+            if (element.key == this.state["moderator"] && !tokens.includes('./tokens/moderator.svg')) {
+                tokens.push('./tokens/moderator.svg')
+            }
+            if (element.key == this.state["leader"] && !tokens.includes('./tokens/leader.svg')) {
+                tokens.push('./tokens/leader.svg')
+            }
+
+            tokens = tokens.filter((el) => {
+                if (el == './tokens/leader.svg' && element.key !== this.state["leader"]) {
+                    return false;
+                }
+                if (el == './tokens/moderator.svg' && element.key !== this.state["moderator"]) {
+                    return false;
+                }
+                return true;
+            })
             contents.push(
                 <div className="menu-house" key={element}>
                     <div className="token-container">

@@ -18,18 +18,17 @@
     max-height: 130px;
     display: flex;
     align-items: center;
-    position: relative;
 }
 
 .token-container {
-    width: 100%;
+    flex: 1;
     display: flex;
     justify-content: space-evenly;
 }
 
 .house-container{
     height: 100%;
-    width: 200px;
+    width: 130px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
