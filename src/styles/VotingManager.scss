@@ -7,12 +7,21 @@
         grid-template-rows: auto 40% auto;
         grid-template-areas: 
           "nay card aye"
-          "aye-scale scale nay-scale"
+          "aye-scale power nay-scale"
           "vote vote vote";
     overflow: auto;
     width: 1280px;
     height: 720px;
     position: absolute;
+}
+
+.available-power {
+  grid-area: power;
+  margin: auto;
+}
+
+.power-token{
+  padding: 5px;
 }
 
 .aye-container{

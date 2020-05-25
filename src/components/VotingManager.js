@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { database } from '../firebase.js';
-
+import VoteDisplay from "../components/VoteDisplay.js"
 import '../styles/VotingManager.scss';
 
 const images = require.context('../assets/', true);
@@ -10,16 +10,14 @@ function VotingManager(props) {
     const [nayVotes, setNayVotes] = useState([]);
     const [ayeOutcomes, setAyeOutcomes] = useState([]);
     const [nayOutcomes, setNayOutcomes] = useState([]);
-
-    const [vote, setVote] = useState({ vote: "", power: "" });
-
+    const [power, setPower] = useState([]);
     useEffect(() => {
         database.ref('session/voting/aye/voters').on('value', (snapshot) => {
-            setAyeVotes(Object.entries(snapshot.val()));
+            setAyeVotes(Object.entries(snapshot.val()).splice(0, 1));
         });
 
         database.ref('session/voting/nay/voters').on('value', (snapshot) => {
-            setNayVotes(Object.entries(snapshot.val()));
+            setNayVotes(Object.entries(snapshot.val()).splice(0, 1));
         });
 
         database.ref('session/voting/aye/outcomes').on('value', (snapshot) => {
@@ -30,14 +28,34 @@ function VotingManager(props) {
         database.ref('session/voting/nay/outcomes').on('value', (snapshot) => {
             // setNayOutcomes(Object.entries(snapshot.val()));
             setNayOutcomes(initOutcomes(snapshot.val()));
-        })
+        });
+
+        database.ref('session/voting/available_power').on('value', (snapshot) => {
+            let powerTokens = [],
+                powerNum = snapshot.val();
+
+            while (powerNum > 0) {
+                if (powerNum - 10 >= 0) {
+                    powerTokens.push(
+                        <img src={images("./tokens/power-10.svg")} key={powerNum} alt="power-10" className="power-token token-med" />)
+                    powerNum -= 10;
+                } else if (powerNum - 5 >= 0) {
+                    powerTokens.push(
+                        <img src={images("./tokens/power.svg")} key={powerNum} alt="power-5" className="power-token token-med" />)
+                    powerNum -= 5;
+                } else {
+                    powerTokens.push(
+                        <img src={images("./tokens/power.svg")} key={powerNum} alt="power-1" className="power-token token-small" />)
+                    powerNum--;
+                }
+            }
+
+            setPower(powerTokens);
+
+        });
 
     }, [])
 
-    let content;
-    if (props.isVisible) {
-        content = <h3> start that voting</h3>
-    }
 
     function initOutcomes(vals) {
         let outcomes = []
@@ -63,7 +81,7 @@ function VotingManager(props) {
                         <tr>
                             <th colSpan="2">
                                 Aye
-            </th>
+                            </th>
                         </tr>
                         {ayeVotes.map((val) => {
                             return (<tr key={val[0]}>
@@ -80,7 +98,7 @@ function VotingManager(props) {
                         <tr>
                             <th colSpan="2">
                                 Nay
-            </th>
+                            </th>
                         </tr>
                         {nayVotes.map((val) => {
                             return (<tr key={val[0]}>
@@ -99,7 +117,7 @@ function VotingManager(props) {
                         <img
                             src={images('./tokens/outcome-' + val.token + ".svg")}
                             key={val.key}
-                            className="aye-outcome-token token-small"
+                            className="aye-outcome-token token-med"
                             style={{ transform: val.transform }}
                         />
                     )}
@@ -112,12 +130,17 @@ function VotingManager(props) {
                         <img
                             src={images('./tokens/outcome-' + val.token + ".svg")}
                             key={val.key}
-                            className="nay-outcome-token token-small"
+                            className="nay-outcome-token token-med"
                             style={{ transform: val.transform }}
                         />
                     )}
                 </div>
             </div>
+
+            <div className="available-power">
+                {power}
+            </div>
+            <VoteDisplay house={props.house} />
         </div>
     );
 }

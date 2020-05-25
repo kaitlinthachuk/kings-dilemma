@@ -1,0 +1,109 @@
+@import 'vars';
+
+.voting-display-container{
+    grid-area: vote;
+    display: flex;
+    justify-content: center;
+}
+
+.select-vote{
+    display: flex;
+    width: 90%;
+    justify-content: space-evenly;
+}
+
+.select-vote > input[type=button]{
+    width: 25%;
+    height: 80%;
+    margin: 10px;
+    outline: none;
+    border: none;
+    transition: background-color 0.5s ease-out;
+}
+
+.aye-button{
+    background-color: $blue-aye;
+    color: $white;
+    font-weight: 700;
+    font-size: 2.3em;
+    &:hover {
+        background-color: darken($blue-aye, 10);
+    }
+}
+
+.nay-button{
+    background-color: $red-nay;
+    color: $white;
+    font-weight: 700;
+    font-size: 2.3em;
+    &:hover{
+        background-color: darken($red-nay, 10);
+    }
+}
+
+.pass-button{
+    background-color: $secondary-yellow;
+    color: $white;
+    font-weight: 700;
+    font-size: 2.3em;
+    white-space: break-spaces;
+    &:hover{
+        background-color: darken($secondary-yellow, 10);
+    }
+}
+
+.background-red {
+    background-color: $red-nay;
+}
+.background-blue {
+    background-color: $blue-aye;
+}
+.background-yellow {
+    background-color: $secondary-yellow;
+}
+
+.add-power-container{
+    color: $white;
+    font-weight: 700;
+    font-size: 2.3em;
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: space-evenly;
+    margin: auto;
+}
+
+.add-power{
+    margin: auto 0;
+}
+
+.add-power-input{
+    height: 50px;
+    width: 60px;
+    font-size: 2.3rem;
+}
+
+.add-power-button{
+    height: 50px;
+    width: 80px;
+    outline: none;
+    border: none;
+    background-color: white;
+    font-size: 0.7em;
+    background-color: $background-color;
+    &:hover{
+        background-color: darken($background-color, 10);
+    }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
