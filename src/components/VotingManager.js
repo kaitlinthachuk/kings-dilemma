@@ -11,6 +11,8 @@ function VotingManager(props) {
     const [ayeOutcomes, setAyeOutcomes] = useState([]);
     const [nayOutcomes, setNayOutcomes] = useState([]);
     const [power, setPower] = useState([]);
+    const [maxComitted, setMaxComitted] = useState(1);
+
     useEffect(() => {
         database.ref('session/voting/aye/voters').on('value', (snapshot) => {
             setAyeVotes(Object.entries(snapshot.val()).splice(0, 1));
@@ -84,6 +86,9 @@ function VotingManager(props) {
                             </th>
                         </tr>
                         {ayeVotes.map((val) => {
+                            if (val[1] > maxComitted) {
+                                setMaxComitted(val[1]);
+                            }
                             return (<tr key={val[0]}>
                                 <td>{val[0]}</td>
                                 <td>{val[1]}</td>
@@ -101,6 +106,9 @@ function VotingManager(props) {
                             </th>
                         </tr>
                         {nayVotes.map((val) => {
+                            if (val[1] > maxComitted) {
+                                setMaxComitted(val[1]);
+                            }
                             return (<tr key={val[0]}>
                                 <td>{val[0]}</td>
                                 <td>{val[1]}</td>
@@ -140,7 +148,7 @@ function VotingManager(props) {
             <div className="available-power">
                 {power}
             </div>
-            <VoteDisplay house={props.house} />
+            <VoteDisplay house={props.house} maxComitted={maxComitted} />
         </div>
     );
 }

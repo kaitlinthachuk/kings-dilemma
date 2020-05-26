@@ -15,7 +15,6 @@ function VoteDisplay(props) {
     const [addPower, setAddPower] = useState(1);
     const [availablePower, setAvailablePower] = useState(0);
 
-
     useEffect(() => {
         database.ref('session/' + props.house.key + "/voting_turn").on('value', (snapshot) => {
             setTurn(snapshot.val());
@@ -57,6 +56,10 @@ function VoteDisplay(props) {
             if (e.target.value.includes("Moderator")) {
                 database.ref("session/voting/moderator").set(props.house.key);
             }
+
+            if (e.target.value.includes("Power")) {
+                database.ref("session/" + props.house.key + "/coins").set(props.house.coins + 1);
+            }
             setTurn(false);
         }
 
@@ -72,10 +75,12 @@ function VoteDisplay(props) {
         database.ref('session/').update({
             ['voting/' + vote["vote"] + '/voters/' + props.house.name]: parseInt(addPower) + power,
             [next + '/voting_turn']: true,
-            [props.house.key + "/voting_turn"]: false,
-            [props.house.key + "/power"]: availablePower - addPower
+            [props.house.key + "/voting_turn"]: false
         });
 
+        if (power + parseInt(addPower) > props.maxComitted) {
+            database.ref("session/voting/leader").set(props.house.key);
+        }
         setPower(power + parseInt(addPower));
         setAddPower(1);
         setTurn(false);
@@ -89,7 +94,6 @@ function VoteDisplay(props) {
 
 
     if (turn && vote["vote"].includes("pass")) {
-        console.log("pass turn to " + next);
         database.ref('session/').update({
             [next + '/voting_turn']: true,
             [props.house.key + "/voting_turn"]: false,
@@ -98,8 +102,7 @@ function VoteDisplay(props) {
     }
 
     let content;
-    console.log(turn);
-    console.log(vote);
+
     if (!turn && vote["vote"].length === 0) {
         content = <h1>Waiting For Your Turn....</h1>
     } else if (turn && vote["vote"].length === 0) {
