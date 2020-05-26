@@ -14,6 +14,8 @@ function VoteDisplay(props) {
     const [passMod, setPassMod] = useState(false);
     const [addPower, setAddPower] = useState(1);
     const [availablePower, setAvailablePower] = useState(0);
+    const [coins, setCoins] = useState(0);
+    const [voteDone, setVoteDone] = useState(false);
 
     useEffect(() => {
         database.ref('session/' + props.house.key + "/voting_turn").on('value', (snapshot) => {
@@ -34,6 +36,14 @@ function VoteDisplay(props) {
 
         database.ref('session/' + props.house.key + '/power').on('value', (snapshot) => {
             setAvailablePower(snapshot.val());
+        });
+
+        database.ref('session/' + props.house.key + '/coins').on('value', (snapshot) => {
+            setCoins(snapshot.val());
+        });
+
+        database.ref('session/voting/voting_done').on('value', (snapshot) => {
+            setVoteDone(snapshot.val());
         });
     }, [])
 
@@ -58,7 +68,7 @@ function VoteDisplay(props) {
             }
 
             if (e.target.value.includes("Power")) {
-                database.ref("session/" + props.house.key + "/coins").set(props.house.coins + 1);
+                database.ref("session/" + props.house.key + "/coins").set(coins + 1);
             }
             setTurn(false);
         }
@@ -71,17 +81,27 @@ function VoteDisplay(props) {
 
     function commitPower(e) {
         e.preventDefault();
+        let pow;
+        if (parseInt(addPower) + power > availablePower) {
+            pow = availablePower;
+        } else {
+            pow = parseInt(addPower) + power
+        }
 
         database.ref('session/').update({
-            ['voting/' + vote["vote"] + '/voters/' + props.house.name]: parseInt(addPower) + power,
+            ['voting/' + vote["vote"] + '/voters/' + props.house.name]: pow,
             [next + '/voting_turn']: true,
             [props.house.key + "/voting_turn"]: false
         });
 
-        if (power + parseInt(addPower) > props.maxComitted) {
+        if (pow > props.maxComitted) {
             database.ref("session/voting/leader").set(props.house.key);
         }
-        setPower(power + parseInt(addPower));
+
+        if (next == leader) {
+            database.ref('session/voting/voting_done').set(true);
+        }
+        setPower(pow);
         setAddPower(1);
         setTurn(false);
 
@@ -98,6 +118,10 @@ function VoteDisplay(props) {
             [next + '/voting_turn']: true,
             [props.house.key + "/voting_turn"]: false,
         });
+
+        if (next == leader) {
+            database.ref('session/voting/voting_done').set(true);
+        }
         setTurn(false);
     }
 

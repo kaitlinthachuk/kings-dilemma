@@ -4,6 +4,9 @@
     grid-area: vote;
     display: flex;
     justify-content: center;
+    &>h1{
+       margin: auto; 
+    }
 }
 
 .select-vote{

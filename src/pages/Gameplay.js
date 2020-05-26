@@ -25,6 +25,7 @@ function Gameplay(props) {
     const [assignTokens, setAssignTokens] = useState(false);
     const [assignOutcomes, setAssignOutcomes] = useState(false);
     const [scale, setScale] = useState(1);
+    const [votingOrder, setVotingOrder] = useState([]);
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -167,7 +168,11 @@ function Gameplay(props) {
         updateObj['/session/voting/moderator'] = otherHouses[0].key;
         updateObj['/session/voting/leader'] = otherHouses[4].key;
 
+        let leader = temp.pop();
+        temp.unshift(leader);
+
         database.ref().update(updateObj);
+        setVotingOrder(temp);
         setAssignOutcomes(true);
     }
 
@@ -205,7 +210,7 @@ function Gameplay(props) {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }
             {
-                !isLoading && <HouseSideMenu houses={otherHouses} />
+                !isLoading && <HouseSideMenu houses={otherHouses} order={votingOrder} />
             }
         </div>
     );

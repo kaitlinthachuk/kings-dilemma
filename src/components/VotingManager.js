@@ -15,11 +15,17 @@ function VotingManager(props) {
 
     useEffect(() => {
         database.ref('session/voting/aye/voters').on('value', (snapshot) => {
-            setAyeVotes(Object.entries(snapshot.val()).splice(0, 1));
+            let obj = Object.entries(snapshot.val()).filter((key) => {
+                return key[0] != "placeholder";
+            });
+            setAyeVotes(obj);
         });
 
         database.ref('session/voting/nay/voters').on('value', (snapshot) => {
-            setNayVotes(Object.entries(snapshot.val()).splice(0, 1));
+            let obj = Object.entries(snapshot.val()).filter((key, val) => {
+                return key[0] != "placeholder";
+            });
+            setNayVotes(obj);
         });
 
         database.ref('session/voting/aye/outcomes').on('value', (snapshot) => {
