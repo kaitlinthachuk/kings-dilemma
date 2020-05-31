@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { database } from '../firebase.js';
 
 import '../styles/VoteDisplay.scss';
-import '../styles/vars.scss';
+
 
 function VoteDisplay(props) {
     const [turn, setTurn] = useState(false);
@@ -10,12 +10,11 @@ function VoteDisplay(props) {
     const [power, setPower] = useState(0);
     const [next, setNext] = useState("");
     const [leader, setLeader] = useState("");
-    const [moderator, setModerator] = useState("");
     const [passMod, setPassMod] = useState(false);
     const [addPower, setAddPower] = useState(1);
     const [availablePower, setAvailablePower] = useState(0);
     const [coins, setCoins] = useState(0);
-    const [voteDone, setVoteDone] = useState(false);
+
 
     useEffect(() => {
         database.ref('session/' + props.house.key + "/voting_turn").on('value', (snapshot) => {
@@ -27,9 +26,6 @@ function VoteDisplay(props) {
         database.ref('session/voting/leader').on('value', (snapshot) => {
             setLeader(snapshot.val());
         });
-        database.ref('session/voting/moderator').on('value', (snapshot) => {
-            setModerator(snapshot.val());
-        });
         database.ref('session/voting/become_mod').on('value', (snapshot) => {
             setPassMod(snapshot.val());
         });
@@ -40,10 +36,6 @@ function VoteDisplay(props) {
 
         database.ref('session/' + props.house.key + '/coins').on('value', (snapshot) => {
             setCoins(snapshot.val());
-        });
-
-        database.ref('session/voting/voting_done').on('value', (snapshot) => {
-            setVoteDone(snapshot.val());
         });
     }, [])
 
@@ -65,10 +57,14 @@ function VoteDisplay(props) {
             });
             if (e.target.value.includes("Moderator")) {
                 database.ref("session/voting/moderator").set(props.house.key);
+                database.ref("session/voting/become_mod").set(true);
             }
 
             if (e.target.value.includes("Power")) {
                 database.ref("session/" + props.house.key + "/coins").set(coins + 1);
+                database.ref("session/voting/pass").update({
+                    [props.house.key]: "gather"
+                })
             }
             setTurn(false);
         }
@@ -98,7 +94,7 @@ function VoteDisplay(props) {
             database.ref("session/voting/leader").set(props.house.key);
         }
 
-        if (next == leader) {
+        if (next === leader) {
             database.ref('session/voting/voting_done').set(true);
         }
         setPower(pow);
@@ -119,7 +115,7 @@ function VoteDisplay(props) {
             [props.house.key + "/voting_turn"]: false,
         });
 
-        if (next == leader) {
+        if (next === leader) {
             database.ref('session/voting/voting_done').set(true);
         }
         setTurn(false);
@@ -195,5 +191,6 @@ function VoteDisplay(props) {
         {content}
     </div>)
 }
+
 
 export default VoteDisplay;

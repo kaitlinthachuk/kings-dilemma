@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { database } from '../firebase.js';
 import VoteDisplay from "../components/VoteDisplay.js"
+import VoteResult from "../components/VoteResult.js"
 import '../styles/VotingManager.scss';
 
 const images = require.context('../assets/', true);
@@ -8,34 +9,47 @@ const images = require.context('../assets/', true);
 function VotingManager(props) {
     const [ayeVotes, setAyeVotes] = useState([]);
     const [nayVotes, setNayVotes] = useState([]);
+    const [passVotes, setPassVotes] = useState([]);
     const [ayeOutcomes, setAyeOutcomes] = useState([]);
     const [nayOutcomes, setNayOutcomes] = useState([]);
     const [power, setPower] = useState([]);
     const [maxComitted, setMaxComitted] = useState(1);
+    const [voteDone, setVoteDone] = useState(false);
 
     useEffect(() => {
         database.ref('session/voting/aye/voters').on('value', (snapshot) => {
             let obj = Object.entries(snapshot.val()).filter((key) => {
-                return key[0] != "placeholder";
+                return key[0] !== "placeholder";
             });
             setAyeVotes(obj);
         });
 
         database.ref('session/voting/nay/voters').on('value', (snapshot) => {
-            let obj = Object.entries(snapshot.val()).filter((key, val) => {
-                return key[0] != "placeholder";
+            let obj = Object.entries(snapshot.val()).filter((key) => {
+                return key[0] !== "placeholder";
             });
             setNayVotes(obj);
         });
 
+        database.ref('session/voting/pass').on('value', (snapshot) => {
+            let obj = Object.keys(snapshot.val()).filter((key) => {
+                return key !== "placeholder";
+            });
+            setPassVotes(obj);
+        });
+
         database.ref('session/voting/aye/outcomes').on('value', (snapshot) => {
-            // setAyeOutcomes(Object.entries(snapshot.val()));
+            //setAyeOutcomes(Object.entries(snapshot.val()));
             setAyeOutcomes(initOutcomes(snapshot.val()));
         });
 
         database.ref('session/voting/nay/outcomes').on('value', (snapshot) => {
-            // setNayOutcomes(Object.entries(snapshot.val()));
+            //setNayOutcomes(Object.entries(snapshot.val()));
             setNayOutcomes(initOutcomes(snapshot.val()));
+        });
+
+        database.ref('session/voting/voting_done').on('value', (snapshot) => {
+            setVoteDone(snapshot.val());
         });
 
         database.ref('session/voting/available_power').on('value', (snapshot) => {
@@ -125,12 +139,13 @@ function VotingManager(props) {
             </div>
 
             <div className="aye-scale">
-                <img src={images("./tokens/aye-scale.svg")} key="scales" />
+                <img src={images("./tokens/aye-scale.svg")} key="scales" alt="scales" />
                 <div className="aye-token-container">
                     {ayeOutcomes.map((val) =>
                         <img
                             src={images('./tokens/outcome-' + val.token + ".svg")}
                             key={val.key}
+                            alt="outcome"
                             className="aye-outcome-token token-med"
                             style={{ transform: val.transform }}
                         />
@@ -138,12 +153,13 @@ function VotingManager(props) {
                 </div>
             </div>
             <div className="nay-scale">
-                <img src={images("./tokens/nay-scale.svg")} key="scales" />
+                <img src={images("./tokens/nay-scale.svg")} key="scales" alt="scales" />
                 <div className="nay-token-container">
                     {nayOutcomes.map((val) =>
                         <img
                             src={images('./tokens/outcome-' + val.token + ".svg")}
                             key={val.key}
+                            alt="outcome"
                             className="nay-outcome-token token-med"
                             style={{ transform: val.transform }}
                         />
@@ -154,7 +170,11 @@ function VotingManager(props) {
             <div className="available-power">
                 {power}
             </div>
-            <VoteDisplay house={props.house} maxComitted={maxComitted} />
+            {
+                voteDone ?
+                    <VoteResult house={props.house} ayeVotes={ayeVotes} nayVotes={nayVotes} passVotes={passVotes} gatherPower={power} /> :
+                    <VoteDisplay house={props.house} maxComitted={maxComitted} />
+            }
         </div>
     );
 }

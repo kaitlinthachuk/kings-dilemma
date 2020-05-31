@@ -7,7 +7,7 @@
         grid-template-rows: auto 40% auto;
         grid-template-areas: 
           "nay card aye"
-          "aye-scale power nay-scale"
+          "nay-scale power aye-scale"
           "vote vote vote";
     overflow: auto;
     width: 1280px;

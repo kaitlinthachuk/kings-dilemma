@@ -33,7 +33,6 @@ function VotingOutcome(props) {
                 value="Assign Token"
                 onClick={add}
             />
-
             {
                 tokens.map((val, idx) => {
                     const side = `side-${idx}`;
@@ -105,7 +104,6 @@ function VotingOutcome(props) {
                     )
                 })
             }
-
             <input type="submit" value="Submit" />
         </form>
     );

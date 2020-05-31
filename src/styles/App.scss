@@ -73,3 +73,13 @@ h5 {
   height: 75px;
   filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
 }
+
+.background-red {
+  background-color: $red-nay;
+}
+.background-blue {
+  background-color: $blue-aye;
+}
+.background-yellow {
+  background-color: $secondary-yellow;
+}

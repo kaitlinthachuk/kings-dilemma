@@ -1,4 +1,4 @@
-import React, { Component, useRef, useEffect } from 'react';
+import React, { Component } from 'react';
 import { database } from '../firebase.js';
 
 import '../styles/HouseSideMenu.scss';
@@ -64,18 +64,18 @@ class HouseSideMenu extends Component {
             let imgSrc = images("./images/" + element.key + "-small.png"),
                 tokens = this.state[element.key];
 
-            if (element.key == this.state["moderator"] && !tokens.includes('./tokens/moderator.svg')) {
+            if (element.key === this.state["moderator"] && !tokens.includes('./tokens/moderator.svg')) {
                 tokens.push('./tokens/moderator.svg')
             }
-            if (element.key == this.state["leader"] && !tokens.includes('./tokens/leader.svg')) {
+            if (element.key === this.state["leader"] && !tokens.includes('./tokens/leader.svg')) {
                 tokens.push('./tokens/leader.svg')
             }
 
             tokens = tokens.filter((el) => {
-                if (el == './tokens/leader.svg' && element.key !== this.state["leader"]) {
+                if (el === './tokens/leader.svg' && element.key !== this.state["leader"]) {
                     return false;
                 }
-                if (el == './tokens/moderator.svg' && element.key !== this.state["moderator"]) {
+                if (el === './tokens/moderator.svg' && element.key !== this.state["moderator"]) {
                     return false;
                 }
                 return true;
@@ -83,7 +83,7 @@ class HouseSideMenu extends Component {
             contents.push(
                 <div className="menu-house" key={element}>
                     <div className="token-container">
-                        {tokens.length == 0 ? null : tokens.map((src) => {
+                        {tokens.length === 0 ? null : tokens.map((src) => {
                             return <img className="token-small" src={images(src)} alt={src} key={src} />
                         })
                         }
