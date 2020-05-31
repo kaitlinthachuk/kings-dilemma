@@ -29,7 +29,7 @@ function Navbar(props) {
         <button className='navbar-button' id="stickers" onClick={navClick}>Chronicle Stickers</button>
         <button className='navbar-button' id="symbols" onClick={navClick}>Symbols Legend</button>
         {
-          isAdmin && <button className='navbar-button' id="voting" onClick={props.votingOnClick}>Start Voting</button>
+          isAdmin && <button className='navbar-button' id="voting" onClick={props.votingOnClick}>Voting</button>
         }
         {
           isAdmin && <button className='navbar-button' id="tokens" onClick={props.tokenOnClick}>Assign Agenda Tokens</button>

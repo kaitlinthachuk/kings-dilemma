@@ -26,6 +26,7 @@ function Gameplay(props) {
     const [assignOutcomes, setAssignOutcomes] = useState(false);
     const [scale, setScale] = useState(1);
     const [votingOrder, setVotingOrder] = useState([]);
+    const [votingDone, setVotingDone] = useState(false);
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -59,11 +60,11 @@ function Gameplay(props) {
         setIsLoading(false);
 
         database.ref('/session/voting/start_voting').on('value', function (snapshot) {
-            if (snapshot.val()) {
-                setIsVoting(true);
-            } else {
-                setIsVoting(false);
-            }
+            setIsVoting(snapshot.val());
+        });
+
+        database.ref('/session/voting/voting_done').on('value', function (snapshot) {
+            setVotingDone(snapshot.val());
         })
     }, []);
 
@@ -148,32 +149,47 @@ function Gameplay(props) {
 
     function startVoting(e) {
         e.preventDefault();
-        let j, x,
-            temp = [...otherHouses];
-        for (let i = 3; i > 0; i--) {
-            j = Math.floor(Math.random() * (i + 1));
-            x = temp[i];
-            temp[i] = temp[j];
-            temp[j] = x;
+        if (votingDone) {
+            database.ref('session/voting/aye/voters/').set({ placeholder: 5 });
+            database.ref('session/voting/nay/voters/').set({ placeholder: 5 });
+            database.ref('session/voting/pass/').set({ placeholder: 5 });
+            database.ref('session/voting/aye/outcomes').remove();
+            database.ref('session/voting/nay/outcomes').remove();
+            database.ref('session/voting/').update({
+                'voting_done': false,
+                'tie_breaker': false,
+                'become_mod': false
+            });
+            setIsVoting(false);
+
+        } else if (!isVoting) {
+            let j, x,
+                temp = [...otherHouses];
+            for (let i = 3; i > 0; i--) {
+                j = Math.floor(Math.random() * (i + 1));
+                x = temp[i];
+                temp[i] = temp[j];
+                temp[j] = x;
+            }
+            let updateObj = {};
+
+            for (let i = 0; i < 4; i++) {
+                updateObj['/session/' + temp[i].key + "/next"] = temp[i + 1].key;
+            }
+
+            updateObj['/session/' + temp[4].key + "/next"] = temp[0].key;
+            updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
+            updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
+            updateObj['/session/voting/moderator'] = otherHouses[0].key;
+            updateObj['/session/voting/leader'] = otherHouses[4].key;
+
+            let leader = temp.pop();
+            temp.unshift(leader);
+
+            database.ref().update(updateObj);
+            setVotingOrder(temp);
+            setAssignOutcomes(true);
         }
-        let updateObj = {};
-
-        for (let i = 0; i < 4; i++) {
-            updateObj['/session/' + temp[i].key + "/next"] = temp[i + 1].key;
-        }
-
-        updateObj['/session/' + temp[4].key + "/next"] = temp[0].key;
-        updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
-        updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
-        updateObj['/session/voting/moderator'] = otherHouses[0].key;
-        updateObj['/session/voting/leader'] = otherHouses[4].key;
-
-        let leader = temp.pop();
-        temp.unshift(leader);
-
-        database.ref().update(updateObj);
-        setVotingOrder(temp);
-        setAssignOutcomes(true);
     }
 
     function processOutcomeTokens(e) {
