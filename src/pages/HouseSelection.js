@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from "react-router-dom";
 import { database } from '../firebase.js';
-
+import { initUrls, imagesMap } from '../storageUtil.js';
 
 import '../styles/HouseSelection.scss';
-
-const images = require.context('../assets/images', true);
 
 function HouseSelection(props) {
 
@@ -19,6 +17,8 @@ function HouseSelection(props) {
     errorMsg = null;
 
   useEffect(() => {
+
+    initUrls();
 
     database.ref('/houses/').once('value')
       .then(function (snapshot) {
@@ -60,8 +60,7 @@ function HouseSelection(props) {
   const newHouse = () => {
     let buttons = [];
     otherHouses.forEach(function (house) {
-      let img_str = "./" + house.key + "-small.png";
-      let img_src = images(img_str);
+      let img_src = imagesMap[house.key + "-small.png"];
       buttons.push(
         <div className="house-selection-container" key={house.name}>
           <div className="house-selection">

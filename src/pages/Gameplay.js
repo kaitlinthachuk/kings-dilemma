@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { database } from '../firebase.js';
+import { cardsMap } from '../storageUtil.js';
 
 import Navbar from '../components/Navbar.js';
 import PlayerBar from '../components/PlayerBar.js';
@@ -93,7 +94,7 @@ function Gameplay(props) {
                     availableAgendas = snapshot.val();
                     availableAgendas.forEach(function (agenda, index) {
                         availableAgendas[index] = {
-                            path: "cards/" + agenda + ".png",
+                            path: cardsMap[agenda + ".png"],
                             alt: agenda,
                             class: "image-modal-agenda",
                             onClick: agendaOnClick

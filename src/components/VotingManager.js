@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { database } from '../firebase.js';
-import VoteDisplay from "../components/VoteDisplay.js"
-import VoteResult from "../components/VoteResult.js"
+import VoteDisplay from "../components/VoteDisplay.js";
+import VoteResult from "../components/VoteResult.js";
+import { tokensMap } from '../storageUtil.js';
+
+
 import '../styles/VotingManager.scss';
 
-const images = require.context('../assets/', true);
+
 
 function VotingManager(props) {
     const [ayeVotes, setAyeVotes] = useState([]);
@@ -59,15 +62,15 @@ function VotingManager(props) {
             while (powerNum > 0) {
                 if (powerNum - 10 >= 0) {
                     powerTokens.push(
-                        <img src={images("./tokens/power-10.svg")} key={powerNum} alt="power-10" className="power-token token-med" />)
+                        <img src={tokensMap["power-10.svg"]} key={powerNum} alt="power-10" className="power-token token-med" />)
                     powerNum -= 10;
                 } else if (powerNum - 5 >= 0) {
                     powerTokens.push(
-                        <img src={images("./tokens/power.svg")} key={powerNum} alt="power-5" className="power-token token-med" />)
+                        <img src={tokensMap["power.svg"]} key={powerNum} alt="power-5" className="power-token token-med" />)
                     powerNum -= 5;
                 } else {
                     powerTokens.push(
-                        <img src={images("./tokens/power.svg")} key={powerNum} alt="power-1" className="power-token token-small" />)
+                        <img src={tokensMap["power.svg"]} key={powerNum} alt="power-1" className="power-token token-small" />)
                     powerNum--;
                 }
             }
@@ -139,11 +142,11 @@ function VotingManager(props) {
             </div>
 
             <div className="aye-scale">
-                <img src={images("./tokens/aye-scale.svg")} key="scales" alt="scales" />
+                <img src={tokensMap["aye-scale.svg"]} key="scales" alt="scales" />
                 <div className="aye-token-container">
                     {ayeOutcomes.map((val) =>
                         <img
-                            src={images('./tokens/outcome-' + val.token + ".svg")}
+                            src={tokensMap['outcome-' + val.token + ".svg"]}
                             key={val.key}
                             alt="outcome"
                             className="aye-outcome-token token-med"
@@ -153,11 +156,11 @@ function VotingManager(props) {
                 </div>
             </div>
             <div className="nay-scale">
-                <img src={images("./tokens/nay-scale.svg")} key="scales" alt="scales" />
+                <img src={tokensMap["nay-scale.svg"]} key="scales" alt="scales" />
                 <div className="nay-token-container">
                     {nayOutcomes.map((val) =>
                         <img
-                            src={images('./tokens/outcome-' + val.token + ".svg")}
+                            src={tokensMap['outcome-' + val.token + ".svg"]}
                             key={val.key}
                             alt="outcome"
                             className="nay-outcome-token token-med"

@@ -85,7 +85,7 @@ function VoteResult(props) {
 
     function processWinner(winner, winnerPow) {
         let winners = winner === "aye" ? ayeVotes : nayVotes,
-            winnersTotalPow = winner == "aye" ? ayePower : nayPower;
+            winnersTotalPow = winner === "aye" ? ayePower : nayPower;
         //leader has to be on winning side
         if (winnerPow["house"] !== leader) {
             database.ref('session/voting/leader').set(winnerPow["house"]);

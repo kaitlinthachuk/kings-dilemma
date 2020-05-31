@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import ImageModal from './ImageModal.js'
+import ImageModal from './ImageModal.js';
+import { imagesMap } from '../storageUtil.js';
 
 import '../styles/Navbar.scss';
 
@@ -10,7 +11,7 @@ function Navbar(props) {
 
   function navClick(e) {
     e.preventDefault();
-    setImagePath("images/" + e.target.id + ".png");
+    setImagePath(imagesMap[e.target.id + ".png"]);
     setIsVisible(true);
   }
 

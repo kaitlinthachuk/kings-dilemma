@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { database } from '../firebase.js';
+import { tokensMap, imagesMap } from '../storageUtil.js';
 
 import '../styles/HouseSideMenu.scss';
-
-const images = require.context('../assets', true);
 
 class HouseSideMenu extends Component {
     constructor(props) {
@@ -23,14 +22,13 @@ class HouseSideMenu extends Component {
 
     componentDidMount() {
         database.ref('session/tokens/').on('value', (snapshot) => {
-            let fbTokens = snapshot.val(),
-                tokenSrc = './tokens/';
+            let fbTokens = snapshot.val();
 
             Object.keys(fbTokens).forEach((key) => {
                 Object.values(fbTokens[key]).forEach((val) => {
                     let temp = [];
-                    if (!this.state[key].includes(tokenSrc + val + ".svg")) {
-                        temp = [...this.state[key], tokenSrc + val + ".svg"];
+                    if (!this.state[key].includes(val + ".svg")) {
+                        temp = [...this.state[key], val + ".svg"];
                         this.setState({
                             [key]: temp
                         })
@@ -58,24 +56,22 @@ class HouseSideMenu extends Component {
         let contents = [],
             array = this.props.order.length !== 0 ? this.props.order : this.props.houses;
 
-        console.log(this.props.houses, this.props.order, array);
-
         array.forEach(element => {
-            let imgSrc = images("./images/" + element.key + "-small.png"),
+            let imgSrc = imagesMap[element.key + "-small.png"],
                 tokens = this.state[element.key];
 
-            if (element.key === this.state["moderator"] && !tokens.includes('./tokens/moderator.svg')) {
-                tokens.push('./tokens/moderator.svg')
+            if (element.key === this.state["moderator"] && !tokens.includes('moderator.svg')) {
+                tokens.push('moderator.svg')
             }
-            if (element.key === this.state["leader"] && !tokens.includes('./tokens/leader.svg')) {
-                tokens.push('./tokens/leader.svg')
+            if (element.key === this.state["leader"] && !tokens.includes('leader.svg')) {
+                tokens.push('leader.svg')
             }
 
             tokens = tokens.filter((el) => {
-                if (el === './tokens/leader.svg' && element.key !== this.state["leader"]) {
+                if (el === 'leader.svg' && element.key !== this.state["leader"]) {
                     return false;
                 }
-                if (el === './tokens/moderator.svg' && element.key !== this.state["moderator"]) {
+                if (el === 'moderator.svg' && element.key !== this.state["moderator"]) {
                     return false;
                 }
                 return true;
@@ -84,7 +80,7 @@ class HouseSideMenu extends Component {
                 <div className="menu-house" key={element}>
                     <div className="token-container">
                         {tokens.length === 0 ? null : tokens.map((src) => {
-                            return <img className="token-small" src={images(src)} alt={src} key={src} />
+                            return <img className="token-small" src={tokensMap[src]} alt={src} key={src} />
                         })
                         }
                     </div>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import cardData from '../assets/cards/cards.json';
 import { database } from '../firebase.js';
+import { cardsMap, tokensMap, cardJson } from '../storageUtil.js';
 
 import '../styles/PlayerBar.scss';
 
-const images = require.context('../assets', true);
+
 
 
 function PlayerBar(props) {
@@ -12,9 +12,9 @@ function PlayerBar(props) {
     const [coins, setCoins] = useState(0);
     const [power, setPower] = useState(0);
 
-    let coinSrc = images("./tokens/coin.svg"),
-        powerSrc = images("./tokens/power.svg"),
-        laurelSrc = images("./cards/laurel.svg"),
+    let coinSrc = tokensMap["coin.svg"],
+        powerSrc = tokensMap["power.svg"],
+        laurelSrc = cardsMap["laurel.svg"],
         boardSrc,
         isExtremist = false,
         isRebel = false,
@@ -39,8 +39,8 @@ function PlayerBar(props) {
     }
 
     if (haveAgenda) {
-        let resources = cardData[props.secretAgenda]["resources"],
-            ranking = cardData[props.secretAgenda]["ranking"];
+        let resources = cardJson[props.secretAgenda]["resources"],
+            ranking = cardJson[props.secretAgenda]["ranking"];
 
         if (props.secretAgenda === "rebel") {
             isRebel = true;
@@ -69,7 +69,7 @@ function PlayerBar(props) {
             );
         })
 
-        boardSrc = images("./cards/" + props.secretAgenda + "-board.svg");
+        boardSrc = cardsMap[props.secretAgenda + "-board.svg"];
     }
 
     return (
@@ -90,7 +90,7 @@ function PlayerBar(props) {
                         </table>
                     }
                     {isExtremist && resourceContents}
-                    {isRebel && <span className="rebel-extra">{cardData[props.secretAgenda]["extra"]}</span>}
+                    {isRebel && <span className="rebel-extra">{cardJson[props.secretAgenda]["extra"]}</span>}
                     {haveAgenda &&
                         <table className="ranking" key="ranking">
                             <tbody>

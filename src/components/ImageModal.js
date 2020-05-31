@@ -1,8 +1,5 @@
 import React from 'react';
-
 import "../styles/ImageModal.scss";
-
-const images = require.context('../assets', true);
 
 function ImageModal(props) {
 
@@ -12,8 +9,7 @@ function ImageModal(props) {
     if (props.isVisible) {
         let imagesTags = [];
         props.images.forEach(element => {
-            let img_src = images("./" + element.path);
-            imagesTags.push(<img className={element.class} src={img_src} key={img_src} alt={element.alt} onClick={element.onClick}></img>);
+            imagesTags.push(<img className={element.class} src={element.path} key={element.path} alt={element.alt} onClick={element.onClick}></img>);
         });
         contents = <div className={props.class}>
             {
