@@ -54,18 +54,20 @@ function VoteDisplay(props) {
             database.ref('session/').update({
                 [next + '/voting_turn']: true,
                 [props.house.key + "/voting_turn"]: false,
+                [props.house.key + "/coins"]: coins + 1
             });
+
             if (e.target.value.includes("Moderator")) {
                 database.ref("session/voting/moderator").set(props.house.key);
                 database.ref("session/voting/become_mod").set(true);
             }
 
             if (e.target.value.includes("Power")) {
-                database.ref("session/" + props.house.key + "/coins").set(coins + 1);
                 database.ref("session/voting/pass").update({
                     [props.house.key]: "gather"
                 })
             }
+
             setTurn(false);
         }
 
