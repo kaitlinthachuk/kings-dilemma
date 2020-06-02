@@ -15,6 +15,13 @@
     position: absolute;
 }
 
+.voting-card-container{
+  grid-area: card;
+}
+.voting-card{
+  width: 300px;
+  margin-top: 30px;
+}
 .available-power {
   grid-area: power;
   margin: auto;

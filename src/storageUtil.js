@@ -6,7 +6,7 @@ const cards = ["extremist-board.svg", "extremist.png", "greedy-board.svg", "gree
     "opportunist-board.svg", "opportunist.png", "opulent-board.svg", "opulent.png", "rebel-board.svg", "rebel.png", "laurel.svg"];
 
 const images = ["coden-small.png", "crann-small.png", "solad-small.png", "tork-small.png", "tiryll-small.png",
-    "lore.png", "map.png", "rules.png", "symbols.png", "stickers.png"];
+    "lore.png", "map.png", "rules.png", "symbols.png", "stickers.png", "voting.png"];
 
 const tokens = ["aye-scale.svg", "coin.svg", "coin-10.svg", "influence-negative.svg", "influence-positive.svg", "knowledge-negative.svg",
     "knowledge-positive.svg", "leader.svg", "moderator.svg", "nay-scale.svg", "outcome-chronicle-neg.svg", "outcome-chronicle-pos.svg", "outcome-influence-neg.svg",

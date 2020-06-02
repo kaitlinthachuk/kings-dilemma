@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { database } from '../firebase.js';
 import VoteDisplay from "../components/VoteDisplay.js";
 import VoteResult from "../components/VoteResult.js";
-import { tokensMap } from '../storageUtil.js';
+import { tokensMap, imagesMap } from '../storageUtil.js';
 
 
 import '../styles/VotingManager.scss';
@@ -18,6 +18,7 @@ function VotingManager(props) {
     const [power, setPower] = useState([]);
     const [maxComitted, setMaxComitted] = useState(1);
     const [voteDone, setVoteDone] = useState(false);
+
 
     useEffect(() => {
         database.ref('session/voting/aye/voters').on('value', (snapshot) => {
@@ -119,6 +120,9 @@ function VotingManager(props) {
                         })}
                     </tbody>
                 </table>
+            </div>
+            <div className="voting-card-container">
+                <img src={imagesMap["voting.png"]} alt="voting-card" className="voting-card" />
             </div>
             <div className="nay-container" key="nay-container">
                 <table className="nay" key="nay">
