@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from "react-router-dom";
 import { database } from '../firebase.js';
-import { initUrls, imagesMap } from '../storageUtil.js';
+import { imagesMap } from '../storageUtil.js';
 
 import '../styles/HouseSelection.scss';
 
@@ -17,9 +17,6 @@ function HouseSelection(props) {
     errorMsg = null;
 
   useEffect(() => {
-
-    initUrls();
-
     database.ref('/houses/').once('value')
       .then(function (snapshot) {
         let fetchedHouses = [];
@@ -78,7 +75,7 @@ function HouseSelection(props) {
   }
 
   const SVGSpinner =
-    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" width="40%" height="40%" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" width="40%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <g>
         <circle className={'spinner'} cx={50} cy={50} r={25} />
         <circle className={'spinner-inner'} cx={50} cy={50} r={15} />

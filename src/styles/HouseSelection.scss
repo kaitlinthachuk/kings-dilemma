@@ -69,5 +69,8 @@
     transform-origin: 50% 50%;
   }
 
-
+svg {
+  position: absolute;
+  left: 30%;
+}
   @keyframes rot { to { transform: rotate(1turn);} }
