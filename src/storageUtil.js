@@ -9,7 +9,7 @@ const images = ["coden-small.png", "crann-small.png", "solad-small.png", "tork-s
     "lore.png", "map.png", "rules.png", "symbols.png", "stickers.png", "voting.png"];
 
 const tokens = ["aye-scale.svg", "coin.svg", "coin-10.svg", "influence-negative.svg", "influence-positive.svg", "knowledge-negative.svg",
-    "knowledge-positive.svg", "leader.svg", "moderator.svg", "nay-scale.svg", "outcome-chronicle-neg.svg", "outcome-chronicle-pos.svg", "outcome-influence-neg.svg",
+    "knowledge-positive.svg", "leader.svg", "moderator.svg", "nay-scale.svg", "morale-positive.svg", "morale-negative.svg", "outcome-chronicle-neg.svg", "outcome-chronicle-pos.svg", "outcome-influence-neg.svg",
     "outcome-influence-pos.svg", "outcome-knowledge-neg.svg", "outcome-knowledge-pos.svg", "outcome-morale-neg.svg", "outcome-morale-pos.svg",
     "outcome-wealth-neg.svg", "outcome-wealth-pos.svg", "outcome-welfare-neg.svg", "outcome-welfare-pos.svg", "power.svg", "power-10.svg", "wealth-negative.svg",
     "wealth-positive.svg", "welfare-negative.svg", "welfare-positive.svg"];
