@@ -84,6 +84,7 @@ function VoteResult(props) {
     }
 
     function processWinner(winner, winnerPow) {
+        setProcessedWinners(true);
         let winners = winner === "aye" ? ayeVotes : nayVotes,
             winnersTotalPow = winner === "aye" ? ayePower : nayPower;
         //leader has to be on winning side
@@ -109,7 +110,7 @@ function VoteResult(props) {
             //put winners power in center for next vote
             database.ref('session/voting/available_power').set(availablePower - gatheredPow * props.passVotes.length + winnersTotalPow);
         }
-        setProcessedWinners(true);
+
     }
 
     let winner, winnerPow, content, backgroundColor, breakTie = false;

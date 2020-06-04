@@ -159,7 +159,8 @@ function Gameplay(props) {
             database.ref('session/voting/').update({
                 'voting_done': false,
                 'tie_breaker': false,
-                'become_mod': false
+                'become_mod': false,
+                'start_voting': false
             });
             setIsVoting(false);
 
@@ -213,7 +214,7 @@ function Gameplay(props) {
 
         <div className="gameplay-container">
             <Navbar isAdmin={isAdmin} tokenOnClick={tokenOnClick} votingOnClick={startVoting} />
-            <ImageModal isVisible={selectAgenda.state} images={selectAgenda.availableAgendas}
+            <ImageModal isVisible={selectAgenda.state && secretAgenda.length === 0} images={selectAgenda.availableAgendas}
                 showClose='false' class="image-agenda-modal" />
             <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
             <VotingOutcome isVisible={assignOutcomes} onSubmit={processOutcomeTokens} />
