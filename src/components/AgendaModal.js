@@ -83,6 +83,7 @@ function AgendaModal(props) {
                                 className="alignment"
                                 value="positive"
                                 onChange={handleChange}
+                                checked={tokens[idx].alignment === "positive"}
                             />
                             <label htmlFor={alignment + '-pos'}>Positive</label>
                             <input
@@ -93,6 +94,7 @@ function AgendaModal(props) {
                                 className="alignment"
                                 value="negative"
                                 onChange={handleChange}
+                                checked={tokens[idx].alignment === "negative"}
                             />
                             <label htmlFor={alignment + '-neg'}>Negative</label>
                         </div>

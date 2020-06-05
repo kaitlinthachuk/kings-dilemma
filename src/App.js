@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { initUrls } from './storageUtil.js';
+import { initUrls } from './Util.js';
 
 
 import HouseSelection from './pages/HouseSelection.js';

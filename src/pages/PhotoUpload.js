@@ -6,6 +6,7 @@ import "../styles/PhotoUpload.scss";
 function PhotoUpload(props) {
     const [imageEndpoint, setImageEndpoint] = useState("");
     const [imageToUpload, setImageToUpload] = useState("");
+    const [successful, setSuccessful] = useState(false);
 
     function handleChange(e) {
         e.preventDefault();
@@ -19,12 +20,14 @@ function PhotoUpload(props) {
 
         imageRef.put(imageToUpload).then(function (snapshot) {
             console.log('Uploaded a blob or file!');
+            setSuccessful(true);
         });
     }
 
     function imageSelected(e) {
         e.preventDefault();
         setImageToUpload(e.target.files[0]);
+        setSuccessful(false);
     }
 
     return (
@@ -39,6 +42,7 @@ function PhotoUpload(props) {
                         className="endpoint"
                         value="sticker.png"
                         onChange={handleChange}
+                        checked={imageEndpoint === "sticker.png"}
                     />
                     <label htmlFor="voting-endpoint">Voting Card</label>
                     <input
@@ -48,6 +52,7 @@ function PhotoUpload(props) {
                         className="endpoint"
                         value="voting.png"
                         onChange={handleChange}
+                        checked={imageEndpoint === "voting.png"}
                     />
                 </div>
                 <div className="image-container">
@@ -61,6 +66,11 @@ function PhotoUpload(props) {
                 </div>
                 <input type="submit" />
             </form>
+
+
+            {
+                successful && <h2> Photo uploaded!!</h2>
+            }
         </div>
     );
 }

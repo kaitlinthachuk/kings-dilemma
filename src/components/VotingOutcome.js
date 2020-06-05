@@ -49,6 +49,7 @@ function VotingOutcome(props) {
                                 className="side"
                                 value="aye"
                                 onChange={handleChange}
+                                checked={tokens[idx].side === "aye"}
                             />
                             <label htmlFor={side + '-nay'}>Nay</label>
                             <input
@@ -59,6 +60,7 @@ function VotingOutcome(props) {
                                 className="side"
                                 value="nay"
                                 onChange={handleChange}
+                                checked={tokens[idx].side === "nay"}
                             />
 
                             <label htmlFor={token}>Select Token</label>
@@ -88,6 +90,7 @@ function VotingOutcome(props) {
                                 className="alignment"
                                 value="pos"
                                 onChange={handleChange}
+                                checked={tokens[idx].alignment === "pos"}
                             />
                             <label htmlFor={alignment + '-pos'}>Positive</label>
                             <input
@@ -98,6 +101,7 @@ function VotingOutcome(props) {
                                 className="alignment"
                                 value="neg"
                                 onChange={handleChange}
+                                checked={tokens[idx].alignment === "neg"}
                             />
                             <label htmlFor={alignment + '-neg'}>Negative</label>
                         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ImageModal from './ImageModal.js';
-import { imagesMap } from '../storageUtil.js';
+import { imagesMap } from '../Util.js';
 
 import '../styles/Navbar.scss';
 

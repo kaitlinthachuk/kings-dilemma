@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { database } from '../firebase.js';
-import { cardsMap, tokensMap, cardJson } from '../storageUtil.js';
+import { cardsMap, tokensMap, cardJson } from '../Util.js';
 
 import '../styles/PlayerBar.scss';
 

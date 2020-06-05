@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { database } from '../firebase.js';
-import { cardsMap } from '../storageUtil.js';
+import { cardsMap } from '../Util.js';
 
 import Navbar from '../components/Navbar.js';
 import PlayerBar from '../components/PlayerBar.js';

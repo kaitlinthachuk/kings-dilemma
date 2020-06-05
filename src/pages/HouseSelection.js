@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from "react-router-dom";
 import { database } from '../firebase.js';
-import { imagesMap } from '../storageUtil.js';
+import { imagesMap } from '../Util.js';
 
 import '../styles/HouseSelection.scss';
 

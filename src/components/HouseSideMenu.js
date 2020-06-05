@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { database } from '../firebase.js';
-import { tokensMap, imagesMap } from '../storageUtil.js';
+import { tokensMap, imagesMap } from '../Util.js';
 
 import '../styles/HouseSideMenu.scss';
 
