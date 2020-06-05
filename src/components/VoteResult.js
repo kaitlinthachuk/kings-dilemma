@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { database } from '../firebase.js';
+import { processWinner } from "../Util.js";
 
 import '../styles/VoteResult.scss';
 
@@ -27,10 +28,10 @@ function VoteResult(props) {
     }
 
     useEffect(() => {
-        database.ref('session/voting/leader').on('value', (snapshot) => {
+        database.ref('session/voting/leader').once('value', (snapshot) => {
             setLeader(snapshot.val());
         });
-        database.ref('session/voting/moderator').on('value', (snapshot) => {
+        database.ref('session/voting/moderator').once('value', (snapshot) => {
             setModerator(snapshot.val());
         });
         database.ref('session/voting/tie_breaker').on('value', (snapshot) => {
@@ -83,44 +84,18 @@ function VoteResult(props) {
         setModChoice(e.target.value);
     }
 
-    function processWinner(winner, winnerPow) {
-        setProcessedWinners(true);
-        let winners = winner === "aye" ? ayeVotes : nayVotes,
-            winnersTotalPow = winner === "aye" ? ayePower : nayPower;
-        //leader has to be on winning side
-        if (winnerPow["house"] !== leader) {
-            database.ref('session/voting/leader').set(winnerPow["house"]);
-        }
-        //take power from winners
-        winners.forEach((pair) => {
-            database.ref("session/" + pair[0] + "/power").once('value', (snapshot) => {
-                database.ref("session/" + pair[0] + "/power").set(snapshot.val() - parseInt(pair[1]));
-            });
-        })
 
-        //give power to those who gathered it, if any
-        if (props.passVotes.length !== 0) {
-            let gatheredPow = Math.floor(availablePower / props.passVotes.length);
-            props.passVotes.forEach((house) => {
-                database.ref("session/" + house + "/power").once('value', (snapshot) => {
-                    database.ref("session/" + house + "/power").set(snapshot.val() + gatheredPow);
-                });
-            })
-
-            //put winners power in center for next vote
-            database.ref('session/voting/available_power').set(availablePower - gatheredPow * props.passVotes.length + winnersTotalPow);
-        }
-
-    }
-
-    let winner, winnerPow, content, backgroundColor, breakTie = false;
+    let winner, winnerPow, winnerVotes, content, backgroundColor, breakTie = false;
 
     if (tieBreaker === "aye" || tieBreaker === "nay") {
+        winnerVotes = tieBreaker === "aye" ? ayeVotes : nayVotes;
         winner = tieBreaker;
         winnerPow = tieBreaker === "aye" ? maxAye : maxNay;
 
         if (!processedWinners) {
-            processWinner(tieBreaker, winnerPow);
+            setProcessedWinners(true);
+            console.log("called process winner, tiebreaker");
+            processWinner(winner, winnerPow, props.passVotes, availablePower, leader);
         }
     }
     else if (ayePower === nayPower && ayePower !== 0) {
@@ -132,10 +107,13 @@ function VoteResult(props) {
         database.ref('session/voting/leader').set(moderator);
     } else {
         winner = ayePower > nayPower ? "aye" : "nay";
+        winnerVotes = winner === "aye" ? ayeVotes : nayVotes;
         winnerPow = winner === "aye" ? maxAye : maxNay;
-
+        console.log("ready to process");
         if (!processedWinners) {
-            processWinner(winner, winnerPow);
+            setProcessedWinners(true);
+            console.log("called process winner, no tie" + processedWinners);
+            processWinner(winnerVotes, winnerPow, props.passVotes, availablePower, leader)
         }
     }
 
@@ -157,6 +135,7 @@ function VoteResult(props) {
                         className="tie-break-input tie-break"
                         value="aye"
                         onChange={handleBreakTieChange}
+                        checked={modChoice === "aye"}
                     />
                     <label className="tie-break-input-label tie-break" htmlFor="nay">Nay</label>
                     <input
@@ -166,6 +145,7 @@ function VoteResult(props) {
                         className="tie-break-input tie-break"
                         value="nay"
                         onChange={handleBreakTieChange}
+                        checked={modChoice === "nay"}
                     />
                     <input
                         type="button"

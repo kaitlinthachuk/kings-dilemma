@@ -1,4 +1,4 @@
-import { storage } from './firebase.js';
+import { database, storage } from './firebase.js';
 
 const storageRef = storage.ref();
 
@@ -78,6 +78,36 @@ function fetchCardJSON() {
         xhr.open('GET', url);
         xhr.send();
     });
+}
+
+export function processWinner(votes, mostPower, passVotes, availablePower, leader) {
+    console.log("processWinner called!");
+    let winnersTotalPow = 0;
+
+    //leader has to be on winning side
+    if (mostPower["house"] !== leader) {
+        database.ref('session/voting/leader').set(mostPower["house"]);
+    }
+    //take power from winners
+    votes.forEach((pair) => {
+        winnersTotalPow += parseInt(pair[1]);
+        database.ref("session/" + pair[0] + "/power").once('value', (snapshot) => {
+            database.ref("session/" + pair[0] + "/power").set(snapshot.val() - parseInt(pair[1]));
+        });
+    })
+
+    //give power to those who gathered it, if any
+    if (passVotes.length !== 0) {
+        let gatheredPow = Math.floor(availablePower / passVotes.length);
+        passVotes.forEach((house) => {
+            database.ref("session/" + house + "/power").once('value', (snapshot) => {
+                database.ref("session/" + house + "/power").set(snapshot.val() + gatheredPow);
+            });
+        })
+
+        //put winners power in center for next vote
+        database.ref('session/voting/available_power').set(availablePower - gatheredPow * passVotes.length + winnersTotalPow);
+    }
 }
 
 export { cardJson, cardsMap, imagesMap, tokensMap }
