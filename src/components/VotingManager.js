@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { database } from '../firebase.js';
 import VoteDisplay from "../components/VoteDisplay.js";
 import VoteResult from "../components/VoteResult.js";
-import { tokensMap, imagesMap } from '../storageUtil.js';
+import HoverCard from "../components/HoverCard.js";
+import { tokensMap, imagesMap, processWinner } from '../Util.js';
 
 
 import '../styles/VotingManager.scss';
@@ -84,13 +85,15 @@ function VotingManager(props) {
 
 
     function initOutcomes(vals) {
-        let outcomes = []
+        let outcomes = [],
+            i = 0;
         for (const val in vals) {
             outcomes.push({
                 key: val,
                 token: vals[val],
-                transform: `translate(${getRandom(50)}px, ${getRandom(50)}px) rotate(${getRandom(30)}deg)`,
+                transform: `translate(${i * getRandom(10)}px, ${i * getRandom(10)}px) rotate(${getRandom(30)}deg)`,
             });
+            i++;
         }
         return outcomes;
     }
@@ -98,6 +101,8 @@ function VotingManager(props) {
     function getRandom(scale) {
         return (Math.random() * 2 - 1) * scale;
     }
+
+    console.log("manager rendering");
 
     return (
         <div className="voting-container" style={{ display: props.isVisible ? "" : "none", transform: `scale(${props.scale})` }}>
@@ -122,7 +127,7 @@ function VotingManager(props) {
                 </table>
             </div>
             <div className="voting-card-container">
-                <img src={imagesMap["voting.png"]} alt="voting-card" className="voting-card" />
+                <HoverCard image={imagesMap["voting.png"]} />
             </div>
             <div className="nay-container" key="nay-container">
                 <table className="nay" key="nay">

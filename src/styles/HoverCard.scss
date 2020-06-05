@@ -1,0 +1,36 @@
+.card-container {
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
+    height: calc(100% - 10px);
+    perspective: 1000px;
+    transition: transform 0.35s;
+    transform-origin: top;
+
+    .card-image {
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        right: 0;
+        margin: auto;
+        height: 100%;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        perspective-origin: 50% 50%;
+        transform-style: preserve-3d;
+        transform-origin: center;
+        will-change: transform;
+        transition: transform 0.5s, filter 0.35s;
+        border-radius: 10px;
+        pointer-events: none;
+    }
+
+    &:hover {
+        transform: scale(2.2);
+        z-index: 10;
+
+        .card-image {
+            box-shadow: 10px 20px 32px 1px #000000ab;
+            transition: none;
+        }
+    }
+}
