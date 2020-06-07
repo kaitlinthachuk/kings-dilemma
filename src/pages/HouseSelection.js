@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from "react-router-dom";
 import { database } from '../firebase.js';
-import { imagesMap } from '../Util.js';
+import { imagesMap, initUrls } from '../Util.js';
 
 import '../styles/HouseSelection.scss';
 
@@ -17,22 +17,22 @@ function HouseSelection(props) {
     errorMsg = null;
 
   useEffect(() => {
-    database.ref('/houses/').once('value')
-      .then(function (snapshot) {
-        let fetchedHouses = [];
-        snapshot.forEach((child) => {
-          let val = child.toJSON();
-          val['agenda'] = null;
-          fetchedHouses.push(val);
-        })
-        setLoading(false);
-        setOtherHouses(fetchedHouses);
+    initUrls();
+    database.ref('/houses/').once('value').then(function (snapshot) {
+      let fetchedHouses = [];
+      snapshot.forEach((child) => {
+        let val = child.toJSON();
+        val['agenda'] = null;
+        fetchedHouses.push(val);
+      })
+      setLoading(false);
+      setOtherHouses(fetchedHouses);
 
-      }).catch(err => {
-        isError = true;
-        errorMsg = err;
+    }).catch(err => {
+      isError = true;
+      errorMsg = err;
 
-      });
+    });
 
   }, []);
 

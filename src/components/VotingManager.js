@@ -3,7 +3,7 @@ import { database } from '../firebase.js';
 import VoteDisplay from "../components/VoteDisplay.js";
 import VoteResult from "../components/VoteResult.js";
 import HoverCard from "../components/HoverCard.js";
-import { tokensMap, imagesMap, processWinner } from '../Util.js';
+import { tokensMap, imagesMap } from '../Util.js';
 
 
 import '../styles/VotingManager.scss';
