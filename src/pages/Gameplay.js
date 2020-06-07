@@ -73,6 +73,10 @@ function Gameplay(props) {
         database.ref('/session/voting/voting_order').on('value', function (snapshot) {
             setVotingOrder(snapshot.val());
         })
+
+        database.ref('/session/game_over').on('value', function (snapshot) {
+            setGameOver(snapshot.val());
+        })
     }, []);
 
     useLayoutEffect(() => {
@@ -220,7 +224,7 @@ function Gameplay(props) {
 
     function endGame(e) {
         e.preventDefault();
-        setGameOver(true);
+        database.ref('session/game_over').set(true));
     }
 
     return (
