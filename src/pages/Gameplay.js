@@ -166,6 +166,7 @@ function Gameplay(props) {
             database.ref('session/voting/pass/').set({ placeholder: 5 });
             database.ref('session/voting/aye/outcomes').remove();
             database.ref('session/voting/nay/outcomes').remove();
+            database.ref('session/voting/voting_order').remove();
             database.ref('session/voting/').update({
                 'voting_done': false,
                 'tie_breaker': false,
@@ -176,15 +177,17 @@ function Gameplay(props) {
 
             });
         } else if (!isVoting) {
+            let updateObj = {};
+            updateObj['/session/voting/moderator'] = otherHouses[0].key;
+
             let j, x,
                 temp = [...otherHouses];
-            for (let i = 3; i > 0; i--) {
+            for (let i = 3; i >= 0; i--) {
                 j = Math.floor(Math.random() * (i + 1));
                 x = temp[i];
                 temp[i] = temp[j];
                 temp[j] = x;
             }
-            let updateObj = {};
 
             for (let i = 0; i < 4; i++) {
                 updateObj['/session/' + temp[i].key + "/next"] = temp[i + 1].key;
@@ -193,15 +196,12 @@ function Gameplay(props) {
             let leader = temp.pop();
             temp.unshift(leader);
 
-            updateObj['/session/' + temp[4].key + "/next"] = temp[0].key;
-            updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
-            updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
-            updateObj['/session/voting/moderator'] = otherHouses[0].key;
-            updateObj['/session/voting/leader'] = otherHouses[4].key;
+            updateObj['/session/' + leader + "/next"] = temp[0].key;
+            updateObj['/session/' + leader + "/voting_turn"] = true;
+            updateObj['/session/voting/leader'] = leader.key;
             updateObj['/session/voting/voting_order'] = temp;
 
             database.ref().update(updateObj);
-            setVotingOrder(temp);
             setAssignOutcomes(true);
         }
     }

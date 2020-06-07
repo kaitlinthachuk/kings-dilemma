@@ -76,8 +76,8 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
         const keyChange = {
             "House Stormcloak": "solad",
             "House Rhinehardt": "tork",
-            "House Arborstella": "tiryll",
-            "House Irvine": "coden",
+            "House Arborstella": "coden",
+            "House Irvine": "tiryll",
             "House Flora": "crann"
         }
 
@@ -186,8 +186,8 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
             if (passVotes.length !== 0) {
                 let gatheredPow = Math.floor(availablePower / passVotes.length);
                 passVotes.forEach((house) => {
-                    database.parent.child(house + "/power").once('value', (snap) => {
-                        database.parent.child(house + "/power").set(snap.val() + gatheredPow);
+                    database.parent.child(house[0] + "/power").once('value', (snap) => {
+                        database.parent.child(house[0] + "/power").set(snap.val() + gatheredPow);
                     });
                 });
 
