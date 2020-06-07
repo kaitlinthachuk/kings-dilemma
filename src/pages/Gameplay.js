@@ -30,6 +30,7 @@ function Gameplay(props) {
     const [votingOrder, setVotingOrder] = useState([]);
     const [votingDone, setVotingDone] = useState(false);
     const [gameOver, setGameOver] = useState(false);
+    const [leader, setLeader] = useState("");
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -76,6 +77,10 @@ function Gameplay(props) {
 
         database.ref('/session/game_over').on('value', function (snapshot) {
             setGameOver(snapshot.val());
+        })
+
+        database.ref('/session/voting/leader').on('value', function (snapshot) {
+            setLeader(snapshot.val());
         })
     }, []);
 
@@ -177,33 +182,45 @@ function Gameplay(props) {
 
             });
         } else if (!isVoting) {
-            let updateObj = {};
-            updateObj['/session/voting/moderator'] = otherHouses[0].key;
+            let updateObj = {}, temp;
 
-            let j, x,
-                temp = [...otherHouses];
-            for (let i = 3; i >= 0; i--) {
-                j = Math.floor(Math.random() * (i + 1));
-                x = temp[i];
-                temp[i] = temp[j];
-                temp[j] = x;
-            }
+            temp = shuffleHouses();
 
             for (let i = 0; i < 4; i++) {
                 updateObj['/session/' + temp[i].key + "/next"] = temp[i + 1].key;
             }
 
-            let leader = temp.pop();
-            temp.unshift(leader);
-
-            updateObj['/session/' + leader + "/next"] = temp[0].key;
-            updateObj['/session/' + leader + "/voting_turn"] = true;
-            updateObj['/session/voting/leader'] = leader.key;
+            updateObj['/session/' + temp[4] + "/next"] = temp[0].key;
+            updateObj['/session/' + temp[0] + "/voting_turn"] = true;
             updateObj['/session/voting/voting_order'] = temp;
 
             database.ref().update(updateObj);
             setAssignOutcomes(true);
         }
+    }
+
+    function shuffleHouses() {
+        let temp = [...otherHouses],
+            tempLeader;
+        for (let i = 0; i < 4; i++) {
+            if (temp[i].key === leader) {
+                tempLeader = temp[i];
+                temp.splice(i, 1);
+                break;
+            }
+        }
+
+        let j, x;
+        for (let i = 3; i >= 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = temp[i];
+            temp[i] = temp[j];
+            temp[j] = x;
+        }
+
+        temp.unshift(tempLeader);
+
+        return temp;
     }
 
     function processOutcomeTokens(e) {
