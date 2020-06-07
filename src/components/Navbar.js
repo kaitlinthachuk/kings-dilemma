@@ -33,7 +33,10 @@ function Navbar(props) {
           isAdmin && <button className='navbar-button' id="voting" onClick={props.votingOnClick}>Voting</button>
         }
         {
-          isAdmin && <button className='navbar-button' id="tokens" onClick={props.tokenOnClick}>Assign Agenda Tokens</button>
+          isAdmin && <button className='navbar-button' id="tokens" onClick={props.tokenOnClick}>Agenda Tokens</button>
+        }
+        {
+          isAdmin && <button className='navbar-button' id="end" onClick={props.endOnClick}>End Game</button>
         }
       </div>
       <ImageModal isVisible={isVisible} closeModal={closeModal} showClose='true' class="image-modal-container"

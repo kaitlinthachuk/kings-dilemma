@@ -1,0 +1,53 @@
+@import 'vars';
+
+table.power, table.coins {
+  font-size: 10px;
+  width: 22em;
+  border: 3px solid $secondary-yellow;
+  border-radius: 1em;
+  border-spacing: 0; // need to reset for chrome
+  overflow: hidden;
+  align-self: center;
+  display: inline-table;
+  margin: 40px;
+  
+  th, td {
+    text-align: center;
+    height: 1.5em;
+  }
+  
+  td {
+    font-size: 150%;
+    font-weight: 700;
+    border-bottom: 1px solid $secondary-yellow;
+    background-color: $white;
+  }
+  
+  th:nth-child(2), td:nth-child(2) {
+    border-left: 1px solid $secondary-yellow;
+  }
+  
+  th:nth-child(1) {
+    background-color: $secondary-yellow;
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  
+  th:nth-child(2) {
+    background-color: $secondary-yellow;
+  }
+  
+  td:nth-child(1) {
+    color: $primary-text;
+  }
+  
+  td:nth-child(2) {
+    color: $secondary-yellow;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+  

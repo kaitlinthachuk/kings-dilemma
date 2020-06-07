@@ -10,6 +10,7 @@ import HouseSideMenu from '../components/HouseSideMenu.js';
 import AgendaModal from '../components/AgendaModal.js';
 import VotingManager from '../components/VotingManager.js';
 import VotingOutcome from "../components/VotingOutcome.js";
+import GameOver from "../components/GameOver.js";
 
 import '../styles/Gameplay.scss';
 
@@ -28,6 +29,7 @@ function Gameplay(props) {
     const [scale, setScale] = useState(1);
     const [votingOrder, setVotingOrder] = useState([]);
     const [votingDone, setVotingDone] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -69,7 +71,6 @@ function Gameplay(props) {
         });
 
         database.ref('/session/voting/voting_order').on('value', function (snapshot) {
-            debugger;
             setVotingOrder(snapshot.val());
         })
     }, []);
@@ -153,7 +154,7 @@ function Gameplay(props) {
         setAssignTokens(true);
     }
 
-    function startVoting(e) {
+    function votingOnClick(e) {
         e.preventDefault();
         if (votingDone) {
             database.ref('session/voting/aye/voters/').set({ placeholder: 5 });
@@ -217,17 +218,25 @@ function Gameplay(props) {
         setAssignTokens(false);
     }
 
+    function endGame(e) {
+        e.preventDefault();
+        setGameOver(true);
+    }
+
     return (
 
         <div className="gameplay-container">
-            <Navbar isAdmin={isAdmin} tokenOnClick={tokenOnClick} votingOnClick={startVoting} />
+            <Navbar isAdmin={isAdmin} tokenOnClick={tokenOnClick} votingOnClick={votingOnClick} endOnClick={endGame} />
             <ImageModal isVisible={selectAgenda.state && secretAgenda.length === 0} images={selectAgenda.availableAgendas}
                 showClose='false' class="image-agenda-modal" />
             <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
             <VotingOutcome isVisible={assignOutcomes} onSubmit={processOutcomeTokens} />
             <div className='aspect-ratio-box-root'>
                 {
-                    !isLoading && <VotingManager isVisible={isVoting} scale={scale} house={house} />
+                    !isLoading && !gameOver && <VotingManager isVisible={isVoting} scale={scale} house={house} />
+                }
+                {
+                    !isLoading && gameOver && <GameOver houses={otherHouses} house={house} />
                 }
                 {/* useful root for when adding webcame too */}
             </div>
