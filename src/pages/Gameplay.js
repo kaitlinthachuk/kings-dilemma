@@ -66,6 +66,11 @@ function Gameplay(props) {
 
         database.ref('/session/voting/voting_done').on('value', function (snapshot) {
             setVotingDone(snapshot.val());
+        });
+
+        database.ref('/session/voting/voting_order').on('value', function (snapshot) {
+            debugger;
+            setVotingOrder(snapshot.val());
         })
     }, []);
 
@@ -160,10 +165,11 @@ function Gameplay(props) {
                 'voting_done': false,
                 'tie_breaker': false,
                 'become_mod': false,
-                'start_voting': false
-            });
-            setIsVoting(false);
+                'start_voting': false,
+                'winner': "val",
+                'winner_update': false
 
+            });
         } else if (!isVoting) {
             let j, x,
                 temp = [...otherHouses];
@@ -179,14 +185,15 @@ function Gameplay(props) {
                 updateObj['/session/' + temp[i].key + "/next"] = temp[i + 1].key;
             }
 
+            let leader = temp.pop();
+            temp.unshift(leader);
+
             updateObj['/session/' + temp[4].key + "/next"] = temp[0].key;
             updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
             updateObj['/session/' + temp[4].key + "/voting_turn"] = true;
             updateObj['/session/voting/moderator'] = otherHouses[0].key;
             updateObj['/session/voting/leader'] = otherHouses[4].key;
-
-            let leader = temp.pop();
-            temp.unshift(leader);
+            updateObj['/session/voting/voting_order'] = temp;
 
             database.ref().update(updateObj);
             setVotingOrder(temp);

@@ -54,7 +54,7 @@ class HouseSideMenu extends Component {
 
     buildHouses() {
         let contents = [],
-            array = this.props.order.length !== 0 ? this.props.order : this.props.houses;
+            array = this.props.order ? this.props.order : this.props.houses;
 
         array.forEach(element => {
             let imgSrc = imagesMap[element.key + "-small.png"],
