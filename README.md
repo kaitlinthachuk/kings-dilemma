@@ -1,6 +1,18 @@
 The project is currently being hosted on Netlify [here](https://pensive-bohr-6ca76f.netlify.app/) and utilizes Firebase's database, storage, and cloud functions for managing game state, assets, and large chunks of game logic respectively. Find out more about the board game on Horrible Guild's [official site](https://www.horribleguild.com/the-kings-dilemma/).
 
-## Available Scripts (From [Create React App](https://github.com/facebook/create-react-app))
+## Table of Contents
+- [Available Scripts](#available-scripts)
+  * [`npm start`](#-npm-start-)
+  * [`npm run build`](#-npm-run-build-)
+- [House Selection](#house-selection)
+- [Quick Access Bar](#quick-access-bar)
+- [Voting](#voting)
+- [Secret Agenda Cards](#secret-agenda-cards)
+- [Side Bar](#side-bar)
+- [Uploading](#uploading)
+
+## Available Scripts 
+From [Create React App](https://github.com/facebook/create-react-app)
 
 In the project directory, you can run:
 
@@ -34,7 +46,7 @@ Every House has access to a main navigation bar at the top which allows easy acc
 
 ![Navbar](https://github.com/kaitlinthachuk/kings-dilemma/blob/master/images/navbar.png)
 
-One House has admin priveledges and their top bar features a few extra buttons which allow for controlling the game state. These include stopping and starting voting, assigned agenda tokens, and ending the game. 
+One House has admin privileges and their top bar features a few extra buttons which allow for controlling the game state. These include stopping and starting voting, assigned agenda tokens, and ending the game. 
 ![Admin Extras](https://github.com/kaitlinthachuk/kings-dilemma/blob/master/images/admin_extras.png)
 
 ## Voting
@@ -75,7 +87,6 @@ The side bar displays important token information. It shows the current open age
 ![sidebar](https://github.com/kaitlinthachuk/kings-dilemma/blob/master/images/sidebar.png)
 
 ## Uploading
-The current voting card changes throughout the game and the chronicle stickers may be updated as well. I have added an endpoint to be used by someone on their phone to take a photo of the card or stickers and upload it to firebase. This allows for the dynamic nature of the game to be handled easily by whoever has the physical copy of the game. 
+The current voting card changes throughout the game and the chronicle stickers may be updated as well. I have added an endpoint to be used by someone on their phone to take a photo of the card or stickers and upload it to Firebase. This allows for the dynamic nature of the game to be handled easily by whoever has the physical copy of the game. 
 
 ![photo upload](https://github.com/kaitlinthachuk/kings-dilemma/blob/master/images/photo_upload.png)
-
