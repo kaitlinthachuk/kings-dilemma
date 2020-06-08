@@ -66,7 +66,7 @@ function VotingManager(props) {
                     powerTokens.push(
                         <img src={tokensMap["power-10.svg"]} key={powerNum} alt="power-10" className="power-token token-med" />)
                     powerNum -= 10;
-                } else if (powerNum - 5 >= 0) {
+                } else if (powerNum - 5 > 0) {
                     powerTokens.push(
                         <img src={tokensMap["power.svg"]} key={powerNum} alt="power-5" className="power-token token-med" />)
                     powerNum -= 5;
