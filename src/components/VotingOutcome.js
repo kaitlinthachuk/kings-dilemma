@@ -22,6 +22,9 @@ function VotingOutcome(props) {
     const onSubmit = (e) => {
         e.preventDefault();
         props.onSubmit(tokens);
+        setTokens([
+            { side: '', token: '', alignment: '' },
+        ]);
     }
 
 

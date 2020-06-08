@@ -22,6 +22,9 @@ function AgendaModal(props) {
     const onSubmit = (e) => {
         e.preventDefault();
         props.onSubmit(tokens);
+        setTokens([
+            { house: '', token: '', alignment: '' },
+        ]);
     }
     return (
         props.isVisible &&
