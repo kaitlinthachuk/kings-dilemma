@@ -17,23 +17,22 @@ function HouseSelection(props) {
     errorMsg = null;
 
   useEffect(() => {
-    initUrls();
-    database.ref('/houses/').once('value').then(function (snapshot) {
-      let fetchedHouses = [];
-      snapshot.forEach((child) => {
-        let val = child.toJSON();
-        val['agenda'] = null;
-        fetchedHouses.push(val);
-      })
-      setLoading(false);
-      setOtherHouses(fetchedHouses);
+    initUrls().then(() => {
+      database.ref('/houses/').once('value').then(function (snapshot) {
+        let fetchedHouses = [];
+        snapshot.forEach((child) => {
+          let val = child.toJSON();
+          val['agenda'] = null;
+          fetchedHouses.push(val);
+        })
+        setLoading(false);
+        setOtherHouses(fetchedHouses);
 
-    }).catch(err => {
-      isError = true;
-      errorMsg = err;
-
-    });
-
+      }).catch(err => {
+        isError = true;
+        errorMsg = err;
+      });
+    })
   }, []);
 
   function handleHouseSelection(e) {

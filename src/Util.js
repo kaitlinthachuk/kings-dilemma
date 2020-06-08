@@ -19,66 +19,65 @@ const imagesMap = {};
 const tokensMap = {};
 let cardJson;
 
-export function initUrls() {
-    initCards();
-    initImages();
-    initTokens();
-    initCards();
-    fetchCardJSON();
+export async function initUrls() {
+    await Promise.all(initCards()).then((urls) => {
+        cards.forEach((element, index) => {
+            cardsMap[element] = urls[index];
+        })
+        return Promise.all(initImages()).then((urls) => {
+            images.forEach((element, index) => {
+                imagesMap[element] = urls[index];
+            })
+            return Promise.all(initTokens()).then((urls) => {
+                tokens.forEach((element, index) => {
+                    tokensMap[element] = urls[index];
+                })
+                return fetchCardJSON().then(function (url) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.responseType = 'json';
+                    xhr.onload = function (event) {
+                        cardJson = xhr.response;
+                        console.log("card loaded");
+                    };
+                    xhr.open('GET', url);
+                    xhr.send();
+                });
+            });
+        });
+    });
 }
 
-async function initCards() {
+function initCards() {
     let promiseArray = [];
 
     cards.forEach(element => {
         promiseArray.push(storageRef.child("cards/" + element).getDownloadURL());
     });
 
-    await Promise.all(promiseArray).then((urls) => {
-        cards.forEach((element, index) => {
-            cardsMap[element] = urls[index];
-        })
-    });
+    return promiseArray;
 }
 
-async function initImages() {
+function initImages() {
     let promiseArray = [];
 
     images.forEach(element => {
         promiseArray.push(storageRef.child("images/" + element).getDownloadURL());
     });
-
-    await Promise.all(promiseArray).then((urls) => {
-        images.forEach((element, index) => {
-            imagesMap[element] = urls[index];
-        })
-    });
+    return promiseArray;
 }
 
-async function initTokens() {
+function initTokens() {
     let promiseArray = [];
 
     tokens.forEach(element => {
         promiseArray.push(storageRef.child("tokens/" + element).getDownloadURL());
     });
 
-    await Promise.all(promiseArray).then((urls) => {
-        tokens.forEach((element, index) => {
-            tokensMap[element] = urls[index];
-        })
-    });
+    return promiseArray;
 }
 
-async function fetchCardJSON() {
-    await storageRef.child('cards/cards.json').getDownloadURL().then(function (url) {
-        let xhr = new XMLHttpRequest();
-        xhr.responseType = 'json';
-        xhr.onload = function (event) {
-            cardJson = xhr.response;
-        };
-        xhr.open('GET', url);
-        xhr.send();
-    });
+function fetchCardJSON() {
+    return storageRef.child('cards/cards.json').getDownloadURL();
 }
 
 
