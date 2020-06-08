@@ -241,7 +241,7 @@ function Gameplay(props) {
 
     function endGame(e) {
         e.preventDefault();
-        database.ref('session/game_over').set(true));
+        database.ref('session/game_over').set(true);
     }
 
     return (
