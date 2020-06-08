@@ -93,16 +93,17 @@ function VoteDisplay(props) {
         });
 
         if (pow > props.maxComitted) {
-            database.ref("session/voting/leader").set(props.house.key);
+            database.ref("session/voting/leader").set(props.house.key).then(() => {
+                setTurn(false);
+            });
+        } else if (next === leader) {
+            database.ref('session/voting/voting_done').set(true).then(() => {
+                setTurn(false);
+            });
         }
 
-        if (next === leader) {
-            database.ref('session/voting/voting_done').set(true);
-        }
         setPower(pow);
         setAddPower(1);
-        setTurn(false);
-
     }
 
     function handleChange(e) {
