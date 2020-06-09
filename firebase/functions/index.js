@@ -42,10 +42,8 @@ exports.processVotes = functions.database.ref('session/voting/voting_done').onUp
             } else if (ayePower === nayPower) {
                 //everyone passed, mod becomes leader and breaks tie;
                 database.child('moderator').once('value', (snap) => {
-                    // eslint-disable-next-line promise/no-nesting, promise/always-return
-                    return database.child('leader').set(snap.val()).then(() => {
-                        database.child('tie_breaker').set(true);
-                    })
+                    database.child('leader').set(snap.val());
+                    database.child('tie_breaker').set(true);
                 })
             } else {
                 //we have a clear winner, time to process the results
@@ -172,8 +170,8 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
                 winnersTotalPower = winner === "aye" ? ayePower : nayPower;
 
 
-            //leader has to be on winning side
-            if (topHouse["house"] !== leader) {
+            //leader has to be on winning side, assuming everybody didnt pass
+            if (!(ayePower === nayPower && ayePower === 0) && topHouse["house"] !== leader) {
                 database.child('leader').set(topHouse["house"]);
             }
 
