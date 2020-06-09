@@ -185,13 +185,13 @@ function Gameplay(props) {
             let updateObj = {}, temp;
 
             temp = shuffleHouses();
-
+            debugger;
             for (let i = 0; i < 4; i++) {
                 updateObj['/session/' + temp[i].key + "/next"] = temp[i + 1].key;
             }
 
-            updateObj['/session/' + temp[4] + "/next"] = temp[0].key;
-            updateObj['/session/' + temp[0] + "/voting_turn"] = true;
+            updateObj['/session/' + temp[4].key + "/next"] = temp[0].key;
+            updateObj['/session/' + temp[0].key + "/voting_turn"] = true;
             updateObj['/session/voting/voting_order'] = temp;
 
             database.ref().update(updateObj);
@@ -200,9 +200,10 @@ function Gameplay(props) {
     }
 
     function shuffleHouses() {
+        debugger;
         let temp = [...otherHouses],
             tempLeader;
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i <= 4; i++) {
             if (temp[i].key === leader) {
                 tempLeader = temp[i];
                 temp.splice(i, 1);
