@@ -42,7 +42,7 @@ exports.processVotes = functions.database.ref('session/voting/voting_done').onUp
             } else if (ayePower === nayPower) {
                 //everyone passed, mod becomes leader and breaks tie;
                 database.child('moderator').once('value', (snap) => {
-                    snap.ref('leader').set(snap.val());
+                    database.child('leader').set(snap.val());
                 });
                 database.child('tie_breaker').set(true);
             } else {

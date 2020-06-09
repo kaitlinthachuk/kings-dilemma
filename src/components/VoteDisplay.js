@@ -92,7 +92,6 @@ function VoteDisplay(props) {
 
         database.ref('session/').update({
             ['voting/' + vote["vote"] + '/voters/' + props.house.name]: pow,
-            [next + '/voting_turn']: true,
             [props.house.key + "/voting_turn"]: false
         });
 
@@ -101,11 +100,16 @@ function VoteDisplay(props) {
                 return database.ref('session/voting/max_committed').set(pow);
             }).then(() => {
                 setTurn(false);
+                database.ref('session/' + next + '/voting_turn').set(true);
             })
-        } else if (next === leader) {
+        }
+
+        if (next === leader) {
             database.ref('session/voting/voting_done').set(true).then(() => {
                 setTurn(false);
             });
+        } else {
+            database.ref('session/' + next + '/voting_turn').set(true);
         }
 
         setPower(pow);

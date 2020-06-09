@@ -101,8 +101,6 @@ function VotingManager(props) {
         return (Math.random() * 2 - 1) * scale;
     }
 
-    console.log("manager rendering");
-
     return (
         <div className="voting-container" style={{ display: props.isVisible ? "" : "none", transform: `scale(${props.scale})` }}>
             <div className="aye-container" key="aye-container">
