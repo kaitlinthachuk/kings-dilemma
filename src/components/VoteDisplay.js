@@ -102,9 +102,7 @@ function VoteDisplay(props) {
                 setTurn(false);
                 database.ref('session/' + next + '/voting_turn').set(true);
             })
-        }
-
-        if (next === leader) {
+        } else if (next === leader) {
             database.ref('session/voting/voting_done').set(true).then(() => {
                 setTurn(false);
             });
