@@ -50,4 +50,22 @@ table.power, table.coins {
     border-bottom: none;
   }
 }
+
+.update-crave > input[type="number"], .update-prestige > input[type="number"] {
+    width: 30px;
+    text-align: center;
+}
   
+.crave-button, .prestige-button{
+  margin-left: 15px;
+  background-color: darken($background-color, 10);
+  height: 30px;
+  border: none;
+  &:hover {
+    background-color: darken($background-color, 20);
+  }
+}
+
+.update-points{
+  margin-bottom: 30px;
+}
