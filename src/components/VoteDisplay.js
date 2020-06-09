@@ -14,6 +14,7 @@ function VoteDisplay(props) {
     const [addPower, setAddPower] = useState(1);
     const [availablePower, setAvailablePower] = useState(0);
     const [coins, setCoins] = useState(0);
+    const [maxComitted, setMaxComitted] = useState(0);
 
 
     useEffect(() => {
@@ -36,6 +37,9 @@ function VoteDisplay(props) {
 
         database.ref('session/' + props.house.key + '/coins').on('value', (snapshot) => {
             setCoins(snapshot.val());
+        });
+        database.ref('session/voting/max_comitted').on('value', (snapshot) => {
+            setMaxComitted(snapshot.val());
         });
     }, [])
 
@@ -92,10 +96,12 @@ function VoteDisplay(props) {
             [props.house.key + "/voting_turn"]: false
         });
 
-        if (pow > props.maxComitted) {
+        if (pow > maxComitted) {
             database.ref("session/voting/leader").set(props.house.key).then(() => {
+                return database.ref('session/voting/max_comitted').set(pow);
+            }).then(() => {
                 setTurn(false);
-            });
+            })
         } else if (next === leader) {
             database.ref('session/voting/voting_done').set(true).then(() => {
                 setTurn(false);

@@ -17,7 +17,6 @@ function VotingManager(props) {
     const [ayeOutcomes, setAyeOutcomes] = useState([]);
     const [nayOutcomes, setNayOutcomes] = useState([]);
     const [power, setPower] = useState([]);
-    const [maxComitted, setMaxComitted] = useState(1);
     const [voteDone, setVoteDone] = useState(false);
 
 
@@ -115,9 +114,6 @@ function VotingManager(props) {
                             </th>
                         </tr>
                         {ayeVotes.map((val) => {
-                            if (val[1] > maxComitted) {
-                                setMaxComitted(val[1]);
-                            }
                             return (<tr key={val[0]}>
                                 <td>{val[0]}</td>
                                 <td>{val[1]}</td>
@@ -138,9 +134,6 @@ function VotingManager(props) {
                             </th>
                         </tr>
                         {nayVotes.map((val) => {
-                            if (val[1] > maxComitted) {
-                                setMaxComitted(val[1]);
-                            }
                             return (<tr key={val[0]}>
                                 <td>{val[0]}</td>
                                 <td>{val[1]}</td>
@@ -185,7 +178,7 @@ function VotingManager(props) {
             {
                 voteDone ?
                     <VoteResult house={props.house} ayeVotes={ayeVotes} nayVotes={nayVotes} passVotes={passVotes} gatherPower={power} /> :
-                    <VoteDisplay house={props.house} maxComitted={maxComitted} />
+                    <VoteDisplay house={props.house} />
             }
         </div>
     );
