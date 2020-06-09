@@ -178,7 +178,8 @@ function Gameplay(props) {
                 'become_mod': false,
                 'start_voting': false,
                 'winner': "val",
-                'winner_update': false
+                'winner_update': false,
+                "max_committed": 0
 
             });
         } else if (!isVoting) {
