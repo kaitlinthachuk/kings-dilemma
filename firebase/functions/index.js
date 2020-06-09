@@ -42,9 +42,11 @@ exports.processVotes = functions.database.ref('session/voting/voting_done').onUp
             } else if (ayePower === nayPower) {
                 //everyone passed, mod becomes leader and breaks tie;
                 database.child('moderator').once('value', (snap) => {
-                    database.child('leader').set(snap.val());
-                });
-                database.child('tie_breaker').set(true);
+                    // eslint-disable-next-line promise/no-nesting, promise/always-return
+                    return database.child('leader').set(snap.val()).then(() => {
+                        database.child('tie_breaker').set(true);
+                    })
+                })
             } else {
                 //we have a clear winner, time to process the results
                 database.child('winner_update').set(true);
