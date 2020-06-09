@@ -170,7 +170,7 @@ function GameOver(props) {
                     className="prestige-button"
                     name="prestige-update"
                     value="Update Prestige!"
-                    onClick={submitCrave}
+                    onClick={submitPrestige}
                 />
             </div>
         </div>
