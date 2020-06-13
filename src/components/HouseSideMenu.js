@@ -77,8 +77,8 @@ class HouseSideMenu extends Component {
                 return true;
             })
             contents.push(
-                <div className="menu-house" key={element}>
-                    <div className="token-container">
+                <div className="menu-house" key={element.key}>
+                    <div className="token-container" key="token-container">
                         {tokens.length === 0 ? null : tokens.map((src) => {
                             return <img className="token-small" src={tokensMap[src]} alt={src} key={src} />
                         })

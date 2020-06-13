@@ -7,7 +7,7 @@ exports.processVotes = functions.database.ref('session/voting/voting_done').onUp
 
         promiseArray.push(
             new Promise((resolve, reject) => {
-                database.child('aye').child('voters').once('value', (snapshot) => {
+                database.child('/aye/voters').once('value', (snapshot) => {
                     let obj = Object.entries(snapshot.val()).filter((key) => {
                         return key[0] !== "placeholder";
                     });
@@ -70,7 +70,7 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
     let database = change.after.ref.parent;
     if (change.after.val()) {
         let ayeVotes = [], nayVotes = [], passVotes = [], availablePower = 0, ayePower = 0, nayPower = 0,
-            maxAye = { power: 0, house: "" }, maxNay = { power: "0", house: "" },
+            maxAye = ["", 0], maxNay = ["", 0],
             winner, promiseArray = [], leader;
 
         const keyChange = {
@@ -79,6 +79,14 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
             "House Arborstella": "coden",
             "House Irvine": "tiryll",
             "House Flora": "crann"
+        }
+
+        const revKeyChange = {
+            "solad": "House Stormcloak",
+            "tork": "House Rhinehardt",
+            "coden": "House Arborstella",
+            "tiryll": "House Irvine",
+            "crann": "House Flora"
         }
 
 
@@ -91,9 +99,8 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
                     obj.forEach(element => {
                         ayePower += element[1];
                         ayeVotes.push([keyChange[element[0]], element[1]]);
-                        if (element[1] > maxAye["power"]) {
-                            maxAye["power"] = element[1];
-                            maxAye["house"] = keyChange[element[0]]
+                        if (element[1] > maxAye[1]) {
+                            maxAye = [keyChange[element[0]], element[1]];
                         }
                     });
                     resolve();
@@ -110,9 +117,8 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
                     obj.forEach(element => {
                         nayPower += element[1];
                         nayVotes.push([keyChange[element[0]], element[1]]);
-                        if (element[1] > maxNay["power"]) {
-                            maxNay["power"] = element[1];
-                            maxNay["house"] = keyChange[element[0]]
+                        if (element[1] > maxNay[1]) {
+                            maxNay = [keyChange[element[0]], element[1]];
                         }
                     });
                     resolve();
@@ -171,9 +177,23 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
 
 
             //leader has to be on winning side, assuming everybody didnt pass
-            if (!(ayePower === nayPower && ayePower === 0) && topHouse["house"] !== leader) {
-                database.child('leader').set(topHouse["house"]);
+            if (!(ayePower === nayPower && ayePower === 0)) {
+                let leader_tie = false, leaders = [[topHouse[0], revKeyChange[topHouse[0]]]];
+                for (let i = 0; i < winners.length; i++) {
+                    if (winners[i][1] === topHouse[1] && winners[i][0] !== topHouse[0]) {
+                        leaders.push([winners[i][0], revKeyChange[winners[i][0]]]);
+                        leader_tie = true;
+                    }
+                }
+
+                if (leader_tie) {
+                    database.child('leader_tie').set(true);
+                    database.child('leader_opt').set(leaders);
+                } else {
+                    database.child('leader').set(topHouse[0]);
+                }
             }
+
 
             //take power from winners
             winners.forEach((pair) => {

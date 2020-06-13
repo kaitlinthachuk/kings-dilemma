@@ -166,6 +166,9 @@ function Gameplay(props) {
     function votingOnClick(e) {
         e.preventDefault();
         if (votingDone) {
+            otherHouses.forEach((house) => {
+                database.ref("session/" + house.key + "/voting_turn").set(false);
+            })
             database.ref('session/voting/aye/voters/').set({ placeholder: 5 });
             database.ref('session/voting/nay/voters/').set({ placeholder: 5 });
             database.ref('session/voting/pass/').set({ placeholder: 5 });
@@ -179,8 +182,9 @@ function Gameplay(props) {
                 'start_voting': false,
                 'winner': "val",
                 'winner_update': false,
-                "max_committed": 0
-
+                "max_committed": 0,
+                "leader_opt": "val",
+                "leader_tie": false
             });
         } else if (!isVoting) {
             let updateObj = {}, temp;

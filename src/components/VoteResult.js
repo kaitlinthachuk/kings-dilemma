@@ -8,6 +8,9 @@ function VoteResult(props) {
     const [tieBreaker, setTieBreaker] = useState(false);
     const [winner, setWinner] = useState("");
     const [modChoice, setModChoice] = useState("");
+    const [leaderTie, setLeaderTie] = useState(false);
+    const [leaderOpt, setLeaderOpt] = useState([]);
+    const [modLeaderChoice, setModLeaderChoice] = useState("");
 
     useEffect(() => {
         database.ref('session/voting/moderator').once('value', (snapshot) => {
@@ -20,21 +23,40 @@ function VoteResult(props) {
         database.ref('session/voting/winner').on('value', (snapshot) => {
             setWinner(snapshot.val());
         });
+        database.ref('session/voting/leader_tie').on('value', (snapshot) => {
+            setLeaderTie(snapshot.val());
+        });
+        database.ref('session/voting/leader_opt').on('value', (snapshot) => {
+            setLeaderOpt(snapshot.val());
+        })
     }, [])
 
 
     function handleBreakTie(e) {
         e.preventDefault();
         database.ref('session/voting/tie_breaker').set(modChoice);
+        setTieBreaker(false);
     }
 
     function handleBreakTieChange(e) {
         e.preventDefault();
         setModChoice(e.target.value);
     }
-    let content, backgroundColor;
 
-    if (winner === "aye" || winner === "nay") {
+    function handleBreakLeaderTieChange(e) {
+        e.preventDefault();
+        setModLeaderChoice(e.target.value);
+    }
+
+    function handleLeaderBreakTie(e) {
+        e.preventDefault();
+        database.ref('session/voting/leader').set(modLeaderChoice).then(() => {
+            database.ref('session/voting/leader_tie').set(false);
+        });
+    }
+    let content = [], backgroundColor;
+
+    if ((winner === "aye" || winner === "nay") && !leaderTie) {
         backgroundColor = winner === "aye" ? "background-blue" : "background-red";
         content = <div className={`winner-container ${backgroundColor}`}>
             <h1 className="winner">{winner.toUpperCase()} Wins!</h1>
@@ -42,7 +64,7 @@ function VoteResult(props) {
     } else {
         if (tieBreaker) {
             if (props.house.key === moderator) {
-                content = <div className="tie-break-container">
+                content.push(<div className="tie-break-container">
                     <label className="tie-break-input-label tie-break" htmlFor="aye">Aye</label>
                     <input
                         type="radio"
@@ -70,10 +92,42 @@ function VoteResult(props) {
                         value="Break Tie!"
                         onClick={handleBreakTie}
                     />
-                </div>
+                </div>)
             }
             else {
-                content = <div className="background-yellow tie-wait"><h2 >Moderator Needs to Break the Tie!</h2></div>
+                content.push(<div className="background-yellow tie-wait"><h2 >Moderator Needs to Break the Tie!</h2></div>);
+            }
+        } else if (leaderTie) {
+            if (props.house.key === moderator) {
+                content.push(
+                    <div className="tie-leader-container">
+                        {
+                            leaderOpt.map(element => {
+                                return <>
+                                    <label className="tie-leader-input-label tie-leader" htmlFor={element[0]}>{element[1]}</label>
+                                    <input
+                                        type="radio"
+                                        name="tie-leader"
+                                        className="tie-leader-input tie-leader"
+                                        value={element[0]}
+                                        onChange={handleBreakLeaderTieChange}
+                                        checked={modLeaderChoice === element[0]}
+                                    />
+                                </>
+                            })
+                        }
+
+                        <input
+                            type="button"
+                            className="tie-leader-button tie-break"
+                            name="tie-breaker-leader"
+                            value="Choose Leader"
+                            onClick={handleLeaderBreakTie}
+                        />
+                    </div>)
+
+            } else {
+                content.push(<div className="background-yellow tie-wait"><h2> Moderator Needs to Choose a Leader! </h2></div>)
             }
         }
     }
