@@ -49,7 +49,7 @@ function HoverCard(props) {
         >
             <img
                 className="card-image"
-                src={props.image}
+                src={`${props.image}?${new Date().getTime()}`}
                 alt="voting card"
                 style={cardStyle}
             ></img>

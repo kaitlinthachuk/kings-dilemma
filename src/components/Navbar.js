@@ -12,6 +12,10 @@ function Navbar(props) {
   function navClick(e) {
     e.preventDefault();
     setImagePath(imagesMap[e.target.id + ".png"]);
+
+    if (e.target.id === 'stickers') {
+      setImagePath(`${imagePath}?${new Date().getTime()}`);
+    }
     setIsVisible(true);
   }
 

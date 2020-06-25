@@ -121,7 +121,7 @@ function VotingManager(props) {
                 </table>
             </div>
             <div className="voting-card-container">
-                <HoverCard image={imagesMap["voting.png"]} refreshImg={voteDone} />
+                <HoverCard image={imagesMap["voting.png"]} />
             </div>
             <div className="nay-container" key="nay-container">
                 <table className="nay" key="nay">
