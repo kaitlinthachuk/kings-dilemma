@@ -11,6 +11,7 @@ import AgendaModal from '../components/AgendaModal.js';
 import VotingManager from '../components/VotingManager.js';
 import VotingOutcome from "../components/VotingOutcome.js";
 import GameOver from "../components/GameOver.js";
+import Webcam from "../components/Webcam.js";
 
 import '../styles/Gameplay.scss';
 
@@ -265,7 +266,9 @@ function Gameplay(props) {
                 {
                     !isLoading && gameOver && <GameOver houses={otherHouses} house={house} />
                 }
-                {/* useful root for when adding webcame too */}
+                {
+                    !isLoading && !gameOver && <Webcam isVisible={!isVoting} />
+                }
             </div>
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
