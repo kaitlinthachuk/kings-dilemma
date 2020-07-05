@@ -1,22 +1,5 @@
-.vertical-filmstrip {
- >.large-video-labels{
-    display: none;
- }
-> .filmstrip__toolbar{
-    display: none;
+#jitsi-container{
+    grid-area: main;
+    width: 1280px;
+    height: 720px;
 }
-
-> .filmstrip__videos{
-    display: none;
-}
-
-> .subject {
-    display: none;
-}
-
->.watermark {
-    display: none;
-}
-}
-
- 

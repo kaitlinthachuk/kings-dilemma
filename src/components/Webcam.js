@@ -1,25 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import Jitsi from 'react-jitsi';
+import React, { useEffect } from 'react';
 import { database } from '../firebase.js';
 
 
-function Webcam(props) {
-    const [roomName, setRoomName] = useState('');
+import '../styles/Webcam.scss';
+function Webcam() {
 
     useEffect(() => {
         database.ref('session/id').once('value', (snapshot) => {
-            setRoomName(snapshot.val());
-        });
-
+            buildJitsi(snapshot.val());
+        })
     }, []);
 
+    function buildJitsi(roomName) {
+        const domain = 'meet.jit.si';
+        const options = {
+            roomName: roomName,
+            parentNode: document.getElementById('jitsi-container'),
+            interfaceConfigOverwrite: {
+                TOOLBAR_BUTTONS: [],
+                VIDEO_QUALITY_LABEL_DISABLED: true,
+                SHOW_CHROME_EXTENSION_BANNER: false, // not working currently but apparently pull request is being merged as of a few days ago
+                ENFORCE_NOTIFICATION_AUTO_DISMISS_TIMEOUT: 0,
+                INITIAL_TOOLBAR_TIMEOUT: 0, // also not working currently
+                TOOLBAR_TIMEOUT: 0,
+            },
+            configOverwrite: {
+                startWithAudioMuted: true,
+                startWithVideoMuted: true,
+            },
+        }
 
-    return (<>
-        {props.isVisible && <Jitsi roomName={roomName}
-            configOverwrite={{ startWithAudioMuted: true, startWithVideoMuted: true }}
-            interfaceConfigOverwrite={{ filmStripOnly: true, TOOLBAR_BUTTONS: [], SHOW_JITSI_WATERMARK: false }} />}
-    </>
-    )
+        const api = new JitsiMeetExternalAPI(domain, options); // eslint-disable-line
+        api.executeCommand('toggleFilmStrip');
+        api.executeCommand('subject', ' ');
+    }
+
+    return (
+        <div id="jitsi-container"></div>
+    );
 }
 
 export default Webcam;
