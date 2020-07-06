@@ -14,7 +14,7 @@ function Navbar(props) {
     setImagePath(imagesMap[e.target.id + ".png"]);
 
     if (e.target.id === 'stickers') {
-      setImagePath(`${imagePath}?${new Date().getTime()}`);
+      setImagePath(`${e.target.id + ".png"}?${new Date().getTime()}`);
     }
     setIsVisible(true);
   }
