@@ -24,17 +24,19 @@ class HouseSideMenu extends Component {
         database.ref('session/tokens/').on('value', (snapshot) => {
             let fbTokens = snapshot.val();
 
-            Object.keys(fbTokens).forEach((key) => {
-                Object.values(fbTokens[key]).forEach((val) => {
-                    let temp = [];
-                    if (!this.state[key].includes(val + ".svg")) {
-                        temp = [...this.state[key], val + ".svg"];
-                        this.setState({
-                            [key]: temp
-                        })
-                    }
+            if (fbTokens) {
+                Object.keys(fbTokens).forEach((key) => {
+                    Object.values(fbTokens[key]).forEach((val) => {
+                        let temp = [];
+                        if (!this.state[key].includes(val + ".svg")) {
+                            temp = [...this.state[key], val + ".svg"];
+                            this.setState({
+                                [key]: temp
+                            })
+                        }
+                    })
                 })
-            })
+            }
         });
 
         database.ref('session/voting/moderator').on('value', (snapshot) => {

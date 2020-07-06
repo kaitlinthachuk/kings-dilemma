@@ -3,7 +3,7 @@ import { database } from '../firebase.js';
 
 
 import '../styles/Webcam.scss';
-function Webcam() {
+function Webcam(props) {
 
     useEffect(() => {
         database.ref('session/id').once('value', (snapshot) => {
@@ -35,8 +35,9 @@ function Webcam() {
         api.executeCommand('subject', ' ');
     }
 
-    return (
-        <div id="jitsi-container"></div>
+    return (<>
+        {props.isVisible && <div id="jitsi-container"></div>}
+    </>
     );
 }
 
