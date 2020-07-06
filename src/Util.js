@@ -1,4 +1,4 @@
-import { database, storage } from './firebase.js';
+import { storage } from './firebase.js';
 
 const storageRef = storage.ref();
 

@@ -12,10 +12,6 @@ function HouseSelection(props) {
   const [otherHouses, setOtherHouses] = useState([]);
   const [redirect, setRedirect] = useState(false);
 
-
-  let isError = false,
-    errorMsg = null;
-
   useEffect(() => {
     initUrls().then(() => {
       database.ref('/houses/').once('value').then(function (snapshot) {
@@ -28,10 +24,7 @@ function HouseSelection(props) {
         setLoading(false);
         setOtherHouses(fetchedHouses);
 
-      }).catch(err => {
-        isError = true;
-        errorMsg = err;
-      });
+      })
     })
   }, []);
 
@@ -86,8 +79,6 @@ function HouseSelection(props) {
 
   if (loading) {
     content = SVGSpinner;
-  } else if (isError) {
-    content = <div>Something broke! {errorMsg} </div>;
   } else if (redirect) {
     content = <Redirect to={{ pathname: '/play', state: { houseState: house, otherHousesState: otherHouses } }} />;
   } else {

@@ -28,7 +28,6 @@ function Gameplay(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [assignTokens, setAssignTokens] = useState(false);
     const [assignOutcomes, setAssignOutcomes] = useState(false);
-    const [scale, setScale] = useState(1);
     const [votingOrder, setVotingOrder] = useState([]);
     const [votingDone, setVotingDone] = useState(false);
     const [gameOver, setGameOver] = useState(false);
@@ -85,16 +84,6 @@ function Gameplay(props) {
             setLeader(snapshot.val());
         })
     }, []);
-
-    function handleResize() {
-        const availableWidth = document.body.scrollWidth - 300; // 300 from sidebar width
-        const availableHeight = document.body.scrollHeight - 60 - 180; // 60 nav and 180 playerbar
-        const scale = Math.min(
-            availableWidth / 1280,
-            availableHeight / 720
-        );
-        setScale(scale);
-    }
 
     let availableAgendas = [];
 
