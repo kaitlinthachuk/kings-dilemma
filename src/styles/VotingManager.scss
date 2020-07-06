@@ -1,17 +1,15 @@
 @import 'vars';
 
 .voting-container{
-    grid-area: main;
-        display: grid;
-        grid-template-columns: 40% 20% 40%;
-        grid-template-rows: 40% 40% 20%;
-        grid-template-areas: 
-          "nay card aye"
-          "nay-scale power aye-scale"
-          "vote vote vote";
-    width: 1280px;
-    height: 720px;
-    position: absolute;
+      display: grid;
+      grid-template-columns: 40% 20% 40%;
+      grid-template-rows: 40% 40% 20%;
+      grid-template-areas: 
+        "nay card aye"
+        "nay-scale power aye-scale"
+        "vote vote vote";
+  width: 1280px;
+  height: 720px;
 }
 
 .voting-card-container{

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { database } from '../firebase.js';
 import { cardsMap } from '../Util.js';
@@ -12,6 +12,7 @@ import VotingManager from '../components/VotingManager.js';
 import VotingOutcome from "../components/VotingOutcome.js";
 import GameOver from "../components/GameOver.js";
 import Webcam from "../components/Webcam.js";
+import AspectRatioBox from '../components/AspectRatioBox';
 
 import '../styles/Gameplay.scss';
 
@@ -84,12 +85,6 @@ function Gameplay(props) {
             setLeader(snapshot.val());
         })
     }, []);
-
-    useLayoutEffect(() => {
-        handleResize(); // for initial load if causes problems try useEffectLayout as suggested by react docs
-        window.addEventListener('resize', handleResize);
-        return (() => window.removeEventListener('resize', handleResize));
-    });
 
     function handleResize() {
         const availableWidth = document.body.scrollWidth - 300; // 300 from sidebar width
@@ -259,9 +254,9 @@ function Gameplay(props) {
                 showClose='false' class="image-agenda-modal" />
             <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
             <VotingOutcome isVisible={assignOutcomes} onSubmit={processOutcomeTokens} />
-            <div className='aspect-ratio-box-root'>
+            <AspectRatioBox>
                 {
-                    !isLoading && !gameOver && <VotingManager isVisible={isVoting} scale={scale} house={house} />
+                    !isLoading && !gameOver && <VotingManager isVisible={isVoting} house={house} />
                 }
                 {
                     !isLoading && gameOver && <GameOver houses={otherHouses} house={house} />
@@ -269,7 +264,7 @@ function Gameplay(props) {
                 {
                     !isLoading && !gameOver && <Webcam isVisible={!isVoting} />
                 }
-            </div>
+            </AspectRatioBox>
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }
