@@ -36,7 +36,7 @@ function Webcam(props) {
     }
 
     return (<>
-        {props.isVisible && <div id="jitsi-container"></div>}
+        <div id="jitsi-container" hidden={!props.isVisible}></div>
     </>
     );
 }
