@@ -187,8 +187,8 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
                 }
 
                 if (leader_tie) {
-                    database.child('leader_tie').set(true);
                     database.child('leader_opt').set(leaders);
+                    database.child('leader_tie').set(true);
                 } else {
                     database.child('leader').set(topHouse[0]);
                 }

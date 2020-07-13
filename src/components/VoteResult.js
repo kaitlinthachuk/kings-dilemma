@@ -27,7 +27,10 @@ function VoteResult(props) {
             setLeaderTie(snapshot.val());
         });
         database.ref('session/voting/leader_opt').on('value', (snapshot) => {
-            setLeaderOpt(snapshot.val());
+            if (snapshot.val() !== "val") {
+                setLeaderOpt(snapshot.val());
+            }
+
         })
     }, [])
 

@@ -19,7 +19,6 @@ function PhotoUpload(props) {
             imageRef = storageRef.child('images/' + imageEndpoint);
 
         imageRef.put(imageToUpload).then(function (snapshot) {
-            console.log('Uploaded a blob or file!');
             setSuccessful(true);
         });
     }

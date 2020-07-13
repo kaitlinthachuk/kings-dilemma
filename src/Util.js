@@ -37,7 +37,6 @@ export async function initUrls() {
                     xhr.responseType = 'json';
                     xhr.onload = function (event) {
                         cardJson = xhr.response;
-                        console.log("card loaded");
                     };
                     xhr.open('GET', url);
                     xhr.send();
