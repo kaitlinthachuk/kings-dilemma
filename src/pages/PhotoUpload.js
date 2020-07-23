@@ -39,9 +39,9 @@ function PhotoUpload(props) {
                         name="image-endpoint"
                         id="sticker-endpoint"
                         className="endpoint"
-                        value="sticker.png"
+                        value="stickers.png"
                         onChange={handleChange}
-                        checked={imageEndpoint === "sticker.png"}
+                        checked={imageEndpoint === "stickers.png"}
                     />
                     <label htmlFor="voting-endpoint">Voting Card</label>
                     <input

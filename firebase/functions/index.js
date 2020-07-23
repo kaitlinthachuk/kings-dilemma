@@ -203,8 +203,9 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
             })
 
             //give power to those who gathered it, if any
+            let gatheredPow = 0;
             if (passVotes.length !== 0) {
-                let gatheredPow = Math.floor(availablePower / passVotes.length);
+                gatheredPow = Math.floor(availablePower / passVotes.length);
                 passVotes.forEach((house) => {
                     database.parent.child(house[0] + "/power").once('value', (snap) => {
                         database.parent.child(house[0] + "/power").set(snap.val() + gatheredPow);

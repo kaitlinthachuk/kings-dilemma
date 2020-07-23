@@ -76,6 +76,7 @@ function PlayerBar(props) {
         <>
             <div className="agenda-container">
                 <div className="agenda-tables">
+                    {haveAgenda && <h3> {props.secretAgenda.toUpperCase()}</h3>}
                     {haveAgenda && !isExtremist &&
                         <table className="resources" key="resources">
                             <tbody>
