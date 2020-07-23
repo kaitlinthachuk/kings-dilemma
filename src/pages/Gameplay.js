@@ -32,6 +32,7 @@ function Gameplay(props) {
     const [votingDone, setVotingDone] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [leader, setLeader] = useState("");
+    const [toggle, setToggle] = useState(false);
 
     useEffect(() => {
         let { houseState, otherHousesState } = location.state;
@@ -188,6 +189,11 @@ function Gameplay(props) {
         }
     }
 
+    function toggleOnClick(e) {
+        e.preventDefault();
+        setToggle(!toggle);
+    }
+
     function shuffleHouses() {
         let temp = [...otherHouses],
             tempLeader;
@@ -231,6 +237,8 @@ function Gameplay(props) {
     function endGame(e) {
         e.preventDefault();
         database.ref('session/game_over').set(true);
+        database.ref('session/voting/available_power').set(3);
+        database.ref("session/tokens").remove();
     }
 
     return (
@@ -243,13 +251,16 @@ function Gameplay(props) {
             <VotingOutcome isVisible={assignOutcomes} onSubmit={processOutcomeTokens} />
             <AspectRatioBox>
                 {
-                    !isLoading && !gameOver && <VotingManager isVisible={isVoting} house={house} />
+                    !isLoading && !gameOver && <VotingManager isVisible={toggle} house={house} />
                 }
                 {
                     !isLoading && gameOver && <GameOver houses={otherHouses} house={house} />
                 }
                 {
-                    !isLoading && !gameOver && <Webcam isVisible={!isVoting} />
+                    !isLoading && !gameOver && <Webcam isVisible={!toggle} />
+                }
+                {
+                    !isLoading && <button type="button" className="toggle-button" onClick={toggleOnClick} >Toggle View</button>
                 }
             </AspectRatioBox>
             {
