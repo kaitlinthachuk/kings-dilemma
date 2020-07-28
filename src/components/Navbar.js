@@ -11,12 +11,19 @@ function Navbar(props) {
 
   function navClick(e) {
     e.preventDefault();
-    setImagePath(imagesMap[e.target.id + ".png"]);
 
-    if (e.target.id === 'stickers') {
-      setImagePath(`${e.target.id + ".png"}?${new Date().getTime()}`);
+    if (e.target.id === "rules") {
+      const url = 'https://www.dropbox.com/s/5r4tvqpg7obi698/KID_RULEBOOK_v35_20191009.pdf?dl=0';
+      window.open(url, '_blank');
+    } else {
+      setImagePath(imagesMap[e.target.id + ".png"]);
+      if (e.target.id === 'stickers') {
+        setImagePath(`${e.target.id + ".png"}?${new Date().getTime()}`);
+      }
+      setIsVisible(true);
     }
-    setIsVisible(true);
+
+
   }
 
   function closeModal(e) {
