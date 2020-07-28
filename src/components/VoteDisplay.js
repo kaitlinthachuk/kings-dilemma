@@ -98,16 +98,17 @@ function VoteDisplay(props) {
         if (pow > maxCommitted) {
             database.ref("session/voting/leader").set(props.house.key).then(() => {
                 return database.ref('session/voting/max_committed').set(pow);
-            }).then(() => {
-                setTurn(false);
-                database.ref('session/' + next + '/voting_turn').set(true);
             })
-        } else if (next === leader) {
+        }
+
+        if (next === leader) {
             database.ref('session/voting/voting_done').set(true).then(() => {
                 setTurn(false);
             });
         } else {
-            database.ref('session/' + next + '/voting_turn').set(true);
+            database.ref('session/' + next + '/voting_turn').set(true).then(() => {
+                setTurn(false);
+            });
         }
 
         setPower(pow);
