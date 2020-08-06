@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from "react-router-dom";
 import { database } from '../firebase.js';
-import { imagesMap, initUrls } from '../Util.js';
-
 import '../styles/HouseSelection.scss';
+
+const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
 
 function HouseSelection(props) {
 
@@ -13,18 +13,15 @@ function HouseSelection(props) {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    initUrls().then(() => {
-      database.ref('/houses/').once('value').then(function (snapshot) {
-        let fetchedHouses = [];
-        snapshot.forEach((child) => {
-          let val = child.toJSON();
-          val['agenda'] = null;
-          fetchedHouses.push(val);
-        })
-        setLoading(false);
-        setOtherHouses(fetchedHouses);
-
+    database.ref('/houses/').once('value').then(function (snapshot) {
+      let fetchedHouses = [];
+      snapshot.forEach((child) => {
+        let val = child.toJSON();
+        val['agenda'] = null;
+        fetchedHouses.push(val);
       })
+      setLoading(false);
+      setOtherHouses(fetchedHouses);
     })
   }, []);
 
@@ -49,7 +46,8 @@ function HouseSelection(props) {
   const newHouse = () => {
     let buttons = [];
     otherHouses.forEach(function (house) {
-      let img_src = imagesMap[house.key + "-small.png"];
+      let img_src = baseURL + "images/" + house.key;
+      console.log(img_src);
       buttons.push(
         <div className="house-selection-container" key={house.name}>
           <div className="house-selection">

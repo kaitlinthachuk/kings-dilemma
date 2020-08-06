@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { database } from '../firebase.js';
-import { cardsMap } from '../Util.js';
 
 import Navbar from '../components/Navbar.js';
 import PlayerBar from '../components/PlayerBar.js';
@@ -16,6 +15,7 @@ import AspectRatioBox from '../components/AspectRatioBox';
 
 import '../styles/Gameplay.scss';
 
+const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
 
 function Gameplay(props) {
     const location = useLocation();
@@ -95,7 +95,7 @@ function Gameplay(props) {
                     availableAgendas = snapshot.val();
                     availableAgendas.forEach(function (agenda, index) {
                         availableAgendas[index] = {
-                            path: cardsMap[agenda + ".png"],
+                            path: baseURL + "cards/" + agenda + ".png",
                             alt: agenda,
                             class: "image-modal-agenda",
                             onClick: agendaOnClick

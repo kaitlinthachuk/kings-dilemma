@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { database } from '../firebase.js';
-import { cardsMap, tokensMap, cardJson } from '../Util.js';
+import cardJson from '../cards.json';
 
 import '../styles/PlayerBar.scss';
 
-
+const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
 
 
 function PlayerBar(props) {
@@ -12,9 +12,9 @@ function PlayerBar(props) {
     const [coins, setCoins] = useState(0);
     const [power, setPower] = useState(0);
 
-    let coinSrc = tokensMap["coin.svg"],
-        powerSrc = tokensMap["power.svg"],
-        laurelSrc = cardsMap["laurel.svg"],
+    let coinSrc = baseURL + "tokens/coin.svg",
+        powerSrc = baseURL + "tokens/power.svg",
+        laurelSrc = baseURL + "cards/laurel.svg",
         boardSrc,
         isExtremist = false,
         isRebel = false,
@@ -69,7 +69,7 @@ function PlayerBar(props) {
             );
         })
 
-        boardSrc = cardsMap[props.secretAgenda + "-board.svg"];
+        boardSrc = baseURL + "cards/" + props.secretAgenda + "-board.svg";
     }
 
     return (

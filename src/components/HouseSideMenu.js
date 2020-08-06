@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { database } from '../firebase.js';
-import { tokensMap, imagesMap } from '../Util.js';
+import House from './House.js';
 
 import '../styles/HouseSideMenu.scss';
 
@@ -15,7 +15,8 @@ class HouseSideMenu extends Component {
             "tiryll": [],
             "tork": [],
             "moderator": "",
-            "leader": ""
+            "leader": "",
+            "turn": ""
         }
         this.buildHouses = this.buildHouses.bind(this);
     }
@@ -50,8 +51,6 @@ class HouseSideMenu extends Component {
             })
         });
 
-
-
     }
 
     buildHouses() {
@@ -59,8 +58,7 @@ class HouseSideMenu extends Component {
             array = this.props.order ? this.props.order : this.props.houses;
 
         array.forEach(element => {
-            let imgSrc = imagesMap[element.key + "-small.png"],
-                tokens = this.state[element.key];
+            let tokens = this.state[element.key];
 
             if (element.key === this.state["moderator"] && !tokens.includes('moderator.svg')) {
                 tokens.push('moderator.svg')
@@ -78,18 +76,8 @@ class HouseSideMenu extends Component {
                 }
                 return true;
             })
-            contents.push(
-                <div className="menu-house" key={element.key}>
-                    <div className="token-container" key="token-container">
-                        {tokens.length === 0 ? null : tokens.map((src) => {
-                            return <img className="token-small" src={tokensMap[src]} alt={src} key={src} />
-                        })
-                        }
-                    </div>
-                    <div className="house-container" key={element + "-house"} style={{ backgroundImage: `url(${imgSrc})` }}>
-                        <h5 className="house-name" key={element.name}>{element.name}</h5>
-                    </div>
-                </div>
+            contents.push(<House element={element} tokens={tokens} key={element.key} />
+
             )
         });
         return contents;

@@ -84,9 +84,9 @@ function AgendaModal(props) {
                                 data-idx={idx}
                                 id={alignment + "-pos"}
                                 className="alignment"
-                                value="positive"
+                                value="-pos"
                                 onChange={handleChange}
-                                checked={tokens[idx].alignment === "positive"}
+                                checked={tokens[idx].alignment === "-pos"}
                             />
                             <label htmlFor={alignment + '-pos'}>Positive</label>
                             <input
@@ -95,9 +95,9 @@ function AgendaModal(props) {
                                 data-idx={idx}
                                 id={alignment + "-neg"}
                                 className="alignment"
-                                value="negative"
+                                value="-neg"
                                 onChange={handleChange}
-                                checked={tokens[idx].alignment === "negative"}
+                                checked={tokens[idx].alignment === "-neg"}
                             />
                             <label htmlFor={alignment + '-neg'}>Negative</label>
                         </div>

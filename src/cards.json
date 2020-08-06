@@ -1,0 +1,214 @@
+{
+    "greedy": {
+        "resources": [
+            [
+                0,
+                4
+            ],
+            [
+                1,
+                7
+            ],
+            [
+                2,
+                11
+            ],
+            [
+                3,
+                7
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                5,
+                0
+            ]
+        ],
+        "ranking": [
+            [
+                "I",
+                8
+            ],
+            [
+                "II",
+                6
+            ],
+            [
+                "III",
+                4
+            ]
+        ]
+    },
+    "rebel": {
+        "resources": [
+            [
+                1,
+                9
+            ],
+            [
+                2,
+                13
+            ],
+            [
+                3,
+                17
+            ],
+            [
+                4,
+                19
+            ],
+            [
+                5,
+                20
+            ]
+        ],
+        "ranking": [
+            [
+                "I",
+                3
+            ],
+            [
+                "II",
+                2
+            ],
+            [
+                "III",
+                1
+            ]
+        ],
+        "extra": "If the King Abdicated, you must also mark an additional Crave on your House screen."
+    },
+    "moderate": {
+        "resources": [
+            [
+                1,
+                6
+            ],
+            [
+                2,
+                7
+            ],
+            [
+                3,
+                10
+            ],
+            [
+                4,
+                13
+            ],
+            [
+                5,
+                14
+            ]
+        ],
+        "ranking": [
+            [
+                "I",
+                5
+            ],
+            [
+                "II",
+                3
+            ],
+            [
+                "III",
+                1
+            ]
+        ]
+    },
+    "extremist": {
+        "resources": "At the end of the game, you score points equal to the distance, in rows, between the highest and lowest Resource markers on the Rescourse Track (including the extremes).",
+        "ranking": [
+            [
+                "I",
+                4
+            ],
+            [
+                "II",
+                2
+            ],
+            [
+                "III",
+                1
+            ]
+        ]
+    },
+    "opportunist": {
+        "resources": [
+            [
+                1,
+                4
+            ],
+            [
+                2,
+                7
+            ],
+            [
+                3,
+                10
+            ],
+            [
+                4,
+                14
+            ],
+            [
+                5,
+                15
+            ]
+        ],
+        "ranking": [
+            [
+                "I",
+                6
+            ],
+            [
+                "II",
+                4
+            ],
+            [
+                "III",
+                2
+            ]
+        ]
+    },
+    "opulent": {
+        "resources": [
+            [
+                1,
+                4
+            ],
+            [
+                2,
+                7
+            ],
+            [
+                3,
+                10
+            ],
+            [
+                4,
+                14
+            ],
+            [
+                5,
+                15
+            ]
+        ],
+        "ranking": [
+            [
+                "I",
+                6
+            ],
+            [
+                "II",
+                4
+            ],
+            [
+                "III",
+                2
+            ]
+        ]
+    }
+}

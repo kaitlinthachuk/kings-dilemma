@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import ImageModal from './ImageModal.js';
-import { imagesMap } from '../Util.js';
 
 import '../styles/Navbar.scss';
+const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
+
 
 function Navbar(props) {
   const { isAdmin } = props;
@@ -16,7 +17,7 @@ function Navbar(props) {
       const url = 'https://www.dropbox.com/s/5r4tvqpg7obi698/KID_RULEBOOK_v35_20191009.pdf?dl=0';
       window.open(url, '_blank');
     } else {
-      setImagePath(imagesMap[e.target.id + ".png"]);
+      setImagePath(baseURL + "images/" + e.target.id + ".png");
       if (e.target.id === 'stickers') {
         setImagePath(`${e.target.id + ".png"}?${new Date().getTime()}`);
       }
