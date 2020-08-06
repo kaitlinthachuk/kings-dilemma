@@ -12,6 +12,10 @@
     background-color: darken($background-color, 12);
 }
 
+.selected-turn {
+    background-color: darken($background-color, 30) !important;
+}
+
 .menu-house{
     height: 100%;
     min-height: 60px;

@@ -3,12 +3,10 @@ import { database } from '../firebase.js';
 import VoteDisplay from "../components/VoteDisplay.js";
 import VoteResult from "../components/VoteResult.js";
 import HoverCard from "../components/HoverCard.js";
-import { tokensMap, imagesMap } from '../Util.js';
-
 
 import '../styles/VotingManager.scss';
 
-
+const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
 
 function VotingManager(props) {
     const [ayeVotes, setAyeVotes] = useState([]);
@@ -43,12 +41,10 @@ function VotingManager(props) {
         });
 
         database.ref('session/voting/aye/outcomes').on('value', (snapshot) => {
-            //setAyeOutcomes(Object.entries(snapshot.val()));
             setAyeOutcomes(initOutcomes(snapshot.val()));
         });
 
         database.ref('session/voting/nay/outcomes').on('value', (snapshot) => {
-            //setNayOutcomes(Object.entries(snapshot.val()));
             setNayOutcomes(initOutcomes(snapshot.val()));
         });
 
@@ -63,15 +59,15 @@ function VotingManager(props) {
             while (powerNum > 0) {
                 if (powerNum - 10 >= 0) {
                     powerTokens.push(
-                        <img src={tokensMap["power-10.svg"]} key={powerNum} alt="power-10" className="power-token token-med" />)
+                        <img src={baseURL + "tokens/power-10.svg"} key={powerNum} alt="power-10" className="power-token token-med" />)
                     powerNum -= 10;
                 } else if (powerNum - 5 > 0) {
                     powerTokens.push(
-                        <img src={tokensMap["power.svg"]} key={powerNum} alt="power-5" className="power-token token-med" />)
+                        <img src={baseURL + "tokens/power.svg"} key={powerNum} alt="power-5" className="power-token token-med" />)
                     powerNum -= 5;
                 } else {
                     powerTokens.push(
-                        <img src={tokensMap["power.svg"]} key={powerNum} alt="power-1" className="power-token token-small" />)
+                        <img src={baseURL + "tokens/power.svg"} key={powerNum} alt="power-1" className="power-token token-small" />)
                     powerNum--;
                 }
             }
@@ -121,7 +117,7 @@ function VotingManager(props) {
                 </table>
             </div>
             <div className="voting-card-container">
-                <HoverCard image={imagesMap["voting.png"]} />
+                <HoverCard image={baseURL + "images/voting.png"} />
             </div>
             <div className="nay-container" key="nay-container">
                 <table className="nay" key="nay">
@@ -142,11 +138,11 @@ function VotingManager(props) {
             </div>
 
             <div className="aye-scale">
-                <img src={tokensMap["aye-scale.svg"]} key="scales" alt="scales" />
+                <img src={baseURL + "tokens/aye-scale.svg"} key="scales" alt="scales" />
                 <div className="aye-token-container">
                     {ayeOutcomes.map((val) =>
                         <img
-                            src={tokensMap['outcome-' + val.token + ".svg"]}
+                            src={baseURL + 'tokens/outcome-' + val.token + ".svg"}
                             key={val.key}
                             alt="outcome"
                             className="aye-outcome-token token-med"
@@ -156,11 +152,11 @@ function VotingManager(props) {
                 </div>
             </div>
             <div className="nay-scale">
-                <img src={tokensMap["nay-scale.svg"]} key="scales" alt="scales" />
+                <img src={baseURL + "tokens/nay-scale.svg"} key="scales" alt="scales" />
                 <div className="nay-token-container">
                     {nayOutcomes.map((val) =>
                         <img
-                            src={tokensMap['outcome-' + val.token + ".svg"]}
+                            src={baseURL + 'tokens/outcome-' + val.token + ".svg"}
                             key={val.key}
                             alt="outcome"
                             className="nay-outcome-token token-med"
