@@ -168,6 +168,13 @@ function VotingManager(props) {
 
             <div className="available-power">
                 {power}
+
+                <div className="pass-houses">
+                    {!voteDone && passVotes.map((el) =>
+                        <h3>{el}</h3>
+                    )}
+                </div>
+
             </div>
             {
                 voteDone ?

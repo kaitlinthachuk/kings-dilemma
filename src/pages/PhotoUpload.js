@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { storage } from '../firebase.js';
 
 import "../styles/PhotoUpload.scss";
 
+const API_URL = "https://us-central1-kings-dilemma.cloudfunctions.net"
 function PhotoUpload(props) {
     const [imageEndpoint, setImageEndpoint] = useState("");
     const [imageToUpload, setImageToUpload] = useState("");
@@ -15,12 +15,17 @@ function PhotoUpload(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        let storageRef = storage.ref(),
-            imageRef = storageRef.child('images/' + imageEndpoint);
+        let imageRef = 'images/' + imageEndpoint;
 
-        imageRef.put(imageToUpload).then(function (snapshot) {
+        const formData = new FormData();
+        formData.append('file', imageToUpload);
+        formData.append('endpoint', imageRef);
+        fetch(`${API_URL}/uploadPhoto`, {
+            method: 'POST',
+            body: formData
+        }).then((res) => {
             setSuccessful(true);
-        });
+        })
     }
 
     function imageSelected(e) {
@@ -55,7 +60,7 @@ function PhotoUpload(props) {
                     />
                 </div>
                 <div className="image-container">
-                    <label for="img">Select image:</label>
+                    <label htmlFor="img">Select image:</label>
                     <input
                         type="file"
                         id="img"
