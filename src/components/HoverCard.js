@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { database } from '../firebase.js';
 import '../styles/HoverCard.scss';
 
 // most of the code is from https://codepen.io/jarvis-ai/pen/GRJpQWO?editors=0110
@@ -7,6 +8,15 @@ function HoverCard(props) {
 
     const [rotate, setRotate] = useState({ x: 0, y: 0, z: 0, a: 0 });
     const [brightness, setBrightness] = useState(1);
+    const [url, setUrl] = useState("");
+
+
+    useEffect(() => {
+        database.ref('session/voting_url').on('value', (snapshot) => {
+            setUrl(snapshot.val());
+        });
+    });
+
 
     function handleMouseMove(e) {
         const bounding = mouseOverBoundingElem(e);
@@ -49,7 +59,7 @@ function HoverCard(props) {
         >
             <img
                 className="card-image"
-                src={`${props.image}?${new Date().getTime()}`}
+                src={url}
                 alt="voting card"
                 style={cardStyle}
             ></img>

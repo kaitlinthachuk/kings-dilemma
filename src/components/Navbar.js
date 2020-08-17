@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageModal from './ImageModal.js';
+import { database } from '../firebase.js';
 
 import '../styles/Navbar.scss';
 const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
@@ -8,7 +9,14 @@ const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
 function Navbar(props) {
   const { isAdmin } = props;
   const [isVisible, setIsVisible] = useState(false);
-  const [imagePath, setImagePath] = useState("")
+  const [imagePath, setImagePath] = useState("");
+  const [stickersUrl, setStickersUrl] = useState("");
+
+  useEffect(() => {
+    database.ref('session/stickers_url').on('value', (snapshot) => {
+      setStickersUrl(snapshot.val());
+    });
+  });
 
   function navClick(e) {
     e.preventDefault();
@@ -17,9 +25,9 @@ function Navbar(props) {
       const url = 'https://www.dropbox.com/s/5r4tvqpg7obi698/KID_RULEBOOK_v35_20191009.pdf?dl=0';
       window.open(url, '_blank');
     } else {
-      setImagePath(baseURL + "images/" + e.target.id + ".png");
+      setImagePath(baseURL + "images/" + e.target.id);
       if (e.target.id === 'stickers') {
-        setImagePath(`${e.target.id + ".png"}?${new Date().getTime()}`);
+        setImagePath(stickersUrl);
       }
       setIsVisible(true);
     }

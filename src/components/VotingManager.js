@@ -117,7 +117,7 @@ function VotingManager(props) {
                 </table>
             </div>
             <div className="voting-card-container">
-                <HoverCard image={baseURL + "images/voting.png"} />
+                <HoverCard />
             </div>
             <div className="nay-container" key="nay-container">
                 <table className="nay" key="nay">

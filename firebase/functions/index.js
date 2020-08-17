@@ -1,14 +1,4 @@
 const functions = require('firebase-functions');
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-
-cloudinary.config({
-    cloud_name: functions.config().cloudinary.name,
-    api_key: functions.config().cloudinary.key,
-    api_secret: functions.config().cloudinary.secret
-});
 
 exports.processVotes = functions.database.ref('session/voting/voting_done').onUpdate((change) => {
     let database = change.after.ref.parent;
@@ -232,32 +222,3 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
         return null;
     }
 });
-
-// uploadPhoto function
-
-const app = express();
-
-// Automatically allow cross-origin requests
-app.use(cors({ origin: true }));
-
-app.post('/', (req, res) => {
-    // console.log("request", req);
-    try {
-        cloudinary.uploader.upload(
-            req.body.image,
-            {
-                resource_type: "image",
-                public_id: req.body.endpoint
-            },
-            (data) => {
-                res.send(data);
-            }
-        );
-    } catch (e) {
-        res.status(500).send(e.message);
-    }
-    // res.status(200).send("Photo Uploaded");
-});
-
-// Expose Express API as a single Cloud Function:
-exports.uploadPhoto = functions.https.onRequest(app);
