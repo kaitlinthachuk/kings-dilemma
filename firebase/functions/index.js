@@ -178,23 +178,32 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
 
             //leader has to be on winning side, assuming everybody didnt pass
             if (!(ayePower === nayPower && ayePower === 0)) {
-                let leader_tie = false, leaders = [[topHouse[0], revKeyChange[topHouse[0]]]];
+                //first check if leader is on winning side, if so we do nothing
+                let leader_on_winning_side = false;
+                for (let i = 0; i < winners.length; i++) {
+                    if (winners[i][0] === leader) {
+                        leader_on_winning_side = true;
+                        break;
+                    }
+                }
 
-                if (topHouse[0] !== leader) {
+                if (!leader_on_winning_side) {
+                    //if leader not on winning side, find new leader, see if there is a tie
+                    let leader_tie = false, leaders = [[topHouse[0], revKeyChange[topHouse[0]]]];
+
                     for (let i = 0; i < winners.length; i++) {
                         if (winners[i][1] === topHouse[1] && winners[i][0] !== topHouse[0]) {
                             leaders.push([winners[i][0], revKeyChange[winners[i][0]]]);
                             leader_tie = true;
-                        } else if (winners[i][0] === leader) {
-                            break;
                         }
                     }
-                }
-                if (leader_tie) {
-                    database.child('leader_opt').set(leaders);
-                    database.child('leader_tie').set(true);
-                } else {
-                    database.child('leader').set(topHouse[0]);
+                    if (leader_tie) {
+                        database.child('leader_opt').set(leaders);
+                        database.child('leader_tie').set(true);
+                    } else {
+                        //there was no tie, we assign the leader to be on the winning team
+                        database.child('leader').set(topHouse[0]);
+                    }
                 }
             }
 
