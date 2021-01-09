@@ -179,13 +179,17 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
             //leader has to be on winning side, assuming everybody didnt pass
             if (!(ayePower === nayPower && ayePower === 0)) {
                 let leader_tie = false, leaders = [[topHouse[0], revKeyChange[topHouse[0]]]];
-                for (let i = 0; i < winners.length; i++) {
-                    if (winners[i][1] === topHouse[1] && winners[i][0] !== topHouse[0]) {
-                        leaders.push([winners[i][0], revKeyChange[winners[i][0]]]);
-                        leader_tie = true;
+
+                if (topHouse[0] !== leader) {
+                    for (let i = 0; i < winners.length; i++) {
+                        if (winners[i][1] === topHouse[1] && winners[i][0] !== topHouse[0]) {
+                            leaders.push([winners[i][0], revKeyChange[winners[i][0]]]);
+                            leader_tie = true;
+                        } else if (winners[i][0] === leader) {
+                            break;
+                        }
                     }
                 }
-
                 if (leader_tie) {
                     database.child('leader_opt').set(leaders);
                     database.child('leader_tie').set(true);

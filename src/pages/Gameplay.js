@@ -257,7 +257,7 @@ function Gameplay(props) {
                     !isLoading && gameOver && <GameOver houses={otherHouses} house={house} />
                 }
                 {
-                    !isLoading && !gameOver && <Webcam isVisible={!toggle} />
+                    !isLoading && <Webcam isVisible={!toggle} />
                 }
                 {
                     !isLoading && <button type="button" className="toggle-button" onClick={toggleOnClick} >Toggle View</button>
