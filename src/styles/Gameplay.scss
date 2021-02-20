@@ -1,6 +1,7 @@
 .gameplay-container{
     height: 100%;
     display: grid;
+    position: relative;
     grid-template-columns: auto 300px;
     grid-template-rows: 60px auto 180px;
     grid-template-areas: 
@@ -10,9 +11,9 @@
 }
 
 .toggle-button{
-  margin-left: -220px;
-  margin-top: 20px;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 20px;
+  left: 20px;
+  grid-area: main;
+  font-size: small;
 }

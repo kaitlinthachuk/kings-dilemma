@@ -99,8 +99,8 @@ function GameOver(props) {
         database.ref('houses/' + house.key + "/prestige").set(updatePrestige);
     }
 
-    return (<div className="end-game-container">
-        <div className="table-container">
+    return (<div className="end-game-container" style={{ display: props.isVisible ? "" : "none" }}>
+        <div className="table-container" >
             <div className="power-container" key="power-container">
                 <table className="power" key="power">
                     <tbody>
@@ -139,23 +139,6 @@ function GameOver(props) {
         </div>
         <div className="update-points">
             <h3>Update Your Crave and Prestige Points!</h3>
-            <div className="update-crave">
-                <h4>Current Crave Points: {crave}</h4>
-                <input
-                    type="number"
-                    className="update-crave-input"
-                    name="crave-input"
-                    placeholder="0"
-                    onChange={handleCraveUpdate}
-                />
-                <input
-                    type="button"
-                    className="crave-button"
-                    name="crave-update"
-                    value="Update Crave!"
-                    onClick={submitCrave}
-                />
-            </div>
             <div className="update-prestige">
                 <h4>Current Prestige Points: {prestige}</h4>
                 <input
@@ -171,6 +154,23 @@ function GameOver(props) {
                     name="prestige-update"
                     value="Update Prestige!"
                     onClick={submitPrestige}
+                />
+            </div>
+            <div className="update-crave">
+                <h4>Current Crave Points: {crave}</h4>
+                <input
+                    type="number"
+                    className="update-crave-input"
+                    name="crave-input"
+                    placeholder="0"
+                    onChange={handleCraveUpdate}
+                />
+                <input
+                    type="button"
+                    className="crave-button"
+                    name="crave-update"
+                    value="Update Crave!"
+                    onClick={submitCrave}
                 />
             </div>
         </div>

@@ -254,15 +254,15 @@ function Gameplay(props) {
                     !isLoading && !gameOver && <VotingManager isVisible={toggle} house={house} />
                 }
                 {
-                    !isLoading && gameOver && toggle && <GameOver houses={otherHouses} house={house} />
+                    !isLoading && gameOver && <GameOver isVisible={toggle} houses={otherHouses} house={house} />
                 }
                 {
                     !isLoading && <Webcam isVisible={!toggle} />
                 }
-                {
-                    !isLoading && <button type="button" className="toggle-button" onClick={toggleOnClick} >Toggle View</button>
-                }
             </AspectRatioBox>
+            {
+                !isLoading && <button type="button" className="toggle-button" onClick={toggleOnClick} >Toggle View</button>
+            }
             {
                 !isLoading && <PlayerBar house={house} secretAgenda={secretAgenda} />
             }
