@@ -254,7 +254,7 @@ function Gameplay(props) {
                     !isLoading && !gameOver && <VotingManager isVisible={toggle} house={house} />
                 }
                 {
-                    !isLoading && gameOver && <GameOver houses={otherHouses} house={house} />
+                    !isLoading && gameOver && toggle && <GameOver houses={otherHouses} house={house} />
                 }
                 {
                     !isLoading && <Webcam isVisible={!toggle} />

@@ -35,34 +35,30 @@ exports.processVotes = functions.database.ref('session/voting/voting_done').onUp
             })
         );
 
-        return Promise.all(promiseArray).then((values) => {
+        Promise.all(promiseArray).then(async () => {
             if (ayePower === nayPower && ayePower !== 0) {
                 //there's a tie the mod needs to break;
-                database.child('tie_breaker').set(true);
+                await database.child('tie_breaker').set(true);
             } else if (ayePower === nayPower) {
                 //everyone passed, mod becomes leader and breaks tie;
-                database.child('moderator').once('value', (snap) => {
-                    database.child('leader').set(snap.val());
-                    database.child('tie_breaker').set(true);
+                database.child('moderator').once('value', async (snap) => {
+                    await database.child('leader').set(snap.val());
+                    await database.child('tie_breaker').set(true);
                 })
             } else {
                 //we have a clear winner, time to process the results
-                database.child('winner_update').set(true);
+                await database.child('winner_update').set(true);
             }
-            return null;
-        })
-    } else {
-        return null;
+            return;
+        }).catch((e) => console.log(e));
     }
 });
 
-exports.tieBroken = functions.database.ref('session/voting/tie_breaker').onUpdate((change) => {
+exports.tieBroken = functions.database.ref('session/voting/tie_breaker').onUpdate(async (change) => {
     let database = change.after.ref.parent;
     if (change.after.val() === "aye" || change.after.val() === "nay") {
         //tie has been broken by moderator, process winners
-        return database.child('winner_update').set(true);
-    } else {
-        return null;
+        await database.child('winner_update').set(true);
     }
 });
 
@@ -91,85 +87,67 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
 
 
         promiseArray.push(
-            new Promise((resolve, reject) => {
-                database.child('/aye/voters').once('value', (snapshot) => {
-                    let obj = Object.entries(snapshot.val()).filter((key) => {
-                        return key[0] !== "placeholder";
-                    });
-                    obj.forEach(element => {
-                        ayePower += element[1];
-                        ayeVotes.push([keyChange[element[0]], element[1]]);
-                        if (element[1] > maxAye[1]) {
-                            maxAye = [keyChange[element[0]], element[1]];
-                        }
-                    });
-                    resolve();
+            database.child('/aye/voters').once('value', (snapshot) => {
+                let obj = Object.entries(snapshot.val()).filter((key) => {
+                    return key[0] !== "placeholder";
+                });
+                obj.forEach(element => {
+                    ayePower += element[1];
+                    ayeVotes.push([keyChange[element[0]], element[1]]);
+                    if (element[1] > maxAye[1]) {
+                        maxAye = [keyChange[element[0]], element[1]];
+                    }
                 });
             })
         );
 
         promiseArray.push(
-            new Promise((resolve, reject) => {
-                database.child('/nay/voters').once('value', (snapshot) => {
-                    let obj = Object.entries(snapshot.val()).filter((key) => {
-                        return key[0] !== "placeholder";
-                    });
-                    obj.forEach(element => {
-                        nayPower += element[1];
-                        nayVotes.push([keyChange[element[0]], element[1]]);
-                        if (element[1] > maxNay[1]) {
-                            maxNay = [keyChange[element[0]], element[1]];
-                        }
-                    });
-                    resolve();
+            database.child('/nay/voters').once('value', (snapshot) => {
+                let obj = Object.entries(snapshot.val()).filter((key) => {
+                    return key[0] !== "placeholder";
+                });
+                obj.forEach(element => {
+                    nayPower += element[1];
+                    nayVotes.push([keyChange[element[0]], element[1]]);
+                    if (element[1] > maxNay[1]) {
+                        maxNay = [keyChange[element[0]], element[1]];
+                    }
                 });
             })
         );
         promiseArray.push(
-            new Promise((resolve, reject) => {
-                database.child('pass').once('value', (snapshot) => {
-                    let obj = Object.entries(snapshot.val()).filter((key) => {
-                        return key[0] !== "placeholder";
-                    });
-                    passVotes = obj;
-                    resolve();
+            database.child('pass').once('value', (snapshot) => {
+                let obj = Object.entries(snapshot.val()).filter((key) => {
+                    return key[0] !== "placeholder";
                 });
+                passVotes = obj;
             })
         );
 
         promiseArray.push(
-            new Promise((resolve, reject) => {
-                database.child('leader').once('value', (snapshot) => {
-                    leader = snapshot.val();
-                    resolve();
-                });
+            database.child('leader').once('value', (snapshot) => {
+                leader = keyChange[snapshot.val()];
             })
         );
 
         promiseArray.push(
-            new Promise((resolve, reject) => {
-                database.child('tie_breaker').once('value', (snapshot) => {
-                    winner = snapshot.val();
-                    resolve();
-                });
+            database.child('tie_breaker').once('value', (snapshot) => {
+                winner = snapshot.val();
             })
         );
 
         promiseArray.push(
-            new Promise((resolve, reject) => {
-                database.child('available_power').once('value', (snapshot) => {
-                    availablePower = snapshot.val();
-                    resolve();
-                });
+            database.child('available_power').once('value', (snapshot) => {
+                availablePower = snapshot.val();
             })
         );
 
-        return Promise.all(promiseArray).then((vals) => {
+        Promise.all(promiseArray).then(async () => {
             if (ayePower !== nayPower) {
                 winner = ayePower > nayPower ? "aye" : "nay";
             }
 
-            database.child('winner').set(winner);
+            await database.child('winner').set(winner);
 
             let topHouse = winner === "aye" ? maxAye : maxNay,
                 winners = winner === "aye" ? ayeVotes : nayVotes,
@@ -198,20 +176,20 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
                         }
                     }
                     if (leader_tie) {
-                        database.child('leader_opt').set(leaders);
-                        database.child('leader_tie').set(true);
+                        await database.child('leader_opt').set(leaders);
+                        await database.child('leader_tie').set(true);
                     } else {
                         //there was no tie, we assign the leader to be on the winning team
-                        database.child('leader').set(topHouse[0]);
+                        await database.child('leader').set(topHouse[0]);
                     }
                 }
             }
 
 
             //take power from winners
-            winners.forEach((pair) => {
-                database.parent.child(pair[0] + "/power").once('value', (snap) => {
-                    database.parent.child(pair[0] + "/power").set(snap.val() - parseInt(pair[1]));
+            winners.forEach(async (pair) => {
+                await database.parent.child(pair[0] + "/power").once('value', async (snap) => {
+                    await database.parent.child(pair[0] + "/power").set(snap.val() - parseInt(pair[1]));
                 });
             })
 
@@ -219,19 +197,16 @@ exports.processWinners = functions.database.ref('session/voting/winner_update').
             let gatheredPow = 0;
             if (passVotes.length !== 0) {
                 gatheredPow = Math.floor(availablePower / passVotes.length);
-                passVotes.forEach((house) => {
-                    database.parent.child(house[0] + "/power").once('value', (snap) => {
-                        database.parent.child(house[0] + "/power").set(snap.val() + gatheredPow);
+                passVotes.forEach(async (house) => {
+                    await database.parent.child(house[0] + "/power").once('value', async (snap) => {
+                        await database.parent.child(house[0] + "/power").set(snap.val() + gatheredPow);
                     });
                 });
-
-                //put winners power in center for next vote
-                database.child('available_power').set(availablePower - gatheredPow * passVotes.length + winnersTotalPower);
             }
-            return null;
 
-        })
-    } else {
-        return null;
+            //put winners power in center for next vote
+            await database.child('available_power').set(availablePower - gatheredPow * passVotes.length + winnersTotalPower);
+            return;
+        }).catch((e) => console.log(e));
     }
-});
+})
