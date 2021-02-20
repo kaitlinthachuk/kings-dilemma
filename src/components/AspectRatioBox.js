@@ -15,7 +15,8 @@ function AspectRatioBox(props) {
         const availableHeight = document.body.scrollHeight - 60 - 180; // 60 nav and 180 playerbar
         const scale = Math.min(
             availableWidth / 1280,
-            availableHeight / 720
+            availableHeight / 720,
+            1,
         );
         setScale(scale);
     }
