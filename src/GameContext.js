@@ -1,16 +1,16 @@
-import React, {createContext, useEffect, useState} from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { io } from "socket.io-client";
 
-const URL = "http://localhost:3000";
+const serverURL = "http://localhost:3000";
 
 const GameContext = createContext(undefined)
 
-export const GameProvider = ({children}) => {
+export const GameProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
     const roomId = window.location.pathname.slice(1)
-    const socket = io(URL);
+    const socket = io(serverURL);
     socket.on('hello', (msg) => {
       setIsConnected(true)
     })
@@ -18,7 +18,7 @@ export const GameProvider = ({children}) => {
   }, [])
 
   const providerValue = {
-    isConnected
+    isConnected, serverURL
   }
 
   return (

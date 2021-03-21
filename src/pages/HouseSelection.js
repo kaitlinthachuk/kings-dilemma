@@ -1,60 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Redirect } from "react-router-dom";
 import { database } from '../firebase.js';
+import GameContext from '../GameContext'
 import '../styles/HouseSelection.scss';
 
 const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
 
 function HouseSelection(props) {
-
+  const { serverURL } = useContext(GameContext)
   const [loading, setLoading] = useState(true);
   const [house, setHouse] = useState(null);
   const [otherHouses, setOtherHouses] = useState([]);
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    database.ref('/houses/').once('value').then(function (snapshot) {
-      let fetchedHouses = [];
-      snapshot.forEach((child) => {
-        let val = child.toJSON();
-        val['agenda'] = null;
-        fetchedHouses.push(val);
+    fetch(serverURL + "/houses")
+      .then(res => {
+        res.json().then(houses => {
+          setOtherHouses(Object.values(houses))
+          setLoading(false)
+        })
       })
-      setLoading(false);
-      setOtherHouses(fetchedHouses);
-    })
   }, []);
 
   function handleHouseSelection(e) {
     e.preventDefault();
-    let houseName = e.target.parentElement.name;
+    debugger;
+    console.log(e.target.parentElement);
+    let houseID = e.target.parentElement.name;
+    console.log(houseID)
     for (let i = 0; i < otherHouses.length; i++) {
-      if (otherHouses[i].key === houseName) {
+      if (otherHouses[i].id === houseID) {
         setHouse(otherHouses[i]);
-        database.ref().update({
-          ['session/' + otherHouses[i].key + "/coins"]: otherHouses[i].coins,
-          ['session/' + otherHouses[i].key + "/power"]: otherHouses[i].power,
-        });
-
         setRedirect(true);
         break;
       }
     }
-
   };
 
   const newHouse = () => {
     let buttons = [];
     otherHouses.forEach(function (house) {
-      let img_src = baseURL + "images/" + house.key;
+      let img_src = baseURL + "images/" + house.id;
       console.log(img_src);
       buttons.push(
-        <div className="house-selection-container" key={house.name}>
+        <div className="house-selection-container" key={house.houseName}>
           <div className="house-selection">
             <img className="house-crest" src={img_src} alt="" />
             <h3 className="house-motto">{house.motto}</h3>
           </div>
-          <button className="house-selection-button" name={house.key} onClick={handleHouseSelection}><h1>{house.name}</h1></button>
+          <button className="house-selection-button" name={house.id} onClick={handleHouseSelection}><h1>{house.houseName}</h1><h3>{house.kingdom}</h3></button>
         </div>
       )
     });

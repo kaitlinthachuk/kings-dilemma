@@ -12,14 +12,13 @@ import "./styles/App.scss";
 function App() {
   return (
     <GameProvider>
-      <Hello />
-      {/* <Router>
+      <Router>
         <div className="App">
           <Route exact path="/" component={HouseSelection} />
           <Route exact path="/play" component={GamePlay} />
           <Route exact path="/upload" component={PhotoUpload} />
         </div>
-      </Router> */}
+      </Router>
     </GameProvider>
   );
 }
