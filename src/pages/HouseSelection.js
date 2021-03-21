@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Redirect } from "react-router-dom";
-import { database } from '../firebase.js';
 import GameContext from '../GameContext'
 import '../styles/HouseSelection.scss';
 
-const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
-
 function HouseSelection(props) {
-  const { serverURL } = useContext(GameContext)
+  const { serverURL, imageURL } = useContext(GameContext)
   const [loading, setLoading] = useState(true);
   const [house, setHouse] = useState(null);
   const [otherHouses, setOtherHouses] = useState([]);
@@ -41,7 +38,7 @@ function HouseSelection(props) {
   const newHouse = () => {
     let buttons = [];
     otherHouses.forEach(function (house) {
-      let img_src = baseURL + "images/" + house.id;
+      let img_src = imageURL + "images/" + house.id;
       console.log(img_src);
       buttons.push(
         <div className="house-selection-container" key={house.houseName}>
@@ -73,7 +70,7 @@ function HouseSelection(props) {
   if (loading) {
     content = SVGSpinner;
   } else if (redirect) {
-    content = <Redirect to={{ pathname: '/play', state: { houseState: house, otherHousesState: otherHouses } }} />;
+    content = <Redirect to={{ pathname: '/play', state: { houseState: house } }} />;
   } else {
     content = newHouse();
   }

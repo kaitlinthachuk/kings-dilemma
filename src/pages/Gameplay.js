@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
-import { database } from '../firebase.js';
 
 import Navbar from '../components/Navbar.js';
 import PlayerBar from '../components/PlayerBar.js';
@@ -12,136 +11,34 @@ import VotingOutcome from "../components/VotingOutcome.js";
 import GameOver from "../components/GameOver.js";
 import Webcam from "../components/Webcam.js";
 import AspectRatioBox from '../components/AspectRatioBox';
+import GameContext from '../GameContext'
 
 import '../styles/Gameplay.scss';
 
-const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
 
 function Gameplay(props) {
     const location = useLocation();
-    const [isVoting, setIsVoting] = useState(false);
+    const { state, secretAgendas, imageURL, emitSecretAgenda } = useContext(GameContext)
     const [house, setHouse] = useState(null);
-    const [otherHouses, setOtherHouses] = useState([]);
-    const [secretAgenda, setSecretAgenda] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
-    const [selectAgenda, setSelectAgenda] = useState({ state: false, availableAgendas: [] });
     const [isLoading, setIsLoading] = useState(true);
     const [assignTokens, setAssignTokens] = useState(false);
     const [assignOutcomes, setAssignOutcomes] = useState(false);
-    const [votingOrder, setVotingOrder] = useState([]);
-    const [votingDone, setVotingDone] = useState(false);
-    const [gameOver, setGameOver] = useState(false);
-    const [leader, setLeader] = useState("");
+
     const [toggle, setToggle] = useState(false);
 
     useEffect(() => {
-        let { houseState, otherHousesState } = location.state;
-
-        otherHousesState.sort((a, b) => {
-            if (a.prestige === b.prestige) {
-                return a.number - b.number;
-            } else {
-                return a.prestige - b.prestige;
-            }
-
-        })
-
-        let randomIndex = Math.floor(Math.random() * 4),
-            availableAgendas = ['greedy', 'opulent', 'rebel', 'opportunist', 'moderate', 'extremist'];
-
-        availableAgendas.splice(randomIndex, 1);
-
-        if (houseState.key === "solad") {
-            database.ref().update({
-                'session/available_agendas': availableAgendas,
-                ['session/' + otherHousesState[0].key + "/secret_agenda"]: true,
-                'session/voting/moderator': otherHousesState[0].key,
-                'session/voting/leader': otherHousesState[4].key
-            });
-            setIsAdmin(true);
-        }
-
+        let { houseState } = location.state;
         setHouse(houseState);
-        setOtherHouses(otherHousesState);
+        if (houseState.id === "solad") {
+            setIsAdmin(true)
+        }
         setIsLoading(false);
-
-        database.ref('/session/voting/start_voting').on('value', function (snapshot) {
-            setIsVoting(snapshot.val());
-        });
-
-        database.ref('/session/voting/voting_done').on('value', function (snapshot) {
-            setVotingDone(snapshot.val());
-        });
-
-        database.ref('/session/voting/voting_order').on('value', function (snapshot) {
-            setVotingOrder(snapshot.val());
-        })
-
-        database.ref('/session/game_over').on('value', function (snapshot) {
-            setGameOver(snapshot.val());
-        })
-
-        database.ref('/session/voting/leader').on('value', function (snapshot) {
-            setLeader(snapshot.val());
-        })
     }, []);
-
-    let availableAgendas = [];
-
-    if (!isLoading && secretAgenda.length === 0 && !selectAgenda.state) {
-        database.ref("/session/" + house.key + "/secret_agenda").on('value', function (snapshot) {
-            if (snapshot.val()) {
-                database.ref("/session/available_agendas").once('value', function (snapshot) {
-                    availableAgendas = snapshot.val();
-                    availableAgendas.forEach(function (agenda, index) {
-                        availableAgendas[index] = {
-                            path: baseURL + "cards/" + agenda + ".png",
-                            alt: agenda,
-                            class: "image-modal-agenda",
-                            onClick: agendaOnClick
-                        };
-                    });
-                    setSelectAgenda({ state: true, availableAgendas: availableAgendas });
-                })
-            }
-        });
-
-    }
 
     function agendaOnClick(e) {
         e.preventDefault();
-        let index = otherHouses.findIndex(function (el) {
-            return house.key === el.key;
-        });
-
-
-        let agendaIndex = availableAgendas.findIndex(function (el) {
-            return el.alt === e.target.alt;
-        });
-
-        availableAgendas.splice(agendaIndex, 1);
-
-        availableAgendas = availableAgendas.map(function (el) {
-            return el.alt;
-        })
-
-        let housePath = 'session/' + [house.key] + "/secret_agenda";
-
-
-        if (index < 4) {
-            let nextPath = 'session/' + otherHouses[index + 1].key + "/secret_agenda";
-            database.ref().update({
-                [nextPath]: true
-            })
-        }
-
-        database.ref().update({
-            'session/available_agendas': availableAgendas,
-            [housePath]: false
-        });
-
-        setSecretAgenda(e.target.alt);
-        setSelectAgenda(false);
+        emitSecretAgenda(house.id, e.target.alt)
     }
 
     function tokenOnClick(e) {
@@ -194,30 +91,6 @@ function Gameplay(props) {
         setToggle(!toggle);
     }
 
-    function shuffleHouses() {
-        let temp = [...otherHouses],
-            tempLeader;
-        for (let i = 0; i <= 4; i++) {
-            if (temp[i].key === leader) {
-                tempLeader = temp[i];
-                temp.splice(i, 1);
-                break;
-            }
-        }
-
-        let j, x;
-        for (let i = 3; i >= 0; i--) {
-            j = Math.floor(Math.random() * (i + 1));
-            x = temp[i];
-            temp[i] = temp[j];
-            temp[j] = x;
-        }
-
-        temp.unshift(tempLeader);
-
-        return temp;
-    }
-
     function processOutcomeTokens(e) {
         e.forEach((val) => {
             database.ref('session/voting/' + val.side + "/outcomes").push(val.token + "-" + val.alignment);
@@ -245,8 +118,15 @@ function Gameplay(props) {
 
         <div className="gameplay-container">
             <Navbar isAdmin={isAdmin} tokenOnClick={tokenOnClick} votingOnClick={votingOnClick} endOnClick={endGame} />
-            <ImageModal isVisible={selectAgenda.state && secretAgenda.length === 0} images={selectAgenda.availableAgendas}
-                showClose='false' class="image-agenda-modal" />
+            <ImageModal isVisible={state === "secretAgenda"} showClose='false' class="image-agenda-modal"
+                images={secretAgendas.map((agenda) => {
+                    return {
+                        path: imageURL + "cards/" + agenda.name + ".png",
+                        alt: agenda.name,
+                        class: "image-modal-agenda",
+                        onClick: agendaOnClick
+                    }
+                })} />
             <AgendaModal isVisible={assignTokens} onSubmit={processTokens} />
             <VotingOutcome isVisible={assignOutcomes} onSubmit={processOutcomeTokens} />
             <AspectRatioBox>
