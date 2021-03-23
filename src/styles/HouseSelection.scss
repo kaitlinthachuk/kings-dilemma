@@ -10,6 +10,15 @@
     backface-visibility: hidden;
 }
 
+.house-crest-bullet {
+  border-radius: 2em;
+  opacity: 1;
+  display: block;
+  width: 150px;
+  height: auto;
+  padding-right: 10px;
+}
+
 .selected {
   width : 25%;
   margin: auto;
@@ -42,6 +51,10 @@
   margin-bottom: 20px;
 }
 
+.myHouse-selection {
+  margin-left: 33%;
+}
+
 .house-selection-container{
   display: flex;
 }
@@ -49,6 +62,26 @@
 .house-selection-button{
     height: fit-content;
     margin: auto;
+}
+
+.joined-player-container{
+  display: flex;
+}
+
+.joined-player {
+  position: relative;
+  display: flex;
+  margin: auto;
+  padding: 20px;
+}
+
+.joined-player-content {
+  height: fit-content;
+  margin: auto;
+}
+
+.myHouse-container {
+  text-align: center;
 }
 
 .spinner {

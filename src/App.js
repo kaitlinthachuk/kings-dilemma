@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { GameProvider } from "./GameContext";
 import Game from "./Game";
+import HouseSelection from "./pages/HouseSelection"
 
 import "./styles/App.scss";
 
@@ -10,7 +11,7 @@ function App() {
     <BrowserRouter>
       <Route path={"/"}>
         <GameProvider>
-          <Game />
+          <HouseSelection />
         </GameProvider>
       </Route>
     </BrowserRouter>

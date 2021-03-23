@@ -4,42 +4,43 @@ import GameContext from '../GameContext'
 import '../styles/HouseSelection.scss';
 
 function HouseSelection(props) {
-  const { serverURL, imageURL } = useContext(GameContext)
+  const { myHouse,
+    houseData,
+    imageURL,
+    gameState: { state, players },
+    actions: { selectHouse, startGame } } = useContext(GameContext)
   const [loading, setLoading] = useState(true);
-  const [house, setHouse] = useState(null);
-  const [otherHouses, setOtherHouses] = useState([]);
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch(serverURL + "/houses")
-      .then(res => {
-        res.json().then(houses => {
-          setOtherHouses(Object.values(houses))
-          setLoading(false)
-        })
-      })
+    if (houseData) {
+      setLoading(false);
+    }
+  }, [houseData]);
+
+  useEffect(() => {
+    if (state === "secretAgenda") {
+      setRedirect(true);
+    }
+  }, [state]);
+
+  useEffect(() => {
+    if (myHouse) {
+      selectHouse(myHouse);
+    }
   }, []);
 
   function handleHouseSelection(e) {
     e.preventDefault();
-    debugger;
-    console.log(e.target.parentElement);
     let houseID = e.target.parentElement.name;
     console.log(houseID)
-    for (let i = 0; i < otherHouses.length; i++) {
-      if (otherHouses[i].id === houseID) {
-        setHouse(otherHouses[i]);
-        setRedirect(true);
-        break;
-      }
-    }
+    selectHouse(houseID);
   };
 
   const newHouse = () => {
     let buttons = [];
-    otherHouses.forEach(function (house) {
+    Object.values(houseData).forEach(function (house) {
       let img_src = imageURL + "images/" + house.id;
-      console.log(img_src);
       buttons.push(
         <div className="house-selection-container" key={house.houseName}>
           <div className="house-selection">
@@ -51,8 +52,31 @@ function HouseSelection(props) {
       )
     });
     return <div>
-      <h1>Please Select Your House</h1>
+      <h1>Please Select Your House: </h1>
       {buttons}
+    </div>
+  }
+
+  const returningHouse = () => {
+    return <div className="myHouse-container">
+      <h1>Welcome Back {houseData[myHouse].houseName},</h1>
+      <div className="house-selection myHouse-selection">
+        <img className="house-crest" src={imageURL + "images/" + houseData[myHouse].id} alt="" />
+        <h3 className="house-motto">{houseData[myHouse].motto}</h3>
+      </div>
+      <h3>waiting for the rest of the council to assemble...</h3>
+      <h3>Current memebers of council present: </h3>
+      <div className="joined-player-container">
+        {Object.values(players).filter((player => player.house !== myHouse)).map((player) => (
+          <div className="joined-player">
+            <img className="house-crest-bullet" src={imageURL + "images/" + houseData[player.house].id} alt="" />
+            <h4 className="joined-player-content">
+              {houseData[player.house].houseName}, {houseData[player.house].kingdom}, <i>{houseData[player.house].motto}</i>
+            </h4>
+          </div>
+        ))}
+      </div>
+      {players.length === 5 && myHouse === "solad" && <button onClick={() => startGame()}>Start</button>}
     </div>
   }
 
@@ -70,9 +94,11 @@ function HouseSelection(props) {
   if (loading) {
     content = SVGSpinner;
   } else if (redirect) {
-    content = <Redirect to={{ pathname: '/play', state: { houseState: house } }} />;
-  } else {
+    content = <Redirect to={{ pathname: '/play' }} />;
+  } else if (!myHouse) {
     content = newHouse();
+  } else {
+    content = returningHouse();
   }
 
   return <>
