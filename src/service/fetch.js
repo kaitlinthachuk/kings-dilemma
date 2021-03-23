@@ -1,6 +1,6 @@
 const serverURL = process.env.SERVER_URL || "http://localhost:3000";
 
-function client(endpoint, { body, ...customConfig } = {}) {
+export const api = (endpoint, { body, ...customConfig } = {}) => {
   const headers = { "content-type": "application/json" };
 
   const config = {
@@ -24,5 +24,3 @@ function client(endpoint, { body, ...customConfig } = {}) {
     }
   });
 }
-
-export default client;

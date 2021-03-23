@@ -8,7 +8,7 @@ import "./styles/App.scss";
 function App() {
   return (
     <BrowserRouter>
-      <Route path={"/:sessionId"}>
+      <Route path={"/"}>
         <GameProvider>
           <Game />
         </GameProvider>
