@@ -76,7 +76,7 @@ function HouseSelection(props) {
           </div>
         ))}
       </div>
-      {players.length === 5 && myHouse === "solad" && <button onClick={() => startGame()}>Start</button>}
+      {myHouse === "solad" && <button onClick={() => startGame()}>Start</button>}
     </div>
   }
 

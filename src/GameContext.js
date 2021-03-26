@@ -3,6 +3,7 @@ import { api } from "./service/fetch";
 import { socket } from "./service/socket";
 
 const imageURL = "https://res.cloudinary.com/didsjgttu/image/upload/";
+const chronicleStickerUrl = "https://res.cloudinary.com/didsjgttu/image/upload/v1613963531/ucedkr9lkc4p2blyrvi2.jpg";
 
 const GameContext = createContext(undefined);
 
@@ -33,18 +34,34 @@ export const GameProvider = ({ children }) => {
     socket.emit("player:selectSecretAgenda", myHouse, secretAgenda);
   };
 
+  const setVoteOutcomes = (ayeOutcomes, nayOutcomes) => {
+    socket.emit("player:setOutcomes", ayeOutcomes, nayOutcomes);
+  };
+
+  const setAgendaTokens = (agendaTokenAssignments) => {
+    socket.emit("player:setAgendaTokenss", agendaTokenAssignments);
+  };
+
+  const triggerEndGame = () => {
+    socket.emit("player:gameOver");
+  }
+
   // set all game state
   socket.on("game:state", (gameState) => setGameState(gameState));
 
   const providerValue = {
     myHouse,
     imageURL,
+    chronicleStickerUrl,
     gameState,
     houseData,
     actions: {
       selectHouse,
       startGame,
       selectSecretAgenda,
+      setVoteOutcomes,
+      setAgendaTokens,
+      triggerEndGame
     },
   };
 

@@ -82,24 +82,24 @@ function AgendaModal(props) {
                                 type="radio"
                                 name={alignment}
                                 data-idx={idx}
-                                id={alignment + "-pos"}
+                                id={alignment + "pos"}
                                 className="alignment"
-                                value="-pos"
+                                value="pos"
                                 onChange={handleChange}
-                                checked={tokens[idx].alignment === "-pos"}
+                                checked={tokens[idx].alignment === "pos"}
                             />
-                            <label htmlFor={alignment + '-pos'}>Positive</label>
+                            <label htmlFor={alignment + 'pos'}>Positive</label>
                             <input
                                 type="radio"
                                 name={alignment}
                                 data-idx={idx}
-                                id={alignment + "-neg"}
+                                id={alignment + "neg"}
                                 className="alignment"
-                                value="-neg"
+                                value="neg"
                                 onChange={handleChange}
-                                checked={tokens[idx].alignment === "-neg"}
+                                checked={tokens[idx].alignment === "neg"}
                             />
-                            <label htmlFor={alignment + '-neg'}>Negative</label>
+                            <label htmlFor={alignment + 'neg'}>Negative</label>
                         </div>
                     )
                 })

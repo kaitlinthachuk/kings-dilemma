@@ -1,55 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { database } from '../firebase.js';
-const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
+import React, { useContext } from 'react';
+import GameContext from '../GameContext'
 
 function House(props) {
-    const [turn, setTurn] = useState("");
+    const { imageURL,
+        gameState: {
+            turn },
+    } = useContext(GameContext)
 
-    useEffect(() => {
-        database.ref('session/coden/voting_turn').on('value', (snapshot) => {
-            if (snapshot.val()) {
-                setTurn("coden");
-            }
-        });
+    let imgSrc = imageURL + "images/" + props.player.house + ".jpg"
 
-        database.ref('session/crann/voting_turn').on('value', (snapshot) => {
-            console.log('checking crann')
-            if (snapshot.val()) {
-                setTurn("crann");
-            }
-        });
-
-        database.ref('session/tork/voting_turn').on('value', (snapshot) => {
-            if (snapshot.val()) {
-                setTurn("tork");
-            }
-        });
-
-        database.ref('session/tiryll/voting_turn').on('value', (snapshot) => {
-            if (snapshot.val()) {
-                setTurn("tiryll");
-            }
-        });
-
-        database.ref('session/solad/voting_turn').on('value', (snapshot) => {
-            if (snapshot.val()) {
-                setTurn("solad");
-            }
-        });
-    }, [])
-
-    let imgSrc = baseURL + "images/" + props.element.key;
+    function createTokens() {
+        props.player.agendaTokens.map((token) => {
+            let tokenString = token.resource + "-" + token.type
+            return <img className="token-small" src={imageURL + "tokens/" + tokenString + ".jpg"} alt={tokenString} key={tokenString} />
+        })
+    }
 
     return (
-        <div className={`menu-house ${turn === props.element.key ? "selected-turn" : ""}`}>
+        <div className={`menu-house ${turn === props.player.house ? "selected-turn" : ""}`}>
             <div className="token-container" key="token-container">
-                {props.tokens.length === 0 ? null : props.tokens.map((src) => {
-                    return <img className="token-small" src={baseURL + "tokens/" + src} alt={src} key={src} />
-                })
-                }
+                {createTokens()}
             </div>
-            <div className="house-container" key={props.element + "-house"} style={{ backgroundImage: `url(${imgSrc})` }}>
-                <h5 className="house-name" key={props.element.name}>{props.element.name}</h5>
+            <div className="house-container" key={props.player + "-house"} style={{ backgroundImage: `url(${imgSrc})` }}>
+                <h5 className="house-name" key={props.player.house}>{props.player.house}</h5>
             </div>
         </div>
     )
