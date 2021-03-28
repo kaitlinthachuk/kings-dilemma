@@ -3,6 +3,7 @@ import GameContext from '../GameContext'
 
 function House(props) {
     const { imageURL,
+        houseData,
         gameState: {
             turn },
     } = useContext(GameContext)
@@ -31,7 +32,7 @@ function House(props) {
                 {createTokens()}
             </div>
             <div className="house-container" key={props.player.house + "-house"} style={{ backgroundImage: `url(${imgSrc})` }}>
-                <h5 className="house-name" key={props.player.house}>{props.player.house}</h5>
+                <h5 className="house-name" key={props.player.house}>{houseData[props.player.house].houseName}</h5>
             </div>
         </div>
     )

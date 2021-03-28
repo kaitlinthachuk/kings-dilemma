@@ -54,6 +54,18 @@ export const GameProvider = ({ children }) => {
     socket.emit('game:state', winner)
   }
 
+  const playerVote = (vote) => {
+    socket.emit('player:vote', vote)
+  }
+
+  const updateCrave = (crave) => {
+    socket.emit('player:crave', myHouse, crave)
+  }
+
+  const updatePrestige = (prestige) => {
+    socket.emit('player:prestige', myHouse, prestige)
+  }
+
   // set all game state
   socket.on("game:state", (gameState) => setGameState(gameState));
 
@@ -71,7 +83,10 @@ export const GameProvider = ({ children }) => {
       setAgendaTokens,
       triggerEndGame,
       breakTie,
-      breakLeaderTie
+      breakLeaderTie,
+      playerVote,
+      updateCrave,
+      updatePrestige
     },
   };
 

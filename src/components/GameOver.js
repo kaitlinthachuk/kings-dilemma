@@ -1,102 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { database } from '../firebase.js';
+import React, { useContext, useState } from 'react';
+import GameContext from '../GameContext'
 
 import '../styles/GameOver.scss';
 
 function GameOver(props) {
-    const { houses, house } = props;
-    const [power, setPower] = useState([]);
-    const [coins, setCoins] = useState([]);
-    const [crave, setCrave] = useState(0);
-    const [prestige, setPrestige] = useState(0);
-    const [updateCrave, setUpdateCrave] = useState(0);
-    const [updatePrestige, setUpdatePrestige] = useState(0);
+    const {
+        houseData,
+        gameState: {
+            players },
+        actions: { updateCrave,
+            updatePrestige }
+    } = useContext(GameContext)
 
-    useEffect(() => {
-        let powerPromises = [], coinsPromises = [];
-        houses.forEach(house => {
-            powerPromises.push(
-                new Promise((resolve, reject) => {
-                    database.ref('session/' + house.key + '/power').on('value', (snapshot) => {
-                        resolve([snapshot.val(), house.name]);
-                    });
-                })
-            );
-
-            coinsPromises.push(
-                new Promise((resolve, reject) => {
-                    database.ref('session/' + house.key + '/coins').on('value', (snapshot) => {
-                        resolve([snapshot.val(), house.name]);
-                    });
-                })
-            );
-        });
-
-        Promise.all(powerPromises).then(values => {
-            let temp = [values[0]];
-            for (let i = 1; i < values.length; i++) {
-                for (let j = 0; j < temp.length; j++) {
-                    if (temp[j][0] === values[i][0]) {
-                        temp[j][1] += ", " + values[i][1];
-                        break;
-                    } else if (values[i][0] > temp[j][0]) {
-                        temp.splice(j, 0, values[i]);
-                        break;
-                    } else if (j === temp.length - 1) {
-                        temp.push(values[i]);
-                        break;
-                    }
-                }
-            }
-            setPower(temp);
-        });
-
-        Promise.all(coinsPromises).then(values => {
-            let temp = [values[0]];
-            for (let i = 1; i < values.length; i++) {
-                for (let j = 0; j < temp.length; j++) {
-                    if (temp[j][0] === values[i][0]) {
-                        temp[j][1] += ", " + values[i][1];
-                        break;
-                    } else if (values[i][0] > temp[j][0]) {
-                        temp.splice(j, 0, values[i]);
-                        break;
-                    } else if (j === temp.length - 1) {
-                        temp.push(values[i]);
-                        break;
-                    }
-                }
-            }
-            setCoins(temp);
-        })
-
-        database.ref('houses/' + house.key + "/crave").on('value', (snapshot) => {
-            setCrave(snapshot.val());
-        });
-
-        database.ref('houses/' + house.key + "/prestige").on('value', (snapshot) => {
-            setPrestige(snapshot.val());
-        });
-    }, []);
+    const [crave, setCrave] = useState(0)
+    const [prestige, setPrestige] = useState(0)
 
     function handleCraveUpdate(e) {
         e.preventDefault();
-        setUpdateCrave(e.target.value);
+        setCrave(e.target.value);
     }
 
     function submitCrave(e) {
         e.preventDefault();
-        database.ref('houses/' + house.key + "/crave").set(updateCrave);
+        updateCrave(parseInt(crave));
     }
 
     function handlePrestigeUpdate(e) {
         e.preventDefault();
-        setUpdatePrestige(e.target.value);
+        setPrestige(e.target.value);
     }
 
     function submitPrestige(e) {
         e.preventDefault();
-        database.ref('houses/' + house.key + "/prestige").set(updatePrestige);
+        updatePrestige(parseInt(prestige));
     }
 
     return (<div className="end-game-container" style={{ display: props.isVisible ? "" : "none" }}>
@@ -109,10 +45,12 @@ function GameOver(props) {
                                 Power
                             </th>
                         </tr>
-                        {power.map((val) => {
-                            return (<tr key={val}>
-                                <td>{val[1]}</td>
-                                <td>{val[0]}</td>
+                        {players.sort((a, b) => {
+                            return b.power - a.power
+                        }).map((player) => {
+                            return (<tr key={player.house}>
+                                <td>{houseData[player.house].houseName}</td>
+                                <td>{player.power}</td>
                             </tr>)
                         })}
                     </tbody>
@@ -126,10 +64,12 @@ function GameOver(props) {
                                 Coins
                             </th>
                         </tr>
-                        {coins.map((val) => {
-                            return (<tr key={val}>
-                                <td>{val[1]}</td>
-                                <td>{val[0]}</td>
+                        {players.sort((a, b) => {
+                            return b.coins - a.coins
+                        }).map((player) => {
+                            return (<tr key={player.house}>
+                                <td>{houseData[player.house].houseName}</td>
+                                <td>{player.power}</td>
                             </tr>)
                         })}
                     </tbody>

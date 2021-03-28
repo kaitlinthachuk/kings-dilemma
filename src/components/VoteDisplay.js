@@ -1,47 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { database } from '../firebase.js';
+import React, { useEffect, useState, useContext } from 'react';
+import GameContext from '../GameContext'
 
 import '../styles/VoteDisplay.scss';
 
 
 function VoteDisplay(props) {
-    const [turn, setTurn] = useState(false);
-    const [vote, setVote] = useState({ vote: "", color: "" });
-    const [power, setPower] = useState(0);
-    const [next, setNext] = useState("");
-    const [leader, setLeader] = useState("");
-    const [passMod, setPassMod] = useState(false);
-    const [addPower, setAddPower] = useState(1);
-    const [availablePower, setAvailablePower] = useState(0);
-    const [coins, setCoins] = useState(0);
-    const [maxCommitted, setMaxCommitted] = useState(0);
+    const { myHouse,
+        houseData,
+        gameState: { votes,
+            availablePower,
+            turn,
+            players,
+            becomeModAvailable },
+        actions: {
+            playerVote
+        }
+    } = useContext(GameContext)
 
-
-    useEffect(() => {
-        database.ref('session/' + props.house.key + "/voting_turn").on('value', (snapshot) => {
-            setTurn(snapshot.val());
-        });
-        database.ref('session/' + props.house.key + "/next").on('value', (snapshot) => {
-            setNext(snapshot.val());
-        });
-        database.ref('session/voting/leader').on('value', (snapshot) => {
-            setLeader(snapshot.val());
-        });
-        database.ref('session/voting/become_mod').on('value', (snapshot) => {
-            setPassMod(snapshot.val());
-        });
-
-        database.ref('session/' + props.house.key + '/power').on('value', (snapshot) => {
-            setAvailablePower(snapshot.val());
-        });
-
-        database.ref('session/' + props.house.key + '/coins').on('value', (snapshot) => {
-            setCoins(snapshot.val());
-        });
-        database.ref('session/voting/max_committed').on('value', (snapshot) => {
-            setMaxCommitted(snapshot.val());
-        });
-    }, [])
+    const [intermediateVote, setIntermediateVote] = useState({})
+    const [addedPower, setAddedPower] = useState(0)
 
     function voteClick(e) {
         e.preventDefault();
@@ -55,27 +32,16 @@ function VoteDisplay(props) {
         }
 
         if (e.target.value.includes("Pass")) {
-            database.ref('session/').update({
-                [next + '/voting_turn']: true,
-                [props.house.key + "/voting_turn"]: false,
-                [props.house.key + "/coins"]: coins + 1
-            });
-
             if (e.target.value.includes("Moderator")) {
-                database.ref("session/voting/moderator").set(props.house.key);
-                database.ref("session/voting/become_mod").set(true);
+                playerVote({ house: myHouse, type: 'mod', power: 0 })
             }
 
             if (e.target.value.includes("Power")) {
-                database.ref("session/voting/pass").update({
-                    [props.house.key]: "gather"
-                })
+                playerVote({ house: myHouse, type: 'gather', power: 0 })
             }
-
-            setTurn(false);
         }
 
-        setVote({
+        setIntermediateVote({
             vote: e.target.value.toLowerCase(),
             color: color
         })
@@ -83,61 +49,19 @@ function VoteDisplay(props) {
 
     function commitPower(e) {
         e.preventDefault();
-        let pow;
-        if (parseInt(addPower) + power > availablePower) {
-            pow = availablePower;
-        } else {
-            pow = parseInt(addPower) + power
-        }
-
-        database.ref('session/').update({
-            ['voting/' + vote["vote"] + '/voters/' + props.house.name]: pow,
-            [props.house.key + "/voting_turn"]: false
-        });
-
-        if (pow > maxCommitted) {
-            database.ref("session/voting/leader").set(props.house.key).then(() => {
-                return database.ref('session/voting/max_committed').set(pow);
-            })
-        }
-
-        if (next === leader) {
-            database.ref('session/voting/voting_done').set(true).then(() => {
-                setTurn(false);
-            });
-        } else {
-            database.ref('session/' + next + '/voting_turn').set(true).then(() => {
-                setTurn(false);
-            });
-        }
-
-        setPower(pow);
-        setAddPower(1);
+        playerVote({ house: myHouse, type: intermediateVote.vote, power: addedPower })
     }
 
     function handleChange(e) {
         e.preventDefault();
-        setAddPower(e.target.value);
-    }
-
-
-    if (turn && vote["vote"].includes("pass")) {
-        database.ref('session/').update({
-            [next + '/voting_turn']: true,
-            [props.house.key + "/voting_turn"]: false,
-        });
-
-        if (next === leader) {
-            database.ref('session/voting/voting_done').set(true);
-        }
-        setTurn(false);
+        setAddedPower(parseInt(e.target.value));
     }
 
     let content;
 
-    if (!turn && vote["vote"].length === 0) {
+    if (!turn && !votes[players.house]) {
         content = <h1>Waiting For Your Turn....</h1>
-    } else if (turn && vote["vote"].length === 0) {
+    } else if (turn && !votes[players.house]) {
         content = <div className="select-vote">
             <input
                 type="button"
@@ -147,7 +71,7 @@ function VoteDisplay(props) {
                 onClick={voteClick}
             />
             {
-                !passMod && <input
+                becomeModAvailable && <input
                     type="button"
                     className="pass-button"
                     name="vote"
@@ -171,10 +95,11 @@ function VoteDisplay(props) {
             />
         </div>
     } else {
-        content = <div className={`add-power-container ${vote["color"]}`}>
-            <h1 className="add-power add-power-header">{vote["vote"]}</h1>
+        content = <div className={`add-power-container ${intermediateVote["color"]}`}>
+            <h1 className="add-power add-power-header">{intermediateVote["vote"]}</h1>
             {
-                !vote["vote"].includes("pass") && <> <h2 className="add-power add-power-header">Current Power Comitted: {power}</h2>
+                (votes[myHouse].type === 'aye' || votes[myHouse].type === 'nay')
+                && <> <h2 className="add-power add-power-header">Current Power Comitted: {votes[myHouse].power}</h2>
 
                     {
                         turn && <input

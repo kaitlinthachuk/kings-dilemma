@@ -20,6 +20,7 @@ function Gameplay(props) {
             secretAgendas },
         actions: { selectSecretAgenda, }
     } = useContext(GameContext)
+
     const [toggle, setToggle] = useState(false);
 
     function agendaOnClick(agendaName) {
@@ -32,7 +33,6 @@ function Gameplay(props) {
     }
 
     return (
-
         <div className="gameplay-container">
             <Navbar />
             <ImageModal isVisible={state === "secretAgenda" && turn === myHouse} showClose='false' class="image-agenda-modal"
@@ -48,12 +48,12 @@ function Gameplay(props) {
                 {
                     !(state === "gameOver") && <VotingManager isVisible={toggle} />
                 }
-                {/* {
+                {
                     (state === "gameOver") && <GameOver isVisible={toggle} />
-                } */}
-                {/* {
+                }
+                {
                     <Webcam isVisible={!toggle} />
-                } */}
+                }
             </AspectRatioBox>
             {
                 <button type="button" className="toggle-button" onClick={toggleOnClick} >Toggle View</button>
