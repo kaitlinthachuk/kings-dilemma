@@ -39,11 +39,19 @@ export const GameProvider = ({ children }) => {
   };
 
   const setAgendaTokens = (agendaTokenAssignments) => {
-    socket.emit("player:setAgendaTokenss", agendaTokenAssignments);
+    socket.emit("player:setAgendaTokens", agendaTokenAssignments);
   };
 
   const triggerEndGame = () => {
     socket.emit("player:gameOver");
+  }
+
+  const breakTie = (winner) => {
+    socket.emit('game:state', winner)
+  }
+
+  const breakLeaderTie = (winner) => {
+    socket.emit('game:state', winner)
   }
 
   // set all game state
@@ -61,7 +69,9 @@ export const GameProvider = ({ children }) => {
       selectSecretAgenda,
       setVoteOutcomes,
       setAgendaTokens,
-      triggerEndGame
+      triggerEndGame,
+      breakTie,
+      breakLeaderTie
     },
   };
 

@@ -14,7 +14,7 @@ function HouseSideMenu() {
     return (
         <div className="side-menu-container" key="main">
             {turnOrder.map(house => {
-                return <House player={players[house]} key={players[house].house} />
+                return <House player={players[house]} key={players[house].id} />
             })
             }
         </div>

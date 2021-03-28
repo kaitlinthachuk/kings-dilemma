@@ -1,44 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { database } from '../firebase.js';
+import React, { useContext, useState } from 'react';
+import GameContext from '../GameContext'
 
 import '../styles/VoteResult.scss';
 
-function VoteResult(props) {
-    const [moderator, setModerator] = useState("");
-    const [tieBreaker, setTieBreaker] = useState(false);
-    const [winner, setWinner] = useState("");
+function VoteResult() {
+    const { myHouse,
+        houseData,
+        gameState: { players,
+            leaderTie,
+            leaderChoice,
+            voteTie,
+            winner },
+        actions: {
+            breakTie,
+            breakLeaderTie
+        }
+    } = useContext(GameContext)
+
     const [modChoice, setModChoice] = useState("");
-    const [leaderTie, setLeaderTie] = useState(false);
-    const [leaderOpt, setLeaderOpt] = useState([]);
     const [modLeaderChoice, setModLeaderChoice] = useState("");
-
-    useEffect(() => {
-        database.ref('session/voting/moderator').once('value', (snapshot) => {
-            setModerator(snapshot.val());
-        });
-        database.ref('session/voting/tie_breaker').on('value', (snapshot) => {
-            setTieBreaker(snapshot.val());
-        });
-
-        database.ref('session/voting/winner').on('value', (snapshot) => {
-            setWinner(snapshot.val());
-        });
-        database.ref('session/voting/leader_tie').on('value', (snapshot) => {
-            setLeaderTie(snapshot.val());
-        });
-        database.ref('session/voting/leader_opt').on('value', (snapshot) => {
-            if (snapshot.val() !== "val") {
-                setLeaderOpt(snapshot.val());
-            }
-
-        })
-    }, [])
-
 
     function handleBreakTie(e) {
         e.preventDefault();
-        database.ref('session/voting/tie_breaker').set(modChoice);
-        setTieBreaker(false);
+        breakTie(modChoice);
     }
 
     function handleBreakTieChange(e) {
@@ -53,10 +37,9 @@ function VoteResult(props) {
 
     function handleLeaderBreakTie(e) {
         e.preventDefault();
-        database.ref('session/voting/leader').set(modLeaderChoice).then(() => {
-            database.ref('session/voting/leader_tie').set(false);
-        });
+        breakLeaderTie(modLeaderChoice);
     }
+
     let content = [], backgroundColor;
 
     if ((winner === "aye" || winner === "nay") && !leaderTie) {
@@ -65,8 +48,8 @@ function VoteResult(props) {
             <h1 className="winner">{winner.toUpperCase()} Wins!</h1>
         </div >
     } else {
-        if (tieBreaker) {
-            if (props.house.key === moderator) {
+        if (voteTie) {
+            if (players[myHouse].isModerator) {
                 content.push(<div className="tie-break-container">
                     <label className="tie-break-input-label tie-break" htmlFor="aye">Aye</label>
                     <input
@@ -101,20 +84,20 @@ function VoteResult(props) {
                 content.push(<div className="background-yellow tie-wait"><h2 >Moderator Needs to Break the Tie!</h2></div>);
             }
         } else if (leaderTie) {
-            if (props.house.key === moderator) {
+            if (players[myHouse].isModerator) {
                 content.push(
                     <div className="tie-leader-container">
                         {
-                            leaderOpt.map(element => {
+                            leaderChoice.map(house => {
                                 return <>
-                                    <label className="tie-leader-input-label tie-leader" htmlFor={element[0]}>{element[1]}</label>
+                                    <label className="tie-leader-input-label tie-leader" htmlFor={house}>{houseData[house].houseName}</label>
                                     <input
                                         type="radio"
                                         name="tie-leader"
                                         className="tie-leader-input tie-leader"
-                                        value={element[0]}
+                                        value={house}
                                         onChange={handleBreakLeaderTieChange}
-                                        checked={modLeaderChoice === element[0]}
+                                        checked={modLeaderChoice === house}
                                     />
                                 </>
                             })

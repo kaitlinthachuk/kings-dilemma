@@ -5,7 +5,6 @@ import GameContext from '../GameContext'
 import '../styles/Navbar.scss';
 
 function Navbar(props) {
-  const { isAdmin } = props;
   const { imageURL, chronicleStickerUrl } = useContext(GameContext)
   const [isVisible, setIsVisible] = useState(false);
   const [imagePath, setImagePath] = useState("");
@@ -41,15 +40,6 @@ function Navbar(props) {
         <button className='navbar-button' id="rules" onClick={navClick}>Rules</button>
         <button className='navbar-button' id="stickers" onClick={navClick}>Chronicle Stickers</button>
         <button className='navbar-button' id="symbols" onClick={navClick}>Symbols Legend</button>
-        {
-          isAdmin && <button className='navbar-button' id="voting" onClick={props.votingOnClick}>Voting</button>
-        }
-        {
-          isAdmin && <button className='navbar-button' id="tokens" onClick={props.tokenOnClick}>Agenda Tokens</button>
-        }
-        {
-          isAdmin && <button className='navbar-button' id="end" onClick={props.endOnClick}>End Game</button>
-        }
       </div>
       <ImageModal isVisible={isVisible} closeModal={closeModal} showClose='true' class="image-modal-container"
         images={[{ path: imagePath, onClick: e => e.preventDefault(), alt: "", class: "image-modal" }]} />

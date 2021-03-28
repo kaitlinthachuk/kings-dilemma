@@ -1,97 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { database } from '../firebase.js';
+import React, { useContext } from 'react';
 import VoteDisplay from "../components/VoteDisplay.js";
 import VoteResult from "../components/VoteResult.js";
 import HoverCard from "../components/HoverCard.js";
+import GameContext from '../GameContext'
 
 import '../styles/VotingManager.scss';
 
-const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
-
 function VotingManager(props) {
-    const [ayeVotes, setAyeVotes] = useState([]);
-    const [nayVotes, setNayVotes] = useState([]);
-    const [passVotes, setPassVotes] = useState([]);
-    const [ayeOutcomes, setAyeOutcomes] = useState([]);
-    const [nayOutcomes, setNayOutcomes] = useState([]);
-    const [power, setPower] = useState([]);
-    const [voteDone, setVoteDone] = useState(false);
-
-
-    useEffect(() => {
-        database.ref('session/voting/aye/voters').on('value', (snapshot) => {
-            let obj = Object.entries(snapshot.val()).filter((key) => {
-                return key[0] !== "placeholder";
-            });
-            setAyeVotes(obj);
-        });
-
-        database.ref('session/voting/nay/voters').on('value', (snapshot) => {
-            let obj = Object.entries(snapshot.val()).filter((key) => {
-                return key[0] !== "placeholder";
-            });
-            setNayVotes(obj);
-        });
-
-        database.ref('session/voting/pass').on('value', (snapshot) => {
-            let obj = Object.keys(snapshot.val()).filter((key) => {
-                return key !== "placeholder";
-            });
-            setPassVotes(obj);
-        });
-
-        database.ref('session/voting/aye/outcomes').on('value', (snapshot) => {
-            setAyeOutcomes(initOutcomes(snapshot.val()));
-        });
-
-        database.ref('session/voting/nay/outcomes').on('value', (snapshot) => {
-            setNayOutcomes(initOutcomes(snapshot.val()));
-        });
-
-        database.ref('session/voting/voting_done').on('value', (snapshot) => {
-            setVoteDone(snapshot.val());
-        });
-
-        database.ref('session/voting/available_power').on('value', (snapshot) => {
-            let powerTokens = [],
-                powerNum = snapshot.val();
-
-            while (powerNum > 0) {
-                if (powerNum - 10 >= 0) {
-                    powerTokens.push(
-                        <img src={baseURL + "tokens/power-10.svg"} key={powerNum} alt="power-10" className="power-token token-med" />)
-                    powerNum -= 10;
-                } else if (powerNum - 5 > 0) {
-                    powerTokens.push(
-                        <img src={baseURL + "tokens/power.svg"} key={powerNum} alt="power-5" className="power-token token-med" />)
-                    powerNum -= 5;
-                } else {
-                    powerTokens.push(
-                        <img src={baseURL + "tokens/power.svg"} key={powerNum} alt="power-1" className="power-token token-small" />)
-                    powerNum--;
-                }
-            }
-
-            setPower(powerTokens);
-
-        });
-
-    }, [])
-
-
-    function initOutcomes(vals) {
-        let outcomes = [],
-            i = 0;
-        for (const val in vals) {
-            outcomes.push({
-                key: val,
-                token: vals[val],
-                transform: `translate(${i * getRandom(10)}px, ${i * getRandom(10)}px) rotate(${getRandom(30)}deg)`,
-            });
-            i++;
-        }
-        return outcomes;
-    }
+    const {
+        houseData,
+        imageURL,
+        gameState: { votes,
+            availablePower,
+            ayeOutcomes,
+            nayOutcomes,
+            state },
+    } = useContext(GameContext)
 
     function getRandom(scale) {
         return (Math.random() * 2 - 1) * scale;
@@ -107,10 +31,12 @@ function VotingManager(props) {
                                 Aye
                             </th>
                         </tr>
-                        {ayeVotes.map((val) => {
-                            return (<tr key={val[0]}>
-                                <td>{val[0]}</td>
-                                <td>{val[1]}</td>
+                        {Object.values(votes).filter((vote) => {
+                            return vote.type === 'aye'
+                        }).map((vote) => {
+                            return (<tr key={vote.house}>
+                                <td>{houseData[vote.house].houseName}</td>
+                                <td>{vote.power}</td>
                             </tr>)
                         })}
                     </tbody>
@@ -127,10 +53,12 @@ function VotingManager(props) {
                                 Nay
                             </th>
                         </tr>
-                        {nayVotes.map((val) => {
-                            return (<tr key={val[0]}>
-                                <td>{val[0]}</td>
-                                <td>{val[1]}</td>
+                        {Object.values(votes).filter((vote) => {
+                            return vote.type === 'nay'
+                        }).map((vote) => {
+                            return (<tr key={vote.house}>
+                                <td>{houseData[vote.house].houseName}</td>
+                                <td>{vote.power}</td>
                             </tr>)
                         })}
                     </tbody>
@@ -138,48 +66,51 @@ function VotingManager(props) {
             </div>
 
             <div className="aye-scale">
-                <img src={baseURL + "tokens/aye-scale.svg"} key="scales" alt="scales" />
+                <img src={imageURL + "tokens/aye-scale.svg"} key="scales" alt="scales" />
                 <div className="aye-token-container">
-                    {ayeOutcomes.map((val) =>
+                    {ayeOutcomes.map((outcome, i) =>
                         <img
-                            src={baseURL + 'tokens/outcome-' + val.token + ".svg"}
-                            key={val.key}
+                            src={imageURL + 'tokens/outcome-' + outcome.resource + "-" + outcome.type + ".svg"}
+                            key={outcome.resource + "-" + outcome.type}
                             alt="outcome"
                             className="aye-outcome-token token-med"
-                            style={{ transform: val.transform }}
+                            style={{ transform: `translate(${i * getRandom(10)}px, ${i * getRandom(10)}px) rotate(${getRandom(30)}deg)` }}
                         />
                     )}
                 </div>
             </div>
             <div className="nay-scale">
-                <img src={baseURL + "tokens/nay-scale.svg"} key="scales" alt="scales" />
+                <img src={imageURL + "tokens/nay-scale.svg"} key="scales" alt="scales" />
                 <div className="nay-token-container">
-                    {nayOutcomes.map((val) =>
+                    {nayOutcomes.map((outcome, i) =>
                         <img
-                            src={baseURL + 'tokens/outcome-' + val.token + ".svg"}
-                            key={val.key}
+                            src={imageURL + 'tokens/outcome-' + outcome.resource + "-" + outcome.type + ".svg"}
+                            key={outcome.resource + "-" + outcome.type}
                             alt="outcome"
                             className="nay-outcome-token token-med"
-                            style={{ transform: val.transform }}
+                            style={{ transform: `translate(${i * getRandom(10)}px, ${i * getRandom(10)}px) rotate(${getRandom(30)}deg)` }}
                         />
                     )}
                 </div>
             </div>
 
             <div className="available-power">
-                {power}
+                {availablePower}
 
                 <div className="pass-houses">
-                    {!voteDone && passVotes.map((el) =>
-                        <h3>{el}</h3>
-                    )}
+                    {(state !== 'voteDone') && Object.values(votes).filter((vote) => {
+                        return vote.type === 'gather'
+                    }).map((vote) => {
+                        return (<h3>{houseData[vote.house].houseName}</h3>)
+                    })
+                    }
                 </div>
 
             </div>
             {
-                voteDone ?
-                    <VoteResult house={props.house} ayeVotes={ayeVotes} nayVotes={nayVotes} passVotes={passVotes} gatherPower={power} /> :
-                    <VoteDisplay house={props.house} />
+                state === "voteDone" ?
+                    <VoteResult /> :
+                    <VoteDisplay />
             }
         </div>
     );

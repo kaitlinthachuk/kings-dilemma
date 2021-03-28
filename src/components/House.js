@@ -7,13 +7,22 @@ function House(props) {
             turn },
     } = useContext(GameContext)
 
-    let imgSrc = imageURL + "images/" + props.player.house + ".jpg"
+    let imgSrc = imageURL + "images/" + props.player.house
 
     function createTokens() {
-        props.player.agendaTokens.map((token) => {
+        let tokenArray = props.player.agendaTokens.map((token) => {
             let tokenString = token.resource + "-" + token.type
-            return <img className="token-small" src={imageURL + "tokens/" + tokenString + ".jpg"} alt={tokenString} key={tokenString} />
+            return <img className="token-small" src={imageURL + "tokens/" + tokenString} alt={tokenString} key={tokenString} />
         })
+
+        if (props.player.isLeader) {
+            tokenArray.push(<img className="token-small" src={imageURL + "tokens/leader"} alt="leader" key="leader" />)
+        }
+        if (props.player.isModerator) {
+            tokenArray.push(<img className="token-small" src={imageURL + "tokens/moderator"} alt="moderator" key="moderator" />)
+        }
+
+        return tokenArray
     }
 
     return (
@@ -21,7 +30,7 @@ function House(props) {
             <div className="token-container" key="token-container">
                 {createTokens()}
             </div>
-            <div className="house-container" key={props.player + "-house"} style={{ backgroundImage: `url(${imgSrc})` }}>
+            <div className="house-container" key={props.player.house + "-house"} style={{ backgroundImage: `url(${imgSrc})` }}>
                 <h5 className="house-name" key={props.player.house}>{props.player.house}</h5>
             </div>
         </div>

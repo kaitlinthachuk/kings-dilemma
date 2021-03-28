@@ -1,83 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { database } from '../firebase.js';
-import cardJson from '../cards.json';
+import React, { useContext } from 'react';
+import GameContext from '../GameContext'
 
 import '../styles/PlayerBar.scss';
 
-const baseURL = 'https://res.cloudinary.com/didsjgttu/image/upload/';
+function PlayerBar() {
+    const { myHouse,
+        imageURL,
+        gameState: { players }
+    } = useContext(GameContext)
 
-
-function PlayerBar(props) {
-    const [haveAgenda, setHaveAgenda] = useState(false);
-    const [coins, setCoins] = useState(0);
-    const [power, setPower] = useState(0);
-
-    let coinSrc = baseURL + "tokens/coin.svg",
-        powerSrc = baseURL + "tokens/power.svg",
-        laurelSrc = baseURL + "cards/laurel.svg",
+    let coinSrc = imageURL + "tokens/coin.svg",
+        powerSrc = imageURL + "tokens/power.svg",
+        laurelSrc = imageURL + "cards/laurel.svg",
         boardSrc,
+        resources, ranking,
         isExtremist = false,
         isRebel = false,
-        resourceContents = [],
-        rankingContents = [];
+        player = players[myHouse],
+        secretAgenda = player.secretAgenda;
 
 
-    useEffect(() => {
-        database.ref('session/' + props.house.key + "/coins").on('value', (snapshot) => {
-            setCoins(snapshot.val());
-        });
+    if (secretAgenda) {
+        resources = secretAgenda.resourceGoalScoring.map(resource => {
+            return <tr key={resource.numResources + resource.points}>
+                <td>{resource.numResources}</td>
+                <td>{resource.points}</td>
+            </tr>
+        })
 
-        database.ref('session/' + props.house.key + "/power").on('value', (snapshot) => {
-            setPower(snapshot.val());
-        });
+        ranking = secretAgenda.moneyGoalScoring.map(resource => {
+            return <tr key={resource.rank + resource.points}>
+                <td>{resource.rank}</td>
+                <td>{resource.points}</td>
+            </tr>
+        })
 
-    }, [])
-
-
-    if (props.secretAgenda.length > 0 && !haveAgenda) {
-        setHaveAgenda(true);
-    }
-
-    if (haveAgenda) {
-        let resources = cardJson[props.secretAgenda]["resources"],
-            ranking = cardJson[props.secretAgenda]["ranking"];
-
-        if (props.secretAgenda === "rebel") {
+        if (secretAgenda.name === "rebel") {
             isRebel = true;
         }
 
-        if (props.secretAgenda === "extremist") {
-            resourceContents.push(<div className="extremist-resources">{resources}</div>);
+        if (secretAgenda.name === "extremist") {
+            resources.push(<div className="extremist-resources">{resources}</div>);
             isExtremist = true;
-        } else {
-            resources.forEach(element => {
-                resourceContents.push(
-                    <tr key={element[0]}>
-                        <td>{element[0]}</td>
-                        <td>{element[1]}</td>
-                    </tr>
-                );
-            });
         }
 
-        ranking.forEach(element => {
-            rankingContents.push(
-                <tr key={element[0]}>
-                    <td>{element[0]}</td>
-                    <td>{element[1]}</td>
-                </tr>
-            );
-        })
 
-        boardSrc = baseURL + "cards/" + props.secretAgenda + "-board.svg";
+        boardSrc = imageURL + "cards/" + secretAgenda.name + "-board.svg";
     }
 
     return (
         <>
             <div className="agenda-container">
                 <div className="agenda-tables">
-                    {haveAgenda && <h3> {props.secretAgenda.toUpperCase()}</h3>}
-                    {haveAgenda && !isExtremist &&
+                    {secretAgenda && <h3> {secretAgenda.name.toUpperCase()}</h3>}
+                    {secretAgenda && !isExtremist &&
                         <table className="resources" key="resources">
                             <tbody>
                                 <tr>
@@ -86,13 +62,13 @@ function PlayerBar(props) {
                                         <img src={laurelSrc} alt="laurel" />
                                     </th>
                                 </tr>
-                                {resourceContents}
+                                {resources}
                             </tbody>
                         </table>
                     }
-                    {isExtremist && resourceContents}
-                    {isRebel && <span className="rebel-extra">{cardJson[props.secretAgenda]["extra"]}</span>}
-                    {haveAgenda &&
+                    {isExtremist && resources}
+                    {isRebel && <span className="rebel-extra">{secretAgenda.extra}</span>}
+                    {secretAgenda &&
                         <table className="ranking" key="ranking">
                             <tbody>
                                 <tr>
@@ -105,21 +81,21 @@ function PlayerBar(props) {
                                         <img src={laurelSrc} alt="laurel" />
                                     </th>
                                 </tr>
-                                {rankingContents}
+                                {ranking}
                             </tbody>
                         </table>}
                 </div>
-                {haveAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
+                {secretAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
 
             </div>
             <div className="tokens-container">
                 <div className="playerbar-value">
                     <img src={coinSrc} className="token-small playerbar-token" id="coin-svg" alt="coins" />
-                    <span>{coins}</span>
+                    <span>{player.coins}</span>
                 </div>
                 <div className="playerbar-value">
                     <img src={powerSrc} className="token-small playerbar-token" id="power-svg" alt="power" />
-                    <span>{power}</span>
+                    <span>{player.power}</span>
                 </div>
             </div>
         </>

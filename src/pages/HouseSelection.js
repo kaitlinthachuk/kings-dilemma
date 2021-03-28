@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Redirect } from "react-router-dom";
 import GameContext from '../GameContext'
 import '../styles/HouseSelection.scss';
 
@@ -7,22 +6,8 @@ function HouseSelection(props) {
   const { myHouse,
     houseData,
     imageURL,
-    gameState: { state, players },
+    gameState: { players },
     actions: { selectHouse, startGame } } = useContext(GameContext)
-  const [loading, setLoading] = useState(true);
-  const [redirect, setRedirect] = useState(false);
-
-  useEffect(() => {
-    if (houseData) {
-      setLoading(false);
-    }
-  }, [houseData]);
-
-  useEffect(() => {
-    if (state === "secretAgenda") {
-      setRedirect(true);
-    }
-  }, [state]);
 
   useEffect(() => {
     if (myHouse) {
@@ -91,10 +76,8 @@ function HouseSelection(props) {
 
   let content;
 
-  if (loading) {
+  if (!houseData) {
     content = SVGSpinner;
-  } else if (redirect) {
-    content = <Redirect to={{ pathname: '/play' }} />;
   } else if (!myHouse) {
     content = newHouse();
   } else {
