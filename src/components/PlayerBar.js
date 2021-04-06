@@ -1,7 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import GameContext from '../GameContext'
+import SecretAgendaDisplay from './SecretAgendaDisplay'
+import MessageBoard from './MessageBoard'
 
-import '../styles/PlayerBar.scss';
+import "../styles/PlayerBar.scss"
 
 function PlayerBar() {
     const { myHouse,
@@ -9,93 +11,39 @@ function PlayerBar() {
         gameState: { players }
     } = useContext(GameContext)
 
+    const [isVisible, setIsVisible] = useState(true)
+
     let coinSrc = imageURL + "tokens/coin.svg",
-        powerSrc = imageURL + "tokens/power.svg",
-        laurelSrc = imageURL + "cards/laurel.svg",
-        boardSrc,
-        resources, ranking,
-        isExtremist = false,
-        isRebel = false,
-        player = players[myHouse],
-        secretAgenda = player.secretAgenda;
+        powerSrc = imageURL + "tokens/power.svg";
 
-
-    if (secretAgenda) {
-        resources = secretAgenda.resourceGoalScoring.map(resource => {
-            return <tr key={resource.numResources + resource.points}>
-                <td>{resource.numResources}</td>
-                <td>{resource.points}</td>
-            </tr>
-        })
-
-        ranking = secretAgenda.moneyGoalScoring.map(resource => {
-            return <tr key={resource.rank + resource.points}>
-                <td>{resource.rank}</td>
-                <td>{resource.points}</td>
-            </tr>
-        })
-
-        if (secretAgenda.name === "rebel") {
-            isRebel = true;
-        }
-
-        if (secretAgenda.name === "extremist") {
-            resources.push(<div className="extremist-resources">{resources}</div>);
-            isExtremist = true;
-        }
-
-
-        boardSrc = imageURL + "cards/" + secretAgenda.name + "-board.svg";
+    function setVisibility(bool) {
+        console.log("called func with" + bool);
+        setIsVisible(bool);
     }
+
 
     return (
         <>
-            <div className="agenda-container">
-                <div className="agenda-tables">
-                    {secretAgenda && <h3> {secretAgenda.name.toUpperCase()}</h3>}
-                    {secretAgenda && !isExtremist &&
-                        <table className="resources" key="resources">
-                            <tbody>
-                                <tr>
-                                    <th>Resources</th>
-                                    <th>
-                                        <img src={laurelSrc} alt="laurel" />
-                                    </th>
-                                </tr>
-                                {resources}
-                            </tbody>
-                        </table>
-                    }
-                    {isExtremist && resources}
-                    {isRebel && <span className="rebel-extra">{secretAgenda.extra}</span>}
-                    {secretAgenda &&
-                        <table className="ranking" key="ranking">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        <div className="header-wrapper">
-                                            <img src={coinSrc} alt="coin" /> Ranking
-                            </div>
-                                    </th>
-                                    <th>
-                                        <img src={laurelSrc} alt="laurel" />
-                                    </th>
-                                </tr>
-                                {ranking}
-                            </tbody>
-                        </table>}
+            <div className='tab-container'>
+                <div className="tab-buttons-container">
+                    <button class="tab-button" onclick={() => setVisibility(true)}>Secret Agenda</button>
+                    <button class="tab-button" onclick={() => setVisibility(false)}>Message Board</button>
                 </div>
-                {secretAgenda && <img src={boardSrc} key="board" className="playerbar-agenda" id="board" alt="agenda-board" />}
-
+                {
+                    players[myHouse] && players[myHouse].secretAgenda && isVisible && <SecretAgendaDisplay />
+                }
+                {
+                    !isVisible && <MessageBoard />
+                }
             </div>
             <div className="tokens-container">
                 <div className="playerbar-value">
                     <img src={coinSrc} className="token-small playerbar-token" id="coin-svg" alt="coins" />
-                    <span>{player.coins}</span>
+                    <span>{players[myHouse].coins}</span>
                 </div>
                 <div className="playerbar-value">
                     <img src={powerSrc} className="token-small playerbar-token" id="power-svg" alt="power" />
-                    <span>{player.power}</span>
+                    <span>{players[myHouse].power}</span>
                 </div>
             </div>
         </>
