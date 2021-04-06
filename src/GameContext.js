@@ -31,7 +31,7 @@ export const GameProvider = ({ children }) => {
   };
 
   const selectSecretAgenda = (secretAgenda) => {
-    socket.emit("player:selectSecretAgenda", myHouse, secretAgenda);
+    socket.emit("player:selectSecretAgenda", secretAgenda);
   };
 
   const setVoteOutcomes = (ayeOutcomes, nayOutcomes) => {
@@ -59,11 +59,11 @@ export const GameProvider = ({ children }) => {
   }
 
   const updateCrave = (crave) => {
-    socket.emit('player:crave', myHouse, crave)
+    socket.emit('player:crave', crave)
   }
 
   const updatePrestige = (prestige) => {
-    socket.emit('player:prestige', myHouse, prestige)
+    socket.emit('player:prestige', prestige)
   }
 
   // set all game state
