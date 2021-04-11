@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Navbar from '../components/Navbar.js';
 import PlayerBar from '../components/PlayerBar.js';
 import ImageModal from '../components/ImageModal.js';

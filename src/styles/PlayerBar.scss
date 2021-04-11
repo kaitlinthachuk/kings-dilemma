@@ -1,17 +1,55 @@
 @import "vars";
 
-.tokens-container{
-    grid-area: tokens;
-    background-color: darken($background-color, 10);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+.player-area {
+  background-color: darken($background-color, 10);
+  position: relative;
 }
 
-.tab-container{
-    grid-area: footer;
-    background-color: darken($background-color, 10);
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+.playerbar-value {
+  font-size: $tallest;
+  font-weight: 700;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.playerbar-value > span {
+  margin: auto;
+  padding: 10px;
+}
+
+.tokens-container {
+  grid-area: tokens;
+  background-color: darken($background-color, 10);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.tab-container {
+  grid-area: footer;
+  background-color: darken($background-color, 10);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.secret-agenda-card {
+  position: absolute;
+  right: 0;
+  top: 100px;
+  height: 400px;
+  border-radius: 10px;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: translateY(-300px);
+  }
+}
+
+.message-board-container {
+  padding: 20px;
+  text-align: left;
+  overflow: auto;
+  white-space: pre;
 }

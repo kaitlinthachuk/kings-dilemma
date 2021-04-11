@@ -1,15 +1,19 @@
 import React, { useContext } from "react";
 import GameContext from "./GameContext";
-import HouseSelection from "./pages/HouseSelection"
-import GamePlay from "./pages/Gameplay"
+import HouseSelection from "./pages/HouseSelection";
+import GamePlay from "./pages/Gameplay";
+import {Lobby} from "./pages/Lobby";
 
 const ViewSwitch = () => {
-  const { gameState: { state } } = useContext(GameContext);
+  const {
+    myHouse,
+    gameState: { state },
+  } = useContext(GameContext);
 
   const switchView = (state) => {
     switch (state) {
       case "lobby":
-        return <HouseSelection />;
+        return <Lobby />;
       case "secretAgenda":
       case "voting":
       case "voteOver":
@@ -21,7 +25,7 @@ const ViewSwitch = () => {
     }
   };
 
-  return switchView(state);
+  return myHouse ? switchView(state) : <HouseSelection />
 };
 
 export default ViewSwitch;

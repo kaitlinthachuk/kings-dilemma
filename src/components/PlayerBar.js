@@ -1,53 +1,50 @@
-import React, { useContext, useState } from 'react';
-import GameContext from '../GameContext'
-import SecretAgendaDisplay from './SecretAgendaDisplay'
-import MessageBoard from './MessageBoard'
+import React, { useContext } from "react";
+import GameContext from "../GameContext";
 
-import "../styles/PlayerBar.scss"
+import "../styles/PlayerBar.scss";
 
 function PlayerBar() {
-    const { myHouse,
-        imageURL,
-        gameState: { players }
-    } = useContext(GameContext)
+  const {
+    myHouse,
+    imageURL,
+    gameState: { players, message },
+  } = useContext(GameContext);
 
-    const [isVisible, setIsVisible] = useState(true)
+  const coinSrc = imageURL + "tokens/coin.svg";
+  const powerSrc = imageURL + "tokens/power.svg";
 
-    let coinSrc = imageURL + "tokens/coin.svg",
-        powerSrc = imageURL + "tokens/power.svg";
-
-    function setVisibility(bool) {
-        console.log("called func with" + bool);
-        setIsVisible(bool);
-    }
-
-
-    return (
-        <>
-            <div className='tab-container'>
-                <div className="tab-buttons-container">
-                    <button class="tab-button" onclick={() => setVisibility(true)}>Secret Agenda</button>
-                    <button class="tab-button" onclick={() => setVisibility(false)}>Message Board</button>
-                </div>
-                {
-                    players[myHouse] && players[myHouse].secretAgenda && isVisible && <SecretAgendaDisplay />
-                }
-                {
-                    !isVisible && <MessageBoard />
-                }
-            </div>
-            <div className="tokens-container">
-                <div className="playerbar-value">
-                    <img src={coinSrc} className="token-small playerbar-token" id="coin-svg" alt="coins" />
-                    <span>{players[myHouse].coins}</span>
-                </div>
-                <div className="playerbar-value">
-                    <img src={powerSrc} className="token-small playerbar-token" id="power-svg" alt="power" />
-                    <span>{players[myHouse].power}</span>
-                </div>
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div className="player-area">
+      <div className="message-board-container">
+            {message}
+        </div>
+      {players[myHouse]?.secretAgenda && (
+          <img className="secret-agenda-card" src={`${imageURL}/agendas/${players[myHouse].secretAgenda.name}`} alt="secret agenda card"/>
+      )}
+      </div>
+      <div className="tokens-container">
+        <div className="playerbar-value">
+          <img
+            src={coinSrc}
+            className="token-small playerbar-token"
+            id="coin-svg"
+            alt="coins"
+          />
+          <span>{players[myHouse]?.coins}</span>
+        </div>
+        <div className="playerbar-value">
+          <img
+            src={powerSrc}
+            className="token-small playerbar-token"
+            id="power-svg"
+            alt="power"
+          />
+          <span>{players[myHouse]?.power}</span>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default PlayerBar;

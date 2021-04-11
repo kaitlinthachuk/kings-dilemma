@@ -8,9 +8,7 @@ const chronicleStickerUrl = "https://res.cloudinary.com/didsjgttu/image/upload/v
 const GameContext = createContext(undefined);
 
 export const GameProvider = ({ children }) => {
-  const [myHouse, setMyHouse] = useState(
-    process.env.NODE_ENV === "production" && localStorage.getItem("house")
-  );
+  const [myHouse, setMyHouse] = useState();
   const [gameState, setGameState] = useState({});
   const [houseData, setHouseData] = useState({});
 
@@ -21,8 +19,6 @@ export const GameProvider = ({ children }) => {
 
   const selectHouse = (house) => {
     setMyHouse(house);
-    // store house so subsequent visits can remember house
-    localStorage.setItem("house", house);
     socket.emit("player:selectHouse", house);
   };
 
@@ -67,7 +63,10 @@ export const GameProvider = ({ children }) => {
   }
 
   // set all game state
-  socket.on("game:state", (gameState) => setGameState(gameState));
+  socket.on("game:state", (gameState) => {
+    console.log(gameState)
+    setGameState(gameState)
+  });
 
   const providerValue = {
     myHouse,
