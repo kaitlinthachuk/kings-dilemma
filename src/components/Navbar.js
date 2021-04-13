@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import ImageModal from './ImageModal.js';
 import GameContext from '../GameContext'
 
 import '../styles/Navbar.scss';
 
 function Navbar(props) {
-  const { imageURL, chronicleStickerUrl } = useContext(GameContext)
+  const { imageURL, gamestate: { chronicleStickersUrl } } = useContext(GameContext)
   const [isVisible, setIsVisible] = useState(false);
   const [imagePath, setImagePath] = useState("");
 
@@ -18,7 +18,7 @@ function Navbar(props) {
     } else {
       setImagePath(imageURL + "images/" + e.target.id);
       if (e.target.id === 'stickers') {
-        setImagePath(chronicleStickerUrl);
+        setImagePath(chronicleStickersUrl);
       }
       setIsVisible(true);
     }

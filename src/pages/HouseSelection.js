@@ -6,8 +6,18 @@ function HouseSelection() {
   const {
     houseData,
     imageURL,
-    actions: { selectHouse },
+    actions: { selectHouse,
+      updateCrave,
+      updatePrestige },
   } = useContext(GameContext);
+
+  function newHouseOnClick(house) {
+    selectHouse(house);
+    var prestige = prompt("Please enter your current prestige:", 0);
+    updatePrestige(parseInt(prestige));
+    var crave = prompt("Please enter your current crave:", 0);
+    updateCrave(parseInt(crave));
+  }
 
   const newHouse = () =>
     Object.values(houseData).map((house) => (
@@ -23,7 +33,7 @@ function HouseSelection() {
         <button
           className="house-selection-button"
           name={house.id}
-          onClick={() => selectHouse(house.id)}
+          onClick={() => newHouseOnClick(house.id)}
         >
           <h1>{house.houseName}</h1>
           <h3>{house.kingdom}</h3>

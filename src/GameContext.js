@@ -3,7 +3,6 @@ import { api } from "./service/fetch";
 import { socket } from "./service/socket";
 
 const imageURL = "https://res.cloudinary.com/didsjgttu/image/upload/";
-const chronicleStickerUrl = "https://res.cloudinary.com/didsjgttu/image/upload/v1613963531/ucedkr9lkc4p2blyrvi2.jpg";
 
 const GameContext = createContext(undefined);
 
@@ -71,7 +70,6 @@ export const GameProvider = ({ children }) => {
   const providerValue = {
     myHouse,
     imageURL,
-    chronicleStickerUrl,
     gameState,
     houseData,
     actions: {
