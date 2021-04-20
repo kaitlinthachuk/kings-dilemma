@@ -4,8 +4,8 @@ import GameContext from '../GameContext'
 
 import '../styles/Navbar.scss';
 
-function Navbar(props) {
-  const { imageURL, gamestate: { chronicleStickersUrl } } = useContext(GameContext)
+function Navbar() {
+  const { imageURL, gameState: { chronicleStickersUrl } } = useContext(GameContext)
   const [isVisible, setIsVisible] = useState(false);
   const [imagePath, setImagePath] = useState("");
 
