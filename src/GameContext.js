@@ -21,10 +21,6 @@ export const GameProvider = ({ children }) => {
     socket.emit("player:selectHouse", house);
   };
 
-  const startGame = () => {
-    socket.emit("game:start");
-  };
-
   const selectSecretAgenda = (secretAgenda) => {
     socket.emit("player:selectSecretAgenda", secretAgenda);
   };

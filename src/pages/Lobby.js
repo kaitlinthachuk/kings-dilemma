@@ -41,9 +41,6 @@ export const Lobby = () => {
             </div>
           ))}
       </div>
-      {myHouse === "solad" && (
-        <button onClick={startGame}>Start</button>
-      )}
     </div>
   );
 };
