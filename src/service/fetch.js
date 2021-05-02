@@ -1,4 +1,4 @@
-const serverURL = process.env.SERVER_URL || "http://localhost:3000";
+const serverURL = process.env.SERVER_URL || "http://192.168.0.105:3000";
 
 export const api = (endpoint, { body, ...customConfig } = {}) => {
   const headers = { "content-type": "application/json" };

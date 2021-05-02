@@ -7,7 +7,6 @@ export const Lobby = () => {
     houseData,
     imageURL,
     gameState: { players },
-    actions: { startGame },
   } = useContext(GameContext);
 
   return (

@@ -60,7 +60,7 @@ export const GameProvider = ({ children }) => {
 
   // set all game state
   socket.on("game:state", (gameState) => {
-    console.log(gameState)
+    //console.log(gameState)
     setGameState(gameState)
   });
 
