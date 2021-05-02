@@ -3,6 +3,7 @@ import { api } from "./service/fetch";
 import { socket } from "./service/socket";
 
 const imageURL = "https://res.cloudinary.com/didsjgttu/image/upload/";
+const webcamRoomId = "kings-dilemma-1984nidjhs913y4193";
 
 const GameContext = createContext(undefined);
 
@@ -68,9 +69,9 @@ export const GameProvider = ({ children }) => {
     imageURL,
     gameState,
     houseData,
+    webcamRoomId,
     actions: {
       selectHouse,
-      startGame,
       selectSecretAgenda,
       setVoteOutcomes,
       setAgendaTokens,

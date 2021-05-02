@@ -1,15 +1,11 @@
-import React, { useEffect } from 'react';
-import { database } from '../firebase.js';
-
+import React, { useContext } from 'react';
+import GameContext from "../GameContext";
 
 import '../styles/Webcam.scss';
 function Webcam(props) {
-
-    useEffect(() => {
-        database.ref('session/id').once('value', (snapshot) => {
-            buildJitsi(snapshot.val());
-        })
-    }, []);
+    const {
+        webcamRoomId
+    } = useContext(GameContext)
 
     function buildJitsi(roomName) {
         const domain = 'meet.jit.si';
@@ -36,7 +32,7 @@ function Webcam(props) {
     }
 
     return (<>
-        <div id="jitsi-container" hidden={!props.isVisible}></div>
+        <div id="jitsi-container" hidden={!props.isVisible}>{buildJitsi(webcamRoomId)}</div>
     </>
     );
 }
