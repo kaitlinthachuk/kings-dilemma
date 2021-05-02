@@ -23,4 +23,4 @@ export const api = (endpoint, { body, ...customConfig } = {}) => {
       return Promise.reject(new Error(errorMessage));
     }
   });
-}
+};

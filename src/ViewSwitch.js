@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import GameContext from "./GameContext";
 import HouseSelection from "./pages/HouseSelection";
 import GamePlay from "./pages/Gameplay";
-import {Lobby} from "./pages/Lobby";
+import { Lobby } from "./pages/Lobby";
 
 const ViewSwitch = () => {
   const {
@@ -25,7 +25,7 @@ const ViewSwitch = () => {
     }
   };
 
-  return myHouse ? switchView(state) : <HouseSelection />
+  return myHouse ? switchView(state) : <HouseSelection />;
 };
 
 export default ViewSwitch;

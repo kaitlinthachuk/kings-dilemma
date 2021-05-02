@@ -6,9 +6,7 @@ function HouseSelection() {
   const {
     houseData,
     imageURL,
-    actions: { selectHouse,
-      updateCrave,
-      updatePrestige },
+    actions: { selectHouse, updateCrave, updatePrestige },
   } = useContext(GameContext);
 
   function newHouseOnClick(house) {

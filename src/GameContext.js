@@ -36,32 +36,32 @@ export const GameProvider = ({ children }) => {
 
   const triggerEndGame = () => {
     socket.emit("player:gameOver");
-  }
+  };
 
   const breakTie = (winner) => {
-    socket.emit('game:state', winner)
-  }
+    socket.emit("game:state", winner);
+  };
 
   const breakLeaderTie = (winner) => {
-    socket.emit('game:state', winner)
-  }
+    socket.emit("game:state", winner);
+  };
 
   const playerVote = (vote) => {
-    socket.emit('player:vote', vote)
-  }
+    socket.emit("player:vote", vote);
+  };
 
   const updateCrave = (crave) => {
-    socket.emit('player:crave', crave)
-  }
+    socket.emit("player:crave", crave);
+  };
 
   const updatePrestige = (prestige) => {
-    socket.emit('player:prestige', prestige)
-  }
+    socket.emit("player:prestige", prestige);
+  };
 
   // set all game state
   socket.on("game:state", (gameState) => {
     //console.log(gameState)
-    setGameState(gameState)
+    setGameState(gameState);
   });
 
   const providerValue = {
@@ -80,7 +80,7 @@ export const GameProvider = ({ children }) => {
       breakLeaderTie,
       playerVote,
       updateCrave,
-      updatePrestige
+      updatePrestige,
     },
   };
 

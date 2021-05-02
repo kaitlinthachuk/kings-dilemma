@@ -16,12 +16,14 @@ function PlayerBar() {
   return (
     <>
       <div className="player-area">
-      <div className="message-board-container">
-            {message}
-        </div>
-      {players[myHouse]?.secretAgenda && (
-          <img className="secret-agenda-card" src={`${imageURL}/agendas/${players[myHouse].secretAgenda.name}`} alt="secret agenda card"/>
-      )}
+        <div className="message-board-container">{message}</div>
+        {players[myHouse]?.secretAgenda && (
+          <img
+            className="secret-agenda-card"
+            src={`${imageURL}/agendas/${players[myHouse].secretAgenda.name}`}
+            alt="secret agenda card"
+          />
+        )}
       </div>
       <div className="tokens-container">
         <div className="playerbar-value">
