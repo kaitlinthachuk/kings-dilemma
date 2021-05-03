@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import VoteDisplay from "../components/VoteDisplay.js";
 import VoteResult from "../components/VoteResult.js";
 import HoverCard from "../components/HoverCard.js";
@@ -13,51 +13,48 @@ function VotingManager(props) {
     gameState: { votes, availablePower, ayeOutcomes, nayOutcomes, state },
   } = useContext(GameContext);
 
-  const [powerTokens, setPowerTokens] = useState([]);
+  function getRandom(scale) {
+    return (Math.random() * 2 - 1) * scale;
+  }
 
-  useEffect(() => {
-    let powerTokens = [],
-      powerNum = availablePower;
+  function buildPowerTokens(availablePower) {
+    const powerTokens = []
 
-    while (powerNum > 0) {
-      if (powerNum - 10 >= 0) {
+    while (availablePower > 0) {
+      if (availablePower - 10 >= 0) {
         powerTokens.push(
           <img
             src={imageURL + "tokens/power-10.svg"}
-            key={powerNum}
+            key={availablePower}
             alt="power-10"
             className="power-token token-med"
           />
         );
-        powerNum -= 10;
-      } else if (powerNum - 5 > 0) {
+        availablePower -= 10;
+      } else if (availablePower - 5 > 0) {
         powerTokens.push(
           <img
             src={imageURL + "tokens/power.svg"}
-            key={powerNum}
+            key={availablePower}
             alt="power-5"
             className="power-token token-med"
           />
         );
-        powerNum -= 5;
+        availablePower -= 5;
       } else {
         powerTokens.push(
           <img
             src={imageURL + "tokens/power.svg"}
-            key={powerNum}
+            key={availablePower}
             alt="power-1"
             className="power-token token-small"
           />
         );
-        powerNum--;
+        availablePower--;
       }
     }
 
-    setPowerTokens(powerTokens);
-  }, []);
-
-  function getRandom(scale) {
-    return (Math.random() * 2 - 1) * scale;
+    return powerTokens
   }
 
   return (
@@ -171,7 +168,7 @@ function VotingManager(props) {
       </div>
 
       <div className="available-power">
-        {powerTokens}
+        {buildPowerTokens(availablePower)}
 
         <div className="pass-houses">
           {state !== "voteDone" &&
