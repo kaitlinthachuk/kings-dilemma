@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import GameContext from "../GameContext";
 
 import "../styles/Webcam.scss";
 function Webcam(props) {
   const { webcamRoomId } = useContext(GameContext);
+
+  useEffect(() => buildJitsi(webcamRoomId), []);
 
   function buildJitsi(roomName) {
     const domain = "meet.jit.si";
@@ -31,9 +33,7 @@ function Webcam(props) {
 
   return (
     <>
-      <div id="jitsi-container" hidden={!props.isVisible}>
-        {buildJitsi(webcamRoomId)}
-      </div>
+      <div id="jitsi-container" hidden={!props.isVisible}></div>
     </>
   );
 }

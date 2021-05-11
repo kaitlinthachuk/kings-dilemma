@@ -49,9 +49,7 @@ function Gameplay(props) {
       <AspectRatioBox>
         {!(state === "gameOver") && <VotingManager isVisible={toggle} />}
         {state === "gameOver" && <GameOver isVisible={toggle} />}
-        {/* {
-                    <Webcam isVisible={!toggle} />
-                } */}
+        {<Webcam isVisible={!toggle} />}
       </AspectRatioBox>
       {
         <button type="button" className="toggle-button" onClick={toggleOnClick}>
