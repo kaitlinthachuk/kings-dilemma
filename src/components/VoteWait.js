@@ -22,14 +22,22 @@ function VoteWait() {
       background = "background-yellow";
     }
 
-    content = (
-      <div className={`add-power-container ${background}`}>
-        <h1 className="add-power add-power-header">{votes[myHouse].type}</h1>
-        <h2 className="add-power add-power-header">
-          Current Power Comitted: {votes[myHouse].power}
-        </h2>
-      </div>
-    );
+    if (votes[myHouse].type === "gather" || votes[myHouse].type === "mod") {
+      content = (
+        <div className={`add-power-container ${background}`}>
+          <h1 className="add-power add-power-header">Pass</h1>
+        </div>
+      );
+    } else {
+      content = (
+        <div className={`add-power-container ${background}`}>
+          <h1 className="add-power add-power-header">{votes[myHouse].type}</h1>
+          <h2 className="add-power add-power-header">
+            Current Power Comitted: {votes[myHouse].power}
+          </h2>
+        </div>
+      );
+    }
   }
   return <>{content}</>;
 }

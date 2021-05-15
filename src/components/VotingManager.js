@@ -18,7 +18,7 @@ function VotingManager(props) {
   }
 
   function buildPowerTokens(availablePower) {
-    const powerTokens = []
+    const powerTokens = [];
 
     while (availablePower > 0) {
       if (availablePower - 10 >= 0) {
@@ -54,7 +54,7 @@ function VotingManager(props) {
       }
     }
 
-    return powerTokens
+    return powerTokens;
   }
 
   return (
@@ -171,7 +171,7 @@ function VotingManager(props) {
         {buildPowerTokens(availablePower)}
 
         <div className="pass-houses">
-          {state !== "voteDone" &&
+          {state !== "voteOver" &&
             Object.values(votes)
               .filter((vote) => {
                 return vote.type === "gather";
@@ -181,7 +181,7 @@ function VotingManager(props) {
               })}
         </div>
       </div>
-      {state === "voteDone" && <VoteResult />}
+      {state === "voteOver" && <VoteResult />}
       {state === "voting" && <VoteDisplay />}
     </div>
   );

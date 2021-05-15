@@ -29,7 +29,7 @@ function VoteTurn() {
     if (choice === "gather") {
       playerVote({ house: myHouse, type: "gather", power: 0 });
     }
-
+    console.log(choice);
     setIntermediateVote(choice);
   }
 
@@ -71,7 +71,7 @@ function VoteTurn() {
           className="pass-button"
           name="vote"
           value="Pass & Gather Power"
-          onClick={() => voteClick("power")}
+          onClick={() => voteClick("gather")}
         />
         <input
           type="button"
@@ -97,28 +97,36 @@ function VoteTurn() {
       background = "";
     }
 
-    content = (
-      <div className={`add-power-container ${background}`}>
-        <h1 className="add-power add-power-header">{currentChoice}</h1>
-        <h2 className="add-power add-power-header">
-          Current Power Comitted: {currentPowerComitted}
-        </h2>
-        <input
-          type="number"
-          className="add-power-input add-power"
-          name="add-power"
-          placeholder="1"
-          onChange={handleChange}
-        />
-        <input
-          type="button"
-          className="add-power-button add-power"
-          name="add-power-button"
-          value="Vote!"
-          onClick={commitPower}
-        />
-      </div>
-    );
+    if (currentChoice === "gather" || currentChoice === "mod") {
+      content = (
+        <div className={`add-power-container ${background}`}>
+          <h1 className="add-power add-power-header">Pass</h1>
+        </div>
+      );
+    } else {
+      content = (
+        <div className={`add-power-container ${background}`}>
+          <h1 className="add-power add-power-header">{currentChoice}</h1>
+          <h2 className="add-power add-power-header">
+            Current Power Comitted: {currentPowerComitted}
+          </h2>
+          <input
+            type="number"
+            className="add-power-input add-power"
+            name="add-power"
+            placeholder="1"
+            onChange={handleChange}
+          />
+          <input
+            type="button"
+            className="add-power-button add-power"
+            name="add-power-button"
+            value="Vote!"
+            onClick={commitPower}
+          />
+        </div>
+      );
+    }
   }
 
   return <>{content}</>;
