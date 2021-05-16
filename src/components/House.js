@@ -1,17 +1,17 @@
 import React, { useContext } from "react";
 import GameContext from "../GameContext";
 
-function House(props) {
+function House({ player }) {
   const {
     imageURL,
     houseData,
-    gameState: { turn },
+    gameState: { turn, leader, moderator },
   } = useContext(GameContext);
 
-  let imgSrc = imageURL + "images/" + props.player.house;
+  let imgSrc = imageURL + "images/" + player.house;
 
   function createTokens() {
-    let tokenArray = props.player.agendaTokens.map((token) => {
+    let tokenArray = player.agendaTokens.map((token) => {
       let tokenString = token.resource + "-" + token.type;
       return (
         <img
@@ -23,7 +23,7 @@ function House(props) {
       );
     });
 
-    if (props.player.isLeader) {
+    if (player.house === leader) {
       tokenArray.push(
         <img
           className="token-small"
@@ -33,7 +33,7 @@ function House(props) {
         />
       );
     }
-    if (props.player.isModerator) {
+    if (player.house === moderator) {
       tokenArray.push(
         <img
           className="token-small"
@@ -49,20 +49,18 @@ function House(props) {
 
   return (
     <div
-      className={`menu-house ${
-        turn === props.player.house ? "selected-turn" : ""
-      }`}
+      className={`menu-house ${turn === player.house ? "selected-turn" : ""}`}
     >
       <div className="token-container" key="token-container">
         {createTokens()}
       </div>
       <div
         className="house-container"
-        key={props.player.house + "-house"}
+        key={player.house + "-house"}
         style={{ backgroundImage: `url(${imgSrc})` }}
       >
-        <h5 className="house-name" key={props.player.house}>
-          {houseData[props.player.house].houseName}
+        <h5 className="house-name" key={player.house}>
+          {houseData[player.house].houseName}
         </h5>
       </div>
     </div>

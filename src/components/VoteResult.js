@@ -7,7 +7,7 @@ function VoteResult() {
   const {
     myHouse,
     houseData,
-    gameState: { players, leaderTie, leaderChoice, voteTie, winner },
+    gameState: { players, leaderTie, leaderChoice, voteTie, winner, moderator },
     actions: { breakTie, breakLeaderTie },
   } = useContext(GameContext);
 
@@ -46,7 +46,7 @@ function VoteResult() {
     );
   } else {
     if (voteTie) {
-      if (players[myHouse].isModerator) {
+      if (myHouse === moderator) {
         content.push(
           <div className="tie-break-container">
             <label className="tie-break-input-label tie-break" htmlFor="aye">
@@ -90,7 +90,7 @@ function VoteResult() {
         );
       }
     } else if (leaderTie) {
-      if (players[myHouse].isModerator) {
+      if (myHouse === moderator) {
         content.push(
           <div className="tie-leader-container">
             {leaderChoice.map((house) => {
