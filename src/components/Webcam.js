@@ -5,7 +5,7 @@ import "../styles/Webcam.scss";
 function Webcam(props) {
   const { webcamRoomId } = useContext(GameContext);
 
-  useEffect(() => buildJitsi(webcamRoomId), []);
+  useEffect(() => buildJitsi(webcamRoomId), [webcamRoomId]);
 
   function buildJitsi(roomName) {
     const domain = "meet.jit.si";
