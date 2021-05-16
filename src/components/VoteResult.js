@@ -7,7 +7,7 @@ function VoteResult() {
   const {
     myHouse,
     houseData,
-    gameState: { players, leaderTie, leaderChoice, voteTie, winner, moderator },
+    gameState: { leaderTie, leaderChoice, voteTie, winner, moderator },
     actions: { breakTie, breakLeaderTie },
   } = useContext(GameContext);
 
