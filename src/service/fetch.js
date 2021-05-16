@@ -1,4 +1,4 @@
-const serverURL = process.env.SERVER_URL || "http://localhost:3000";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:3000";
 
 export const api = (endpoint, { body, ...customConfig } = {}) => {
   const headers = { "content-type": "application/json" };
@@ -15,7 +15,7 @@ export const api = (endpoint, { body, ...customConfig } = {}) => {
     config.body = JSON.stringify(body);
   }
 
-  return fetch(`${serverURL}/${endpoint}`, config).then(async (response) => {
+  return fetch(`${SERVER_URL}/${endpoint}`, config).then(async (response) => {
     if (response.ok) {
       return await response.json();
     } else {
