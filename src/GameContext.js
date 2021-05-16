@@ -39,11 +39,11 @@ export const GameProvider = ({ children }) => {
   };
 
   const breakTie = (winner) => {
-    socket.emit("game:state", winner);
+    socket.emit("player:breakTie", winner);
   };
 
   const breakLeaderTie = (winner) => {
-    socket.emit("game:state", winner);
+    socket.emit("player:breakLeaderTie", winner);
   };
 
   const playerVote = (vote) => {
