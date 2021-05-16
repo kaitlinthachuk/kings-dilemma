@@ -14,26 +14,6 @@ function VoteResult() {
   const [modChoice, setModChoice] = useState("");
   const [modLeaderChoice, setModLeaderChoice] = useState("");
 
-  function handleBreakTie(e) {
-    e.preventDefault();
-    breakTie(modChoice);
-  }
-
-  function handleBreakTieChange(e) {
-    e.preventDefault();
-    setModChoice(e.target.value);
-  }
-
-  function handleBreakLeaderTieChange(e) {
-    e.preventDefault();
-    setModLeaderChoice(e.target.value);
-  }
-
-  function handleLeaderBreakTie(e) {
-    e.preventDefault();
-    breakLeaderTie(modLeaderChoice);
-  }
-
   let content = [],
     backgroundColor;
 
@@ -58,7 +38,7 @@ function VoteResult() {
               id="aye"
               className="tie-break-input tie-break"
               value="aye"
-              onChange={handleBreakTieChange}
+              onChange={() => setModChoice("aye")}
               checked={modChoice === "aye"}
             />
             <label className="tie-break-input-label tie-break" htmlFor="nay">
@@ -70,7 +50,7 @@ function VoteResult() {
               id="nay"
               className="tie-break-input tie-break"
               value="nay"
-              onChange={handleBreakTieChange}
+              onChange={() => setModChoice("nay")}
               checked={modChoice === "nay"}
             />
             <input
@@ -78,7 +58,7 @@ function VoteResult() {
               className="tie-break-button tie-break"
               name="tie-breaker"
               value="Break Tie!"
-              onClick={handleBreakTie}
+              onClick={() => breakTie(modChoice)}
             />
           </div>
         );
@@ -107,7 +87,7 @@ function VoteResult() {
                     name="tie-leader"
                     className="tie-leader-input tie-leader"
                     value={house}
-                    onChange={handleBreakLeaderTieChange}
+                    onChange={() => setModLeaderChoice(house)}
                     checked={modLeaderChoice === house}
                   />
                 </>
@@ -119,7 +99,7 @@ function VoteResult() {
               className="tie-leader-button tie-break"
               name="tie-breaker-leader"
               value="Choose Leader"
-              onClick={handleLeaderBreakTie}
+              onClick={() => breakLeaderTie(modLeaderChoice)}
             />
           </div>
         );
