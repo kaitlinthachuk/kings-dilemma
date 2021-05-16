@@ -17,9 +17,9 @@ export const GameProvider = ({ children }) => {
     api("houses").then((data) => setHouseData(data));
   }, []);
 
-  const selectHouse = (house) => {
+  const selectHouse = (house, { prestige, crave }) => {
     setMyHouse(house);
-    socket.emit("player:selectHouse", house);
+    socket.emit("player:selectHouse", house, prestige, crave);
   };
 
   const selectSecretAgenda = (secretAgenda) => {
@@ -50,14 +50,6 @@ export const GameProvider = ({ children }) => {
     socket.emit("player:vote", vote);
   };
 
-  const updateCrave = (crave) => {
-    socket.emit("player:crave", crave);
-  };
-
-  const updatePrestige = (prestige) => {
-    socket.emit("player:prestige", prestige);
-  };
-
   // set all game state
   socket.on("game:state", (gameState) => {
     //console.log(gameState);
@@ -79,8 +71,6 @@ export const GameProvider = ({ children }) => {
       breakTie,
       breakLeaderTie,
       playerVote,
-      updateCrave,
-      updatePrestige,
     },
   };
 

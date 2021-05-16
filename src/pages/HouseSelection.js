@@ -6,15 +6,13 @@ function HouseSelection() {
   const {
     houseData,
     imageURL,
-    actions: { selectHouse, updateCrave, updatePrestige },
+    actions: { selectHouse },
   } = useContext(GameContext);
 
   function newHouseOnClick(house) {
-    selectHouse(house);
-    var prestige = prompt("Please enter your current prestige:", 0);
-    updatePrestige(parseInt(prestige));
-    var crave = prompt("Please enter your current crave:", 0);
-    updateCrave(parseInt(crave));
+    const prestige = parseInt(prompt("Please enter your current prestige:", 0));
+    const crave = parseInt(prompt("Please enter your current crave:", 0));
+    selectHouse(house, { prestige, crave });
   }
 
   const newHouse = () =>
