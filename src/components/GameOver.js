@@ -21,7 +21,7 @@ function GameOver(props) {
               <tr>
                 <th colSpan="2">Power</th>
               </tr>
-              {players
+              {Object.values(players)
                 .sort((a, b) => {
                   return b.power - a.power;
                 })
@@ -42,7 +42,7 @@ function GameOver(props) {
               <tr>
                 <th colSpan="2">Coins</th>
               </tr>
-              {players
+              {Object.values(players)
                 .sort((a, b) => {
                   return b.coins - a.coins;
                 })
@@ -50,7 +50,7 @@ function GameOver(props) {
                   return (
                     <tr key={player.house}>
                       <td>{houseData[player.house].houseName}</td>
-                      <td>{player.power}</td>
+                      <td>{player.coins}</td>
                     </tr>
                   );
                 })}
