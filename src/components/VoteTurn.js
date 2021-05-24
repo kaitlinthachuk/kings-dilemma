@@ -114,7 +114,9 @@ function VoteTurn() {
             type="number"
             className="add-power-input add-power"
             name="add-power"
-            placeholder="1"
+            autoFocus
+            onFocus={(e) => e.target.select()}
+            value={intermediatePower}
             onChange={handleChange}
           />
           <input
@@ -122,6 +124,7 @@ function VoteTurn() {
             className="add-power-button add-power"
             name="add-power-button"
             value="Vote!"
+            disabled={intermediatePower === 0}
             onClick={commitPower}
           />
         </div>
