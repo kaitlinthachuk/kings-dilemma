@@ -124,7 +124,6 @@ function VoteTurn() {
             className="add-power-button add-power"
             name="add-power-button"
             value="Vote!"
-            disabled={intermediatePower === 0}
             onClick={commitPower}
           />
         </div>
