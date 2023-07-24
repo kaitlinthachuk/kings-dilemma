@@ -1,4 +1,4 @@
-The project is currently being hosted on Netlify [here](https://pensive-bohr-6ca76f.netlify.app/) and utilizes Firebase's database, storage, and cloud functions for managing game state, assets, and large chunks of game logic respectively. Find out more about the board game on Horrible Guild's [official site](https://www.horribleguild.com/the-kings-dilemma/).
+The project was hosted on Netlify [here](https://pensive-bohr-6ca76f.netlify.app/) and utilized Firebase's database, storage, and cloud functions for managing game state, assets, and large chunks of game logic respectively. Find out more about the board game on Horrible Guild's [official site](https://www.horribleguild.com/the-kings-dilemma/).
 
 ## Table of Contents
 
